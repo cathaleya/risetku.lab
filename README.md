@@ -36,8 +36,8 @@ sudo systemctl enable --now docker
 ### 2. Tarik / Clone Repositori di VPS
 ```bash
 cd /var/www
-# git clone <URL_REPO_ANDA> risetku
-cd risetku/vps_version/deploy_2
+git clone https://github.com/cathaleya/risetku.lab.git risetku
+cd /var/www/risetku
 ```
 
 ### 3. Jalankan Container dengan Docker Compose
@@ -97,7 +97,7 @@ Pilih opsi **Redirect** ke HTTPS saat diminta oleh Certbot.
 ## 🔄 Cara Melakukan Pembaruan Kode (Update di Masa Depan)
 Jika ada pembaruan kode dari GitHub:
 ```bash
-cd /var/www/risetku/vps_version/deploy_2
+cd /var/www/risetku
 git pull origin main
 docker-compose up -d --build
 ```

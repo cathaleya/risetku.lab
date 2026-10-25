@@ -68,8 +68,8 @@ sudo systemctl enable --now docker
 #### 3. Clone Repositori ke VPS
 ```bash
 cd /var/www
-git clone https://github.com/USERNAME_ANDA/risetku-lab.git risetku
-cd /var/www/risetku/vps_version/deploy_2
+git clone https://github.com/cathaleya/risetku.lab.git risetku
+cd /var/www/risetku
 ```
 
 #### 4. Jalankan Aplikasi dengan Docker Compose (Sandbox Anti-Ransomware)
@@ -142,7 +142,7 @@ git commit -m "Update perbaikan"
 git push origin main
 
 # Di VPS:
-cd /var/www/risetku/vps_version/deploy_2
+cd /var/www/risetku
 git pull origin main
 docker-compose up -d --build
 ```
