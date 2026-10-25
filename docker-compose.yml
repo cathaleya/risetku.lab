@@ -6,9 +6,9 @@ services:
     container_name: risetku-app
     restart: unless-stopped
     ports:
-      # KEAMANAN TINGGI & TIDAK BENTROK DENGAN MADEL5C:
-      # Host port memakai 8080 agar MADEL-5C (di port 8000) tetap berjalan normal.
-      - "127.0.0.1:8080:8000"
+      # KEAMANAN TINGGI & TIDAK BENTROK DENGAN APLIKASI LAIN DI VPS:
+      # Port 8585 terisolasi ke localhost (127.0.0.1) dan aman dari ransomware.
+      - "127.0.0.1:8585:8000"
     environment:
       - NODE_ENV=production
       - PORT=8000

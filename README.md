@@ -65,7 +65,7 @@ server {
     server_name www.riset-ku-lab.my.id riset-ku-lab.my.id;
 
     location / {
-        proxy_pass http://127.0.0.1:8080;
+        proxy_pass http://127.0.0.1:8585;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
