@@ -6,10 +6,195 @@
 <title>Telaah SLR</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Outfit:wght@400;500;600;700;800;900&display=swap">
 <link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
+
+  <!-- LANDING PAGE SLR-IN AJA (TAMPILAN AWAL SEBELUM MASUK WORKSPACE) -->
+  <div id="slrLanding" class="min-h-screen bg-[#FAF8F5] text-slate-800 font-sans pb-20">
+    <!-- Navbar Landing -->
+    <header class="sticky top-0 z-40 bg-[#FAF8F5]/90 backdrop-blur-md border-b border-slate-200/80">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-600 to-amber-700 text-white flex items-center justify-center font-black shadow-md shadow-amber-600/30">
+            <i class="fa-solid fa-book-bookmark text-lg"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-base sm:text-lg font-black tracking-tight text-slate-900">SLR-In<span class="text-amber-600">Aja</span></h1>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-300">
+                PRISMA 2020
+              </span>
+            </div>
+            <p class="text-[11px] text-slate-500 font-medium hidden sm:block">Systematic Literature Review &amp; Meta-Analysis Suite &bull; RisetKu</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <a href="/" class="px-3 sm:px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 transition-all flex items-center gap-1.5 border border-slate-300/80">
+            <i class="fa-solid fa-arrow-left text-[11px]"></i>
+            <span class="hidden sm:inline">Kembali ke</span> Portal
+          </a>
+          <button type="button" onclick="handleStartSLR()" class="px-4 sm:px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-black text-xs uppercase tracking-wider shadow-lg shadow-amber-600/25 hover:-translate-y-0.5 active:translate-y-0.5 transition-all flex items-center gap-2">
+            <span>Coba-IN SLR-In</span>
+            <i class="fa-solid fa-arrow-right text-[11px]"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 pt-10 space-y-12">
+      <div class="p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-white via-amber-50/40 to-white border-2 border-slate-200 border-b-4 border-b-slate-400 shadow-xl relative overflow-hidden">
+        <div class="absolute -right-12 -top-12 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="max-w-3xl space-y-5 relative z-10">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100/80 border border-amber-300 text-amber-900 text-xs font-black uppercase tracking-wider">
+            <i class="fa-solid fa-award text-amber-600"></i>
+            <span>Standar Baku Publikasi Scopus Q1 &amp; PRISMA 2020</span>
+          </div>
+
+          <h1 class="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+            Platform Telaah Pustaka Sistematis &amp; Meta-Analisis Terpadu
+          </h1>
+
+          <p class="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+            <strong>SLR-In Aja</strong> dirancang khusus untuk memandu peneliti, mahasiswa S2/S3, dan dosen dalam menuntaskan <em>Systematic Literature Review</em> (SLR) secara akurat. Dilengkapi sistem <strong>Blind Reviewer ganda (R1 &amp; R2)</strong>, instrumen penilaian kualitas metodologi <strong>MMAT 2018</strong>, generator diagram alir <strong>PRISMA 2020 interaktif</strong>, serta deduplikasi otomatis dari basis data Scopus, WoS, PubMed, dan IEEE.
+          </p>
+
+          <div class="pt-2 flex flex-wrap gap-2 text-xs font-bold text-slate-700">
+            <span class="px-2.5 py-1 rounded-xl bg-white border border-slate-200 shadow-sm flex items-center gap-1.5">
+              <i class="fa-solid fa-check text-amber-600"></i> Dual-Blind Screening (R1 &amp; R2)
+            </span>
+            <span class="px-2.5 py-1 rounded-xl bg-white border border-slate-200 shadow-sm flex items-center gap-1.5">
+              <i class="fa-solid fa-check text-amber-600"></i> 27-Item PRISMA 2020 Checklist
+            </span>
+            <span class="px-2.5 py-1 rounded-xl bg-white border border-slate-200 shadow-sm flex items-center gap-1.5">
+              <i class="fa-solid fa-check text-amber-600"></i> Diagram Alir PRISMA Otomatis
+            </span>
+            <span class="px-2.5 py-1 rounded-xl bg-white border border-slate-200 shadow-sm flex items-center gap-1.5">
+              <i class="fa-solid fa-check text-amber-600"></i> Penilaian Metodologi MMAT 2018
+            </span>
+            <span class="px-2.5 py-1 rounded-xl bg-white border border-slate-200 shadow-sm flex items-center gap-1.5">
+              <i class="fa-solid fa-check text-amber-600"></i> Ekspor CSV, RIS, &amp; APA 7
+            </span>
+          </div>
+
+          <!-- TOMBOL COBA-IN UTAMA -->
+          <div class="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <button type="button" onclick="handleStartSLR()" class="px-8 py-4 rounded-2xl bg-gradient-to-r from-amber-600 via-amber-700 to-amber-800 hover:from-amber-500 hover:to-amber-600 text-white font-black text-sm uppercase tracking-wider shadow-xl shadow-amber-600/30 hover:shadow-amber-600/50 hover:-translate-y-0.5 active:translate-y-0.5 transition-all flex items-center justify-center gap-3 group">
+              <i class="fa-solid fa-play text-amber-200 group-hover:scale-110 transition-transform"></i>
+              <span>Coba-IN SLR-In Sekarang</span>
+              <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+            </button>
+            <a href="#fitur-slr" class="px-6 py-4 rounded-2xl bg-white hover:bg-slate-50 border-2 border-slate-200 text-slate-700 font-bold text-xs uppercase tracking-wider shadow-sm flex items-center justify-center gap-2 transition-all">
+              <i class="fa-solid fa-circle-info text-slate-400"></i>
+              <span>Pelajari Alur Metodologi SLR</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 KARTU FITUR UTAMA SLR -->
+      <div id="fitur-slr" class="space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+          <div>
+            <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2.5">
+              <span class="w-8 h-8 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center text-sm font-black">4</span>
+              <span>Pilar Metodologi Telaah Pustaka Modern</span>
+            </h2>
+            <p class="text-xs text-slate-500 font-medium mt-0.5">Dirancang sesuai panduan standar internasional Page et al. (2021)</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <!-- Kartu 1: Dual-Blind Reviewer -->
+          <div class="p-6 rounded-3xl bg-white border-2 border-slate-200 border-b-4 border-b-slate-400 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-600 to-amber-700 text-white flex items-center justify-center text-xl shadow-md shadow-amber-600/20">
+                <i class="fa-solid fa-user-group"></i>
+              </div>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-50 text-amber-800 border border-amber-200">
+                Inter-Rater Reliability
+              </span>
+            </div>
+            <h3 class="text-base font-black text-slate-900">1. Skrining Independen Dual-Reviewer (R1 &amp; R2)</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              Cegah bias seleksi naskah dengan mode <strong>Blind Review</strong>. Reviewer 1 dan Reviewer 2 menilai kelayakan Judul/Abstrak dan Teks Lengkap secara terpisah tanpa melihat keputusan pihak lain sampai konsensus dibuka, lengkap dengan perhitungan Cohen's Kappa.
+            </p>
+          </div>
+
+          <!-- Kartu 2: PRISMA 2020 & Diagram Interaktif -->
+          <div class="p-6 rounded-3xl bg-white border-2 border-slate-200 border-b-4 border-b-slate-400 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-700 text-white flex items-center justify-center text-xl shadow-md shadow-emerald-600/20">
+                <i class="fa-solid fa-sitemap"></i>
+              </div>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-800 border border-emerald-200">
+                Standard Protocol
+              </span>
+            </div>
+            <h3 class="text-base font-black text-slate-900">2. Alur Baku PRISMA 2020 &amp; Diagram Interaktif</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              Setiap keputusan inklusi dan eksklusi dihitung secara otomatis ke dalam kotak diagram alir PRISMA 2020 (Identification, Screening, Eligibility, Included). Hasil dapat diunduh langsung dalam format SVG vektor tajam siap tempel di jurnal.
+            </p>
+          </div>
+
+          <!-- Kartu 3: Penilaian Kualitas MMAT 2018 -->
+          <div class="p-6 rounded-3xl bg-white border-2 border-slate-200 border-b-4 border-b-slate-400 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-blue-700 text-white flex items-center justify-center text-xl shadow-md shadow-indigo-600/20">
+                <i class="fa-solid fa-clipboard-check"></i>
+              </div>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-indigo-50 text-indigo-800 border border-indigo-200">
+                Critical Appraisal
+              </span>
+            </div>
+            <h3 class="text-base font-black text-slate-900">3. Penilaian Kualitas Metodologi (MMAT 2018)</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              Uji validitas internal setiap artikel yang lolos menggunakan rubrik terstandar <strong>Mixed Methods Appraisal Tool (MMAT)</strong>: studi kualitatif, RCT kuantitatif, non-randomized, deskriptif, dan mixed-methods dengan bukti kutipan langsung.
+            </p>
+          </div>
+
+          <!-- Kartu 4: Ekstraksi Data & Sintesis Meta-Analisis -->
+          <div class="p-6 rounded-3xl bg-white border-2 border-slate-200 border-b-4 border-b-slate-400 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-rose-600 to-amber-700 text-white flex items-center justify-center text-xl shadow-md shadow-rose-600/20">
+                <i class="fa-solid fa-table-list"></i>
+              </div>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-rose-50 text-rose-800 border border-rose-200">
+                Data Extraction Matrix
+              </span>
+            </div>
+            <h3 class="text-base font-black text-slate-900">4. Matriks Ekstraksi Variabel &amp; Meta-Analisis</h3>
+            <p class="text-xs text-slate-600 leading-relaxed font-normal">
+              Susun tabel sintesis temuan (populasi, intervensi, instrumen, ukuran efek Cohen's d / Hedge's g). Ekspor dalam sekali klik ke format tabel naskah n-kolom, RIS untuk Mendeley/Zotero, dan format CSV untuk SPSS/R.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Banner Ajakan -->
+      <div class="p-8 rounded-3xl bg-gradient-to-r from-slate-900 via-amber-950 to-slate-900 text-white text-center space-y-4 shadow-2xl border-2 border-amber-500/30">
+        <h3 class="text-2xl font-black tracking-tight">Siap Memulai Kajian Sistematik Anda?</h3>
+        <p class="text-xs text-slate-300 max-w-xl mx-auto leading-relaxed">
+          Unggah berkas RIS/CSV dari Scopus/WoS atau gunakan contoh proyek bawaan untuk melihat alur kerja PRISMA 2020.
+        </p>
+        <div class="pt-2">
+          <button type="button" onclick="handleStartSLR()" class="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-widest shadow-xl shadow-amber-600/40 hover:-translate-y-0.5 active:translate-y-0.5 transition-all inline-flex items-center gap-2">
+            <span>Buka Ruang Kerja SLR (Coba-IN)</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- WORKSPACE SLR-IN AJA (Disembunyikan saat di Landing Page) -->
+  <div id="slrWorkspace" style="display:none">
+
 <header class="topbar">
   <div class="brand" style="display:flex;align-items:center;gap:6px">
     <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
@@ -30,6 +215,10 @@
     <button data-view="export">Ekspor</button>
   </nav>
   <div class="top-right" style="display:flex;align-items:center;gap:6px">
+    <button type="button" onclick="showLanding()" style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:#fef3c7;border:1px solid #fde68a;color:#92400e;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer" title="Kembali ke Landing Page Penjelasan Modul">
+      <i class="fa-solid fa-book-open"></i>
+      <span>Panduan &amp; Teori</span>
+    </button>
     <span id="licBadge" style="display:none;align-items:center;gap:4px;padding:3px 10px;background:#fef3c7;border:1px solid #fde68a;color:#92400e;border-radius:999px;font-size:11px;font-weight:700">
       <span>🛡️</span>
       <span id="licBadgeText">Lisensi Aktif</span>
@@ -83,6 +272,7 @@
 <div class="tooltip" id="tooltip" hidden></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <input type="file" id="hiddenFile" hidden>
+</div> <!-- /#slrWorkspace -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -110,7 +300,8 @@
 <!-- Modal Aktivasi Lisensi SLR-In Aja -->
 <div id="licModal" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.85);backdrop-filter:blur(6px);z-index:999999;align-items:center;justify-content:center;padding:16px;">
   <div style="background:#ffffff;border-radius:20px;max-width:440px;width:100%;box-shadow:0 25px 50px -12px rgba(0,0,0,0.35);overflow:hidden;border:1px solid #e2e8f0;font-family:'IBM Plex Sans',sans-serif">
-    <div style="background:linear-gradient(135deg,#b45309,#d97706);color:#ffffff;padding:24px;text-align:center">
+    <div style="background:linear-gradient(135deg,#b45309,#d97706);color:#ffffff;padding:24px;text-align:center;position:relative">
+      <button type="button" onclick="closeLicModal()" style="position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.2);border:none;color:#ffffff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;font-weight:bold;display:flex;align-items:center;justify-content:center;transition:all 0.2s" title="Tutup">✕</button>
       <div style="width:48px;height:48px;background:rgba(255,255,255,0.2);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 10px auto;border:1px solid rgba(255,255,255,0.4)">
         📚
       </div>

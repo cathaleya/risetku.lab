@@ -1402,17 +1402,8 @@ function applyTerjemahLicUI() {
   const hasValidLic = licStatus && licStatus.active;
   const isUnlocked = !!(terjemahUser && hasValidLic);
 
-  const modal = $('#licModal');
   const badge = $('#licBadge');
   const badgeText = $('#licBadgeText');
-
-  if (modal) {
-    modal.style.display = isUnlocked ? 'none' : 'flex';
-    if (!isUnlocked && terjemahUser) {
-      if ($('#licName') && !$('#licName').value) $('#licName').value = terjemahUser.nama || '';
-      if ($('#licEmail') && !$('#licEmail').value) $('#licEmail').value = terjemahUser.email || '';
-    }
-  }
 
   if (badge) {
     if (isUnlocked) {
@@ -1438,6 +1429,55 @@ function applyTerjemahLicUI() {
   }
 }
 
+function openLicModal() {
+  const modal = $('#licModal');
+  if (modal) {
+    modal.style.display = 'flex';
+    if (terjemahUser) {
+      if ($('#licName') && !$('#licName').value) $('#licName').value = terjemahUser.nama || '';
+      if ($('#licEmail') && !$('#licEmail').value) $('#licEmail').value = terjemahUser.email || '';
+    }
+  }
+}
+
+function closeLicModal() {
+  const modal = $('#licModal');
+  if (modal) modal.style.display = 'none';
+}
+
+function showLanding() {
+  const landing = $('#transLanding');
+  const ws = $('#transWorkspace');
+  if (landing) landing.style.display = 'block';
+  if (ws) ws.style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showWorkspace() {
+  const landing = $('#transLanding');
+  const ws = $('#transWorkspace');
+  if (landing) landing.style.display = 'none';
+  if (ws) ws.style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function handleStartTerjemah() {
+  const licStatus = verifyTerjemahLic();
+  const hasValidLic = licStatus && licStatus.active;
+  const isUnlocked = !!(terjemahUser && hasValidLic);
+  if (isUnlocked) {
+    showWorkspace();
+  } else {
+    openLicModal();
+  }
+}
+
+window.showLanding = showLanding;
+window.showWorkspace = showWorkspace;
+window.openLicModal = openLicModal;
+window.closeLicModal = closeLicModal;
+window.handleStartTerjemah = handleStartTerjemah;
+
 const btnDeactLic = $('#btnDeactLic');
 if (btnDeactLic) {
   btnDeactLic.addEventListener('click', () => {
@@ -1445,6 +1485,8 @@ if (btnDeactLic) {
       terjemahLicense = null;
       localStorage.removeItem('terjemahin-license');
       applyTerjemahLicUI();
+      showLanding();
+      openLicModal();
       const licKeyInput = $('#licKey');
       if (licKeyInput) {
         licKeyInput.value = '';
@@ -1509,6 +1551,8 @@ if (licForm) {
     localStorage.setItem('terjemahin-user', JSON.stringify(terjemahUser));
 
     applyTerjemahLicUI();
+    closeLicModal();
+    showWorkspace();
     toast('Lisensi Terjemah-IN berhasil diaktifkan!');
   });
 }

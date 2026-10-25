@@ -885,17 +885,8 @@ function applySLRLicUI() {
   const hasValidLic = licStatus && licStatus.active;
   const isUnlocked = !!(slrUser && hasValidLic);
 
-  const modal = $('#licModal');
   const badge = $('#licBadge');
   const badgeText = $('#licBadgeText');
-
-  if (modal) {
-    modal.style.display = isUnlocked ? 'none' : 'flex';
-    if (!isUnlocked && slrUser) {
-      if ($('#licName') && !$('#licName').value) $('#licName').value = slrUser.nama || '';
-      if ($('#licEmail') && !$('#licEmail').value) $('#licEmail').value = slrUser.email || '';
-    }
-  }
 
   if (badge) {
     if (isUnlocked) {
@@ -921,6 +912,55 @@ function applySLRLicUI() {
   }
 }
 
+function openLicModal() {
+  const modal = $('#licModal');
+  if (modal) {
+    modal.style.display = 'flex';
+    if (slrUser) {
+      if ($('#licName') && !$('#licName').value) $('#licName').value = slrUser.nama || '';
+      if ($('#licEmail') && !$('#licEmail').value) $('#licEmail').value = slrUser.email || '';
+    }
+  }
+}
+
+function closeLicModal() {
+  const modal = $('#licModal');
+  if (modal) modal.style.display = 'none';
+}
+
+function showLanding() {
+  const landing = $('#slrLanding');
+  const ws = $('#slrWorkspace');
+  if (landing) landing.style.display = 'block';
+  if (ws) ws.style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showWorkspace() {
+  const landing = $('#slrLanding');
+  const ws = $('#slrWorkspace');
+  if (landing) landing.style.display = 'none';
+  if (ws) ws.style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function handleStartSLR() {
+  const licStatus = verifySLRLic();
+  const hasValidLic = licStatus && licStatus.active;
+  const isUnlocked = !!(slrUser && hasValidLic);
+  if (isUnlocked) {
+    showWorkspace();
+  } else {
+    openLicModal();
+  }
+}
+
+window.showLanding = showLanding;
+window.showWorkspace = showWorkspace;
+window.openLicModal = openLicModal;
+window.closeLicModal = closeLicModal;
+window.handleStartSLR = handleStartSLR;
+
 const btnDeactLic = $('#btnDeactLic');
 if (btnDeactLic) {
   btnDeactLic.addEventListener('click', () => {
@@ -928,6 +968,8 @@ if (btnDeactLic) {
       slrLicense = null;
       localStorage.removeItem('slr-license');
       applySLRLicUI();
+      showLanding();
+      openLicModal();
       const licKeyInput = $('#licKey');
       if (licKeyInput) {
         licKeyInput.value = '';
@@ -992,6 +1034,8 @@ if (licForm) {
     localStorage.setItem('slr-user', JSON.stringify(slrUser));
 
     applySLRLicUI();
+    closeLicModal();
+    showWorkspace();
     toast('Lisensi SLR-In Aja berhasil diaktifkan!', 'ok');
   });
 }
