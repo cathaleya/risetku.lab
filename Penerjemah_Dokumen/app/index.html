@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Penerjemah Dokumen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+<header class="top">
+  <div class="brand" style="display:flex;align-items:center;gap:8px">
+    <span style="font-size:1.15rem">🌐</span>
+    <span>Terjemah-IN</span>
+    <small style="font-size:0.68rem;background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0;padding:2px 8px;border-radius:999px;font-weight:700">RisetKu</small>
+  </div>
+  <div class="top-set">
+    <label>Dari
+      <select id="sl">
+        <option value="auto">Deteksi otomatis</option>
+        <option value="en">Inggris</option>
+        <option value="zh-CN">Mandarin</option>
+        <option value="ar">Arab</option>
+        <option value="ja">Jepang</option>
+        <option value="ko">Korea</option>
+        <option value="de">Jerman</option>
+        <option value="fr">Prancis</option>
+        <option value="es">Spanyol</option>
+        <option value="pt">Portugis</option>
+        <option value="ru">Rusia</option>
+        <option value="nl">Belanda</option>
+        <option value="ms">Melayu</option>
+      </select>
+    </label>
+    <label>Ke
+      <select id="tl">
+        <option value="id" selected>Indonesia</option>
+        <option value="en">Inggris</option>
+      </select>
+    </label>
+  </div>
+  <div class="top-act" style="display:flex;align-items:center;gap:8px">
+    <span id="licBadge" style="display:none;align-items:center;gap:4px;padding:3px 10px;background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;border-radius:999px;font-size:11px;font-weight:700">
+      <span>🛡️</span>
+      <span id="licBadgeText">Lisensi Aktif</span>
+      <button type="button" id="btnDeactLic" style="background:none;border:none;color:#991b1b;cursor:pointer;font-size:10px;text-decoration:underline;margin-left:4px" title="Ganti kunci">(Ganti)</button>
+    </span>
+    <a href="/" class="btn sm ghost" style="text-decoration:none;display:inline-flex;align-items:center;gap:4px">
+      <span>←</span>
+      <span>Portal RisetKu</span>
+    </a>
+    <button class="btn sm ghost" id="quotesBtn">❝ Laporan kutipan <span id="quotesN"></span></button>
+    <button class="btn sm ghost" id="openIn">Folder Masukan</button>
+    <button class="btn sm ghost" id="openOut">Folder Hasil</button>
+  </div>
+</header>
+<div id="banner" class="banner" role="alert" hidden></div>
+
+<div class="layout">
+  <aside class="side">
+    <div id="drop" class="drop" tabindex="0" role="button">
+      <b>+ Tambah file</b>
+      <span>Seret ke sini atau klik</span>
+      <small>PDF · Word · CSV · Excel · PowerPoint · TXT · HTML · gambar</small>
+      <input type="file" id="file" multiple hidden accept=".pdf,.docx,.pptx,.xlsx,.csv,.tsv,.txt,.md,.srt,.vtt,.html,.htm,.json,.png,.jpg,.jpeg,.bmp,.webp,.gif">
+    </div>
+    <button class="btn sm ghost wide" id="fromFolder">Ambil semua dari folder Masukan</button>
+    <div class="side-title">Dokumen <span id="libCount" class="muted"></span></div>
+    <ul id="lib" class="lib"></ul>
+  </aside>
+
+  <main class="panel">
+    <div id="empty" class="welcome">
+      <h1>Baca dokumen apa saja dalam bahasa Indonesia</h1>
+      <p>Masukkan file PDF, Word, CSV, atau lainnya. Isinya langsung tampil di sini dan diterjemahkan sambil Anda membaca.</p>
+      <ul>
+        <li><b>Asli / Dwibahasa / Indonesia</b>: pilih cara baca.</li>
+        <li><b>Asli (PDF)</b>: lihat halaman PDF aslinya.</li>
+        <li><b>Blok teks</b> lalu klik <b>Terjemahkan</b> untuk menerjemahkan kalimat tertentu.</li>
+        <li>Dokumen tersimpan di aplikasi; buka lagi kapan saja tanpa menerjemahkan ulang.</li>
+      </ul>
+    </div>
+
+    <div id="docView" hidden>
+      <div class="pa-head">
+        <h2 class="doc-title" id="docTitle"></h2>
+        <p class="doc-meta" id="docMeta"></p>
+        <div class="ref-line" id="docRef"></div>
+      </div>
+      <div class="pa-tools">
+        <div class="seg sm" id="viewSeg">
+          <button data-view="read">Teks</button>
+          <button data-view="orig">PDF asli</button>
+        </div>
+        <div class="seg sm lang-seg" id="langSeg" role="group" aria-label="Bahasa baca">
+          <button data-lang="orig" title="Teks asli">Asli</button>
+          <button data-lang="bi" title="Paragraf asli + terjemahan di bawahnya">Dwibahasa</button>
+          <button data-lang="id" title="Hanya terjemahan">Indonesia</button>
+        </div>
+        <button class="btn sm ghost" id="editBtn" title="Edit teks langsung di sini">✎ Edit</button>
+        <button class="btn sm ghost" id="gramBtn" title="Periksa ejaan dan tata bahasa">Periksa tata bahasa</button>
+        <label class="check sync" id="syncLbl" hidden title="Saat terjemahan di kanan diedit, teks asli di kiri diterjemahkan balik otomatis"><input type="checkbox" id="syncChk" checked> Edit kanan ubah kiri</label>
+        <div class="find">
+          <input type="search" id="find" placeholder="Cari di dokumen ( / )" aria-label="Cari di dokumen">
+          <span class="find-n" id="findN"></span>
+          <button class="icon-btn" id="findPrev" aria-label="Hasil sebelumnya">‹</button><button class="icon-btn" id="findNext" aria-label="Hasil berikutnya">›</button>
+        </div>
+        <div class="pa-actions">
+          <button class="btn sm" id="saveBtn">Simpan file terjemahan</button>
+          <button class="btn sm ghost danger" id="delBtn">Hapus</button>
+          <div id="exportPop" class="pop" hidden>
+            <h4>Simpan ke folder Hasil_Terjemahan</h4>
+            <label id="exPdfRow">Format
+              <select id="pdfOut">
+                <option value="docx">Word (.docx)</option>
+                <option value="pdf">PDF</option>
+                <option value="both">Word + PDF</option>
+              </select>
+            </label>
+            <label id="exCsvRow">Isi CSV
+              <select id="csvMode">
+                <option value="replace">Ganti teks asli</option>
+                <option value="add">Tambah kolom terjemahan</option>
+              </select>
+            </label>
+            <label id="exWhichRow">Isi file
+              <select id="exWhich">
+                <option value="tr">Terjemahan (termasuk hasil edit)</option>
+                <option value="orig">Teks asli hasil edit</option>
+              </select>
+            </label>
+            <label class="check" id="exBiRow"><input type="checkbox" id="bilingual"> Dwibahasa (asli + terjemahan)</label>
+            <div class="pop-act"><button class="btn sm" id="exGo">Simpan</button><button class="btn sm ghost" id="exCancel">Batal</button></div>
+            <p id="exMsg" class="small muted"></p>
+          </div>
+        </div>
+      </div>
+      <div id="gramPanel" class="gram" hidden></div>
+      <div class="doc-content" id="docContent" tabindex="0"></div>
+    </div>
+    <div id="quotesView" class="quotes-view" hidden></div>
+  </main>
+</div>
+
+<div id="selBtn" class="sel-btn" hidden><button class="btn sm" id="selTr">Terjemahkan</button><button class="btn sm" id="selQuote" title="Simpan ke Laporan kutipan dengan sitasi dan referensi APA 7">❝ Kutip</button></div>
+<div id="trPop" class="tr-pop" hidden></div>
+<div id="toast" class="toast" hidden></div>
+<div id="refModal" class="modal" hidden>
+  <div class="modal-card" role="dialog" aria-label="Edit referensi APA 7">
+    <h3>Referensi APA 7</h3>
+    <div class="rf-grid">
+      <label>Jenis
+        <select id="rfType">
+          <option value="journal">Artikel jurnal</option>
+          <option value="book">Buku</option>
+          <option value="chapter">Bab dalam buku</option>
+          <option value="proceedings">Makalah prosiding</option>
+          <option value="report">Laporan</option>
+          <option value="thesis">Skripsi / tesis / disertasi</option>
+          <option value="web">Halaman web</option>
+        </select>
+      </label>
+      <label>Tahun <input id="rfYear" placeholder="2024"></label>
+      <label class="span2">Penulis, satu per baris: Nama belakang, Nama depan <textarea id="rfAuthors" rows="3" placeholder="Clinton, Virginia"></textarea></label>
+      <label class="span2">Judul <input id="rfTitle"></label>
+      <label class="span2" id="rfContainerL">Nama jurnal <input id="rfContainer"></label>
+      <label>Volume <input id="rfVolume"></label>
+      <label id="rfIssueL">Nomor <input id="rfIssue"></label>
+      <label>Halaman <input id="rfPages" placeholder="177-189"></label>
+      <label>Penerbit / institusi <input id="rfPublisher"></label>
+      <label class="span2" id="rfEditorsL">Editor, satu per baris <textarea id="rfEditors" rows="2"></textarea></label>
+      <label class="span2">DOI <input id="rfDoi" placeholder="10.xxxx/xxxxx"></label>
+      <label class="span2">URL (bila tidak ada DOI) <input id="rfUrl"></label>
+    </div>
+    <div class="rf-preview" id="rfPreview"></div>
+    <div class="modal-act">
+      <button class="btn sm ghost" id="rfLookup">Cari otomatis (Crossref)</button>
+      <span id="rfMsg" class="small muted"></span>
+      <span class="grow"></span>
+      <button class="btn sm ghost" id="rfCancel">Batal</button>
+      <button class="btn sm" id="rfSave">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Aktivasi Lisensi Terjemah-IN -->
+<div id="licModal" style="display:flex;position:fixed;inset:0;background:rgba(15,23,42,0.85);backdrop-filter:blur(6px);z-index:999999;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#ffffff;border-radius:20px;max-width:440px;width:100%;box-shadow:0 25px 50px -12px rgba(0,0,0,0.35);overflow:hidden;border:1px solid #e2e8f0;font-family:var(--font-ui)">
+    <div style="background:linear-gradient(135deg,#065f46,#047857);color:#ffffff;padding:24px;text-align:center">
+      <div style="width:48px;height:48px;background:rgba(255,255,255,0.2);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 10px auto;border:1px solid rgba(255,255,255,0.4)">
+        🌐
+      </div>
+      <h3 style="margin:0;font-size:18px;font-weight:800;letter-spacing:-0.5px">Aktivasi Lisensi Terjemah-IN</h3>
+      <p style="margin:4px 0 0 0;font-size:12px;color:#a7f3d0">Penerjemah Dokumen Bilingual &bull; Ekosistem RisetKu</p>
+    </div>
+
+    <form id="licForm" style="padding:22px 24px">
+      <div style="margin-bottom:12px">
+        <label style="display:block;font-size:12px;font-weight:700;color:#334155;margin-bottom:4px">Nama Lengkap Peneliti:</label>
+        <input type="text" id="licName" placeholder="Nama lengkap Anda..." required style="width:100%;padding:10px 12px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:13px;font-weight:600;box-sizing:border-box">
+      </div>
+
+      <div style="margin-bottom:12px">
+        <label style="display:block;font-size:12px;font-weight:700;color:#334155;margin-bottom:4px">Email Kampus / Peneliti:</label>
+        <input type="email" id="licEmail" placeholder="nama@kampus.ac.id" required style="width:100%;padding:10px 12px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:13px;box-sizing:border-box">
+      </div>
+
+      <div style="margin-bottom:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <label style="font-size:12px;font-weight:700;color:#334155">Kunci Lisensi Terjemah-IN:</label>
+          <span style="color:#059669;font-size:11px;font-weight:700">Wajib Diisi</span>
+        </div>
+        <input type="text" id="licKey" placeholder="TRANS-30D-XXXX-XXXX" required style="width:100%;padding:10px 12px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:14px;font-family:monospace;font-weight:800;letter-spacing:1px;text-transform:uppercase;box-sizing:border-box">
+      </div>
+
+      <p id="licErr" style="color:#dc2626;font-size:12px;margin:0 0 12px 0;display:none;font-weight:600"></p>
+
+      <button type="submit" class="btn" style="width:100%;padding:12px;font-size:14px;background:linear-gradient(135deg,#059669,#047857);font-weight:800;border:none;border-radius:10px;cursor:pointer;color:#ffffff;box-shadow:0 4px 12px rgba(5,150,105,0.25)">
+        🔑 Aktivasi Lisensi &amp; Mulai Terjemahkan
+      </button>
+
+      <div style="margin-top:16px;padding-top:14px;border-top:1px dashed #cbd5e1;text-align:center">
+        <p style="font-size:11px;color:#475569;margin:0 0 8px 0;font-weight:600">Belum memiliki Kunci Lisensi Terjemah-IN?</p>
+        <a id="btnRequestLic" href="https://wa.me/6281234567890?text=Halo%20Pemilik%2FAdmin%20RisetKu%2C%20saya%20ingin%20meminta%20Kunci%20Lisensi%20Terjemah-IN." target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#10b981;color:#ffffff;text-decoration:none;border-radius:10px;padding:10px;font-size:12px;font-weight:700;box-shadow:0 4px 12px rgba(16,185,129,0.2)">
+          <span>💬 Minta Kunci Lisensi ke Pemilik (WhatsApp)</span>
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="license.js"></script>
+<script src="app.js"></script>
+<script src="kutipan.js"></script>
+</body>
+</html>

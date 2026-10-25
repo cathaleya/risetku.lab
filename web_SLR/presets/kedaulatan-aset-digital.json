@@ -1,0 +1,225 @@
+{
+  "app": "telaah-slr-preset",
+  "project": {
+    "type": "slr",
+    "title": "Memetakan kedaulatan aset intelektual digital dalam lingkungan belajar pendidikan doktoral: tinjauan sistematis instrumen literasi digital",
+    "question": "RQ1: Instrumen literasi digital apa yang dipakai pada dosen dan mahasiswa doktoral, dan bukti validitas serta reliabilitas apa yang dilaporkan?\nRQ2: Dimensi literasi digital dan kepemilikan aset intelektual digital (C1–C5) mana yang diukur, dan pada lapisan mana (mikro, meso, ekosistem riset)?\nRQ3: Kebutuhan dan hambatan apa yang dilaporkan terkait aset intelektual digital pada populasi tersebut?",
+    "framework": {
+      "P": "Mahasiswa doktoral/pascasarjana dan dosen/peneliti di pendidikan tinggi (I1)",
+      "I": "Literasi digital, fokus aset intelektual digital: hak cipta, lisensi, OER, pengelolaan data riset (I2, I3); tanpa fokus aset = Tier B",
+      "C": "Tidak ada pembanding wajib; dibandingkan menurut lapisan, dimensi, dan jenjang",
+      "O": "(a) instrumen & bukti validitas/reliabilitas, (b) dimensi yang diukur, (c) kebutuhan & hambatan (I4)",
+      "S": "Studi empiris primer (kuantitatif, kualitatif, campuran), periode yang ditetapkan, bahasa Inggris, teks lengkap dapat diakses (I5–I7)"
+    },
+    "reviewers": [
+      "Reviewer 1",
+      "Reviewer 2"
+    ],
+    "single": true,
+    "blind": false
+  },
+  "reasons": [
+    "E1 – Populasi bukan mahasiswa doktoral/pascasarjana atau dosen/peneliti",
+    "E2 – Konstruk bukan literasi digital atau aset intelektual digital",
+    "E3 – Tidak melaporkan outcome yang relevan (instrumen, dimensi, kebutuhan/hambatan)",
+    "E4 – Fokus teknis (pengembangan sistem/alat), bukan kompetensi atau literasi",
+    "E5 – Bukan studi empiris primer (ulasan, opini, editorial, panduan)",
+    "E6 – Duplikat",
+    "E7 – Di luar periode terbit",
+    "E8 – Teks lengkap tidak dapat diperoleh",
+    "E9 – Bahasa bukan Inggris"
+  ],
+  "criteria": {
+    "mode": "all",
+    "include": [
+      {
+        "label": "I1 – Populasi",
+        "terms": "doctoral, PhD, \"Ph.D*\", \"graduate student*\", \"postgraduate*\", \"post-graduate*\", \"master's student*\", \"research student*\", \"early career researcher*\", \"early-career researcher*\", faculty, lecturer*, academic*, \"university teacher*\", professor*, researcher*, \"higher education\""
+      },
+      {
+        "label": "I2 – Konstruk",
+        "terms": "\"digital literacy\", \"digital competence*\", \"digital skill*\", \"digital capabilit*\", \"information literacy\", \"data literacy\", \"data management\", \"research data\", copyright, \"intellectual property\", licens*, \"open educational resource*\", \"open access\", \"data sharing\", \"digital scholarship\""
+      },
+      {
+        "label": "I5 – Desain empiris",
+        "terms": "survey*, questionnaire*, scale, instrument, interview*, \"focus group*\", \"case study\", \"mixed method*\", \"needs assessment\", \"cross-sectional\", validation, psychometric*"
+      }
+    ],
+    "exclude": [
+      {
+        "label": "E1 – Populasi bukan doktoral/dosen",
+        "terms": "\"K-12\", kindergarten, \"primary school*\", \"elementary\", \"secondary school*\", \"high school*\", \"middle school*\", child*, adolescent*, \"pre-service teacher*\", \"preservice teacher*\", \"older adult*\", elderly, patient*"
+      },
+      {
+        "label": "E2 – Konstruk bukan literasi digital",
+        "terms": "\"digital marketing\", \"digital twin*\", \"digital health\", \"digital currency\", cryptocurrency, \"digital transformation of business\", \"e-commerce\", \"digital divide\""
+      },
+      {
+        "label": "E4 – Fokus teknis",
+        "terms": "\"deep learning\", \"machine learning\", algorithm*, prototype*, \"system architecture\", \"software development\""
+      },
+      {
+        "label": "E5 – Bukan studi empiris primer",
+        "terms": "\"systematic review\", \"scoping review\", \"literature review\", \"meta-analysis\", editorial, \"position paper\", \"book review\", \"conceptual paper\""
+      }
+    ],
+    "lang": {
+      "on": true,
+      "allowed": [
+        "en"
+      ],
+      "label": "E9 – Bahasa bukan Inggris"
+    }
+  },
+  "fields": [
+    {
+      "id": "study_id",
+      "label": "ID studi (Penulis, Tahun)",
+      "type": "text",
+      "group": "Umum"
+    },
+    {
+      "id": "country",
+      "label": "Negara",
+      "type": "text",
+      "group": "Umum"
+    },
+    {
+      "id": "design",
+      "label": "Desain studi",
+      "type": "select",
+      "options": [
+        "Survei potong lintang",
+        "Pengembangan/validasi instrumen",
+        "Kualitatif",
+        "Metode campuran",
+        "Studi kasus",
+        "Lainnya"
+      ],
+      "group": "Umum"
+    },
+    {
+      "id": "population",
+      "label": "Populasi dan jenjang",
+      "type": "select",
+      "options": [
+        "Mahasiswa doktoral",
+        "Mahasiswa pascasarjana (S2/S3)",
+        "Dosen",
+        "Peneliti",
+        "Campuran"
+      ],
+      "group": "Umum"
+    },
+    {
+      "id": "sample",
+      "label": "Jumlah sampel (n)",
+      "type": "number",
+      "group": "Umum"
+    },
+    {
+      "id": "layer",
+      "label": "Lapisan",
+      "type": "select",
+      "options": [
+        "Mikro",
+        "Meso",
+        "Ekosistem Riset"
+      ],
+      "group": "Pemetaan"
+    },
+    {
+      "id": "madel5c",
+      "label": "Dimensi MADEL5C",
+      "type": "multi",
+      "options": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5"
+      ],
+      "group": "Pemetaan"
+    },
+    {
+      "id": "asset_focus",
+      "label": "Fokus aset (I3)",
+      "type": "select",
+      "options": [
+        "Ya (Tier A)",
+        "Tidak (Tier B)"
+      ],
+      "group": "Pemetaan"
+    },
+    {
+      "id": "asset_topic",
+      "label": "Topik aset",
+      "type": "select",
+      "options": [
+        "Pengelolaan data riset",
+        "Hak cipta dan lisensi",
+        "Sumber daya pendidikan terbuka",
+        "Lainnya"
+      ],
+      "group": "Pemetaan"
+    },
+    {
+      "id": "instrument",
+      "label": "Instrumen dan alat ukur",
+      "type": "textarea",
+      "group": "Instrumen"
+    },
+    {
+      "id": "validity",
+      "label": "Bukti validitas",
+      "type": "multi",
+      "options": [
+        "Isi",
+        "Konstruk",
+        "Kriteria",
+        "Tidak dilaporkan"
+      ],
+      "group": "Instrumen"
+    },
+    {
+      "id": "reliability",
+      "label": "Bukti reliabilitas",
+      "type": "text",
+      "group": "Instrumen"
+    },
+    {
+      "id": "needs",
+      "label": "Kebutuhan atau hambatan yang dilaporkan",
+      "type": "textarea",
+      "group": "Temuan"
+    },
+    {
+      "id": "owner_consequence",
+      "label": "Konsekuensi bagi pemilik karya",
+      "type": "select",
+      "options": [
+        "Dibahas",
+        "Tidak dibahas"
+      ],
+      "group": "Temuan"
+    },
+    {
+      "id": "findings",
+      "label": "Temuan utama",
+      "type": "textarea",
+      "group": "Temuan"
+    },
+    {
+      "id": "limitations",
+      "label": "Keterbatasan",
+      "type": "textarea",
+      "group": "Temuan"
+    },
+    {
+      "id": "notes",
+      "label": "Catatan",
+      "type": "textarea",
+      "group": "Umum"
+    }
+  ]
+}

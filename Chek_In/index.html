@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cek-In</title>
+<meta name="description" content="Cek-In: pemeriksa sistematika, isi, koherensi, dan analisis data tesis/disertasi berdasarkan Panduan SPs UNJ 2025. Bagian dari MADEL-5C.">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" href="img/logo_cekin.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="css/cekin.css">
+
+<!-- ikon -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="m9 14 2 2 4-4"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1.2" fill="currentColor"/><circle cx="4.5" cy="12" r="1.2" fill="currentColor"/><circle cx="4.5" cy="18" r="1.2" fill="currentColor"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/></symbol>
+  <symbol id="i-type" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7V5h16v2M12 5v14M9 19h6"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2z"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+</svg>
+
+<nav class="nav" aria-label="Navigasi utama">
+  <div class="wrap">
+    <a class="brand" href="#atas">
+      <img class="mark" src="img/logo_cekin.svg" alt="" width="54" height="54">
+      <span class="words"><span class="name">Cek-In</span><span class="tag">Tesis &amp; Disertasi Checker</span></span>
+    </a>
+    <div class="nav-links">
+      <div class="nav-logos"><img src="img/logo_madel5c.png" alt="MADEL-5C"></div>
+      <a class="l" href="#fitur">Yang diperiksa</a>
+      <a class="l" href="#alur">Cara kerja</a>
+      <a class="l" href="#panduan">Panduan</a>
+      <a class="l" href="periksa.html">Periksa naskah</a>
+      <a class="btn primary" id="navMasuk" href="periksa.html">Masuk</a>
+      <a class="who" id="navUser" href="periksa.html" hidden><span class="avatar" id="navAvatar"></span><span class="who-t"><b id="navNama"></b><small>Buka Cek-In →</small></span></a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="atas">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow"><i></i>Panduan Penulisan SPs UNJ 2025</span>
+      <h1><span class="solid timbul-heading">Cek-In</span><span class="emboss">Tesis &amp;<br>Disertasi</span></h1>
+      <div class="hero-card card-timbul">
+        <p>Unggah naskah .docx atau .pdf. Cek-In memeriksa sistematika per jenis penelitian, isi setiap bab, koherensi judul–rumusan masalah–simpulan, dimensi konseptual, paradigma, analisis data, tabel, rujukan, dan format, lalu menyusun catatan revisi yang bisa diunduh.</p>
+        <div class="pills"><span class="pill">8 jenis penelitian</span><span class="pill">KKNI 8 &amp; 9</span><span class="pill">APA 7</span><span class="pill">Kriteria Hair · Wiley · Downing</span></div>
+        <div class="row">
+          <a class="btn primary" href="periksa.html">Mulai periksa <svg class="ico" style="width:16px;height:16px"><use href="#i-arrow"/></svg></a>
+          <a class="btn amber" href="#panduan">Panduan penggunaan</a>
+        </div>
+      </div>
+    </div>
+    <div class="preview card-timbul" aria-label="Contoh tampilan laporan">
+      <div class="ph"><b>Contoh laporan</b><span class="tagx">Naskah fiktif</span></div>
+      <div class="body">
+        <div class="ring" style="--p:84;--c:var(--ok)"><div><strong>84</strong><small>kesesuaian</small></div></div>
+        <div class="mini-bars">
+          <div>Sistematika bab<span><em style="width:100%;background:var(--ok)"></em></span></div>
+          <div>Koherensi<span><em style="width:78%;background:var(--warn)"></em></span></div>
+          <div>Dimensi konseptual<span><em style="width:92%;background:var(--ok)"></em></span></div>
+          <div>Analisis data &amp; statistik<span><em style="width:61%;background:var(--warn)"></em></span></div>
+          <div>Rujukan &amp; sitasi<span><em style="width:45%;background:var(--miss)"></em></span></div>
+        </div>
+      </div>
+      <div class="note">Ilustrasi. Laporan Anda dibuat dari naskah yang diunggah.</div>
+    </div>
+  </div>
+</header>
+
+<section class="band blue" id="fitur">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow"><i></i>Yang diperiksa</span><h2 class="timbul-heading">Dari sistematika sampai angka di tabel</h2><p>Setiap pemeriksaan merujuk halaman buku panduan atau buku acuan psikometri, sehingga catatan revisi bisa ditelusuri sumbernya.</p></div>
+    <div class="feat">
+      <div class="card-timbul hov"><span class="tile" style="background:linear-gradient(135deg,#2563EB,#4338CA)"><svg class="ico"><use href="#i-list"/></svg></span><h3>Sistematika bab</h3><p>Bab dan subbab untuk kualitatif, kuantitatif, eksperimen, R&amp;D, pengembangan instrumen, kebijakan, evaluasi, tindakan.</p><small>Panduan hal. 32–39</small></div>
+      <div class="card-timbul hov"><span class="tile" style="background:linear-gradient(135deg,#059669,#0D9488)"><svg class="ico"><use href="#i-link"/></svg></span><h3>Koherensi</h3><p>Judul dan setiap rumusan masalah dilacak ke tujuan, kajian pustaka, metode, hasil, dan simpulan.</p><small>Panduan hal. 26–31</small></div>
+      <div class="card-timbul hov"><span class="tile" style="background:linear-gradient(135deg,#7C3AED,#4338CA)"><svg class="ico"><use href="#i-layers"/></svg></span><h3>Dimensi &amp; paradigma</h3><p>Dimensi konseptual ke definisi operasional dan kisi-kisi; paradigma, pendekatan, dan grand theory di tiap bab.</p><small>Panduan hal. 27–30</small></div>
+      <div class="card-timbul hov"><span class="tile" style="background:linear-gradient(135deg,#F59E0B,#D97706)"><svg class="ico"><use href="#i-chart"/></svg></span><h3>Analisis data</h3><p>CFI, RMSEA, KMO, AVE, alpha, omega, VIF, MNSQ dibandingkan dengan kriteria buku acuan; angka teks ↔ tabel.</p><small>Hair · Irwing · Downing</small></div>
+      <div class="card-timbul hov"><span class="tile" style="background:linear-gradient(135deg,#DC2626,#B91C1C)"><svg class="ico"><use href="#i-book"/></svg></span><h3>Rujukan &amp; sitasi</h3><p>Minimal 30/60 rujukan, usia jurnal, entri belum lengkap, sitasi tanpa pustaka, urutan alfabetis APA 7.</p><small>Panduan hal. 5, 15, 31</small></div>
+      <div class="card-timbul hov"><span class="tile" style="background:linear-gradient(135deg,#0EA5E9,#2563EB)"><svg class="ico"><use href="#i-type"/></svg></span><h3>Format</h3><p>Times New Roman 12, spasi 1,5, A4, margin 3-3-3-4 cm, nomor halaman, keterangan tabel dan gambar.</p><small>Panduan hal. 3–4</small></div>
+      <div class="card-timbul hov"><span class="tile" style="background:linear-gradient(135deg,#1E3A8A,#0F172A)"><svg class="ico"><use href="#i-spark"/></svg></span><h3>Masukan AI</h3><p>Telaah substansi dengan AI milik Anda: salin prompt ke Gemini/ChatGPT, API key pribadi, atau masuk dengan OpenRouter.</p><small>Tanpa langganan dari kampus</small></div>
+      <div class="card-timbul hov"><span class="tile" style="background:linear-gradient(135deg,#16A34A,#059669)"><svg class="ico"><use href="#i-down"/></svg></span><h3>Laporan revisi</h3><p>Unduh laporan .doc per bab dengan kolom "sudah direvisi" dan tanggapan untuk diserahkan ke pembimbing.</p><small>.doc · .txt · PDF</small></div>
+    </div>
+  </div>
+</section>
+
+<section class="band cream" id="alur">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow"><i></i>Cara kerja</span><h2 class="timbul-heading">Empat langkah</h2><p>Naskah dibaca di browser Anda dan tidak diunggah ke server Cek-In.</p></div>
+    <div class="steps">
+      <div class="card-timbul"><span class="n">01</span><h3>Unggah naskah</h3><p>Berkas .docx memberi hasil paling lengkap, termasuk format, tabel, dan gambar.</p></div>
+      <div class="card-timbul"><span class="n">02</span><h3>Pilih jenis &amp; jenjang</h3><p>Tesis atau disertasi, proposal atau naskah lengkap, dan jenis penelitian, atau biarkan terdeteksi otomatis.</p></div>
+      <div class="card-timbul"><span class="n">03</span><h3>Baca laporan</h3><p>Catatan per bab, matriks koherensi dan dimensi, serta nilai statistik terhadap kriteria.</p></div>
+      <div class="card-timbul"><span class="n">04</span><h3>Revisi</h3><p>Minta masukan AI pilihan Anda, unduh laporan revisi, perbaiki naskah, lalu periksa ulang.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="panduan">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow"><i></i>Panduan penggunaan</span><h2 class="timbul-heading">Langkah demi langkah</h2><p>Ikuti urutan ini dari masuk sampai mengunduh laporan revisi. Bagian kanan berisi cara menyalin dan menempel di laptop maupun HP.</p></div>
+    <div class="guide">
+      <ol class="gsteps">
+        <li class="card-timbul"><span class="gn">1</span><div><h3>Masuk</h3><p>Di bagian <a href="periksa.html">Periksa naskah</a>, isi <b>nama lengkap</b> dan <b>email kampus UNJ</b> (mis. <code>nama@mhs.unj.ac.id</code>), lalu klik <b>Masuk</b>. Tidak perlu kata sandi. Di komputer bersama, klik <b>Keluar</b> setelah selesai.</p></div></li>
+        <li class="card-timbul"><span class="gn">2</span><div><h3>Siapkan naskah</h3><p>Simpan naskah sebagai <b>.docx</b> (Word) agar format, tabel, dan gambar ikut diperiksa. Pastikan:</p><ul><li>judul bab ditulis <code>BAB I PENDAHULUAN</code>, <code>BAB II KAJIAN PUSTAKA</code>, dst.;</li><li>subjudul memakai style Heading atau penomoran <code>A.</code>, <code>1.</code>, <code>a.</code>;</li><li>keterangan tabel/gambar seperti <code>Tabel 4.1 Judul</code> (Insert Caption di Word);</li><li>rumusan masalah ditulis sebagai kalimat tanya.</li></ul></div></li>
+        <li class="card-timbul"><span class="gn">3</span><div><h3>Unggah dan atur</h3><p>Seret berkas ke kotak unggah (atau klik untuk memilih). Pilih <b>jenis penelitian</b>, <b>jenjang</b>, dan <b>tahap</b>, atau biarkan <i>Otomatis</i>. Ketik <b>judul</b> bila naskah tidak memuat halaman sampul. Klik <b>Periksa naskah</b>; hasil muncul dalam beberapa detik.</p></div></li>
+        <li class="card-timbul"><span class="gn">4</span><div><h3>Baca laporan</h3><p>Mulai dari tab <b>Catatan perbaikan</b> atau <b>Per bab</b>. Arti tanda:</p><div class="glegend"><span><span class="badge b-miss">✕</span> Belum ada — wajib diperbaiki</span><span><span class="badge b-warn">!</span> Perlu dicek — mungkin kurang tepat</span><span><span class="badge b-ok">✓</span> Sesuai panduan</span><span><span class="badge b-info">i</span> Informasi</span></div><p>Tab lain merinci koherensi, dimensi &amp; paradigma, analisis data &amp; tabel, rujukan, dan format. Jika pilihan di panel kiri diubah, laporan diperbarui otomatis.</p></div></li>
+        <li class="card-timbul"><span class="gn">5</span><div><h3>Salin catatan per bab</h3><p>Di tab <b>Per bab</b>, setiap bab punya tombol:</p><ul><li><b>Salin catatan bab</b> — daftar revisi bab itu lengkap dengan saran dan kotak <code>[ ] Sudah direvisi</code>. Tempel ke Word, Google Docs, atau WhatsApp pembimbing.</li><li><b>Salin prompt AI bab ini</b> — perintah telaah bab untuk ditempel ke AI (lihat langkah 6).</li></ul><p>Tombol berubah menjadi <b>Tersalin</b> bila berhasil.</p></div></li>
+        <li class="card-timbul"><span class="gn">6</span><div><h3>Minta masukan AI (opsional)</h3><p>Pakai AI yang sudah Anda punya, tanpa biaya dari Cek-In:</p><ol class="sub"><li>Buka tab <b>Masukan AI</b>, pilih <b>cakupan</b> (seluruh naskah, satu bab, koherensi, analisis data, atau teori), atau pakai tombol prompt di tab Per bab.</li><li>Klik <b>Salin prompt</b>, lalu klik <b>Buka Gemini</b> / <b>Buka ChatGPT</b> (terbuka di tab baru).</li><li>Klik kolom ketik AI, <b>tempel</b> (Ctrl+V), lalu kirim.</li><li>Setelah AI menjawab, klik ikon <b>salin</b> di bawah jawaban AI.</li><li>Kembali ke Cek-In, tempel di kolom <b>"Tempel jawaban AI di sini"</b>, klik <b>Simpan ke laporan</b>.</li></ol><p>Jika AI menolak karena teks terlalu panjang, pilih panjang cuplikan <b>Ringkas</b> lalu salin ulang. Pengguna yang punya API key atau akun OpenRouter dapat memakai <b>Cara 2</b> agar jawaban langsung muncul di Cek-In.</p></div></li>
+        <li class="card-timbul"><span class="gn">7</span><div><h3>Unduh, revisi, periksa ulang</h3><p>Klik <b>Laporan revisi (.doc)</b>. Berkas berisi nama Anda, skor, tabel catatan per bab dengan kolom <b>Sudah direvisi</b> dan <b>Tanggapan</b>, masukan AI yang disimpan, serta rincian rujukan dan statistik. Perbaiki naskah, lalu unggah versi baru untuk memeriksa ulang.</p></div></li>
+      </ol>
+      <aside class="gside">
+        <div class="card-timbul cheat">
+          <h3>Cara menyalin &amp; menempel</h3>
+          <table>
+            <tr><th></th><th>Salin</th><th>Tempel</th></tr>
+            <tr><td>Windows</td><td><kbd>Ctrl</kbd>+<kbd>C</kbd></td><td><kbd>Ctrl</kbd>+<kbd>V</kbd></td></tr>
+            <tr><td>Mac</td><td><kbd>⌘</kbd>+<kbd>C</kbd></td><td><kbd>⌘</kbd>+<kbd>V</kbd></td></tr>
+            <tr><td>HP</td><td colspan="2">Tekan lama kolom ketik → <b>Tempel</b></td></tr>
+          </table>
+          <p>Tombol <b>Salin</b> di Cek-In sudah menyalin otomatis; Anda cukup <b>menempel</b>. Bila browser menolak, teks akan terpilih: tekan <kbd>Ctrl</kbd>+<kbd>C</kbd> sendiri.</p>
+        </div>
+        <div class="card-timbul cheat">
+          <h3>Tanya jawab</h3>
+          <details><summary>Apakah naskah saya diunggah ke server?</summary><p>Tidak. Naskah dibaca di browser Anda. Naskah hanya terkirim ke AI bila Anda sendiri menempelkan prompt atau memakai API key.</p></details>
+          <details><summary>Bab atau subbab saya tidak terbaca</summary><p>Lihat tab <b>Struktur terbaca</b>. Gunakan pola <code>BAB I …</code> dan style Heading atau penomoran pada subjudul, lalu periksa ulang.</p></details>
+          <details><summary>Lebih baik Word atau PDF?</summary><p>Word (.docx). PDF hanya bisa dibaca bila berasal dari ekspor Word (bukan hasil pindai), dan format huruf/spasi tidak dapat diperiksa lengkap.</p></details>
+          <details><summary>Hasilnya berbeda dengan pendapat pembimbing</summary><p>Cek-In memeriksa berdasarkan pencocokan istilah dan pola. Panduan mengizinkan bab disesuaikan dengan metode (hal. 3); keputusan akhir tetap pada pembimbing/promotor.</p></details>
+          <details><summary>Tombol unduh tidak berfungsi</summary><p>Unduhan diblokir di pratinjau claude.ai. Buka Cek-In di alamat resminya, atau gunakan tombol Salin.</p></details>
+          <details><summary>Data masuk saya disimpan di mana?</summary><p>Nama dan email hanya disimpan di browser ini dan dicantumkan pada laporan. Klik <b>Keluar</b> untuk menghapusnya.</p></details>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <b>Cek-In · bagian dari MADEL-5C</b>
+      <p>Pemeriksaan otomatis bersifat indikatif dan berbasis pencocokan istilah. Panduan mengizinkan tiap bab disesuaikan dengan pendekatan, model, dan metode penelitian (hal. 3), sehingga keputusan akhir tetap pada pembimbing atau promotor.</p>
+    </div>
+    <a class="btn" href="https://madel5c.com/" rel="noopener">Kembali ke MADEL-5C</a>
+  </div>
+</footer>
+
+<script>
+/* Bila pengguna sudah masuk (disimpan di browser ini), tampilkan namanya di navbar. */
+(function () {
+  try {
+    var u = JSON.parse(localStorage.getItem('cekin-user') || 'null');
+    if (!u || !u.nama) return;
+    document.getElementById('navMasuk').hidden = true;
+    document.getElementById('navUser').hidden = false;
+    document.getElementById('navNama').textContent = u.nama;
+    document.getElementById('navAvatar').textContent = u.nama.trim().split(/\s+/).slice(0, 2).map(function (w) { return w[0]; }).join('').toUpperCase();
+  } catch (e) { /* tetap tampilkan tombol Masuk */ }
+})();
+</script>
+</html>

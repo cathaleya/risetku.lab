@@ -1,0 +1,90 @@
+PENERJEMAH DOKUMEN KE BAHASA INDONESIA
+======================================
+
+Cara memakai
+1. Klik dua kali  Penerjemah.bat
+   (jendela hitam terbuka dan browser membuka http://localhost:8090)
+2. Seret file ke halaman (atau klik "+ Tambah file", atau taruh file di
+   folder "Masukan" lalu klik "Ambil semua dari folder Masukan").
+3. File muncul di daftar kiri dan langsung bisa DIBACA di panel kanan.
+   Terjemahan berjalan sambil Anda membaca.
+4. Selesai? Tutup jendela hitam. Dokumen tetap tersimpan di aplikasi.
+
+Panel baca (seperti web_SLR)
+  Asli / Dwibahasa / Indonesia  -> pilih cara baca
+  PDF asli                      -> lihat halaman PDF aslinya
+  Cari di dokumen ( / )         -> cari kata, Enter = hasil berikutnya
+  Blok teks -> Terjemahkan      -> terjemahan kalimat tertentu
+  Edit                          -> klik teks lalu ketik; tersimpan otomatis
+                                   (Indonesia/Dwibahasa = edit terjemahan,
+                                    Asli = edit teks asli)
+  Periksa tata bahasa           -> daftar saran; klik saran untuk mengganti
+  Simpan file terjemahan        -> buat file ke folder Hasil_Terjemahan
+                                   (hanya bila perlu file-nya)
+
+Periksa tata bahasa
+  - Teks Indonesia: aturan KBBI/PUEBI (kata tidak baku, di-/ke- terpisah atau
+    serangkai, kata ulang, spasi, tanda baca, huruf kapital awal kalimat).
+    Belum ada layanan gratis setara Grammarly untuk bahasa Indonesia, jadi
+    pemeriksaan ini tidak menangkap semua kesalahan tata bahasa.
+  - Teks Inggris (mis. teks asli): LanguageTool, mirip Grammarly.
+  - Garis merah ejaan dari browser: Chrome/Edge > Setelan > Bahasa >
+    Pemeriksaan ejaan > aktifkan "Bahasa Indonesia".
+
+Word (.docx)
+  Simpan -> "Terjemahan (termasuk hasil edit)" atau "Teks asli hasil edit".
+  Tata letak, tabel, gambar, header/footer tetap. Bila satu paragraf
+  campuran tebal/miring, teks memakai format bagian terpanjang paragraf.
+
+Jenis file
+  PDF (termasuk hasil scan via OCR), Word .docx, CSV/TSV, Excel .xlsx,
+  PowerPoint .pptx, .txt, .md, .srt, .vtt, .html, .json, gambar.
+  File lama .doc/.xls/.ppt: Simpan Sebagai .docx/.xlsx/.pptx dulu.
+
+Catatan
+  - Butuh Node.js dan internet. Teks dikirim ke Google Translate (dan ke
+    LanguageTool saat memeriksa teks Inggris): jangan untuk dokumen rahasia.
+  - Dokumen disimpan di browser ini (Chrome/Edge yang dipakai membuka
+    aplikasi). Hapus lewat tombol Hapus.
+  - Port 8090, jadi bisa jalan bersamaan dengan web_SLR (8080).
+
+Dwibahasa berdampingan
+  Kiri = teks asli, kanan = terjemahan, sejajar per paragraf.
+  Dengan Edit aktif:
+    - edit kanan -> teks asli di kiri ikut disesuaikan (diterjemahkan balik),
+      bisa dimatikan lewat centang "Edit kanan ubah kiri";
+    - edit kiri  -> terjemahan di kanan diperbarui otomatis;
+    - tombol ↺ di kiri mengembalikan teks asli semula.
+
+Memindahkan ke laptop lain
+  - Salin SELURUH folder Penerjemah_Dokumen (mis. lewat flashdisk atau zip).
+  - Laptop tujuan butuh Node.js (https://nodejs.org), ATAU taruh node.exe
+    di subfolder "node" (node\node.exe) agar tidak perlu memasang apa pun.
+  - Butuh internet dan Chrome/Edge.
+  - Dokumen yang sudah dimasukkan dan hasil editnya tersimpan di browser
+    laptop ini, jadi tidak ikut pindah. Simpan dulu lewat "Simpan file
+    terjemahan" bila ingin dibawa; file di Hasil_Terjemahan ikut tersalin.
+
+Menghapus dokumen
+  Tombol × di setiap dokumen pada panel kiri (atau tombol Hapus di atas
+  dokumen). File dan terjemahannya dihapus dari aplikasi agar ringan.
+  Kutipan dari dokumen itu TETAP tersimpan di Laporan kutipan.
+
+Kutipan + referensi APA 7
+  1. Blok kalimat di dokumen -> klik "❝ Kutip".
+  2. Kutipan tersimpan otomatis di "❝ Laporan kutipan" (bilah atas) dengan:
+     - sitasi dalam kurung  (Clinton, 2018, p. 181)
+     - sitasi naratif       Clinton (2018) ... (p. 181)
+     - referensi APA 7 lengkap untuk daftar pustaka.
+  3. Unduh Word (.docx) atau CSV/Excel, atau "Salin kutipan + referensi"
+     lalu tempel ke naskah (huruf miring APA ikut tersalin).
+  Data referensi dicari otomatis: DOI di PDF -> Crossref; bila tidak ada
+  DOI -> judul -> Crossref; bila tidak ketemu -> metadata file (lengkapi
+  lewat "Edit referensi"). Nomor halaman memakai halaman jurnal bila
+  rentang halamannya cocok dengan jumlah halaman PDF.
+  Kutipan dari teks terjemahan diberi tanda: menurut APA 7 terjemahan
+  sendiri dianggap parafrase, periksa terhadap teks asli.
+
+Bila Google Translate membatasi
+  Aplikasi otomatis memakai penerjemah bawaan Chrome (di perangkat) dan
+  kembali ke Google setelah 5 menit. Hasil Chrome sedikit kurang rapi.

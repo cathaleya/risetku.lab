@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Environment & Secret files
+.env
+.env.local
+.env.production
+
+# Owner Offline Generator (Khusus lokal pribadi pemilik, jangan di-push ke publik)
+Generator_Lisensi_RisetKu.html
+generate_license.js
+
+# OS & Temp files
+.DS_Store
+Thumbs.db
+*.log
+scratch/

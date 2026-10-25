@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ANALISISaja - Premium Psychometric Mockup</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Outfit', sans-serif;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(241, 245, 249, 1);
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(203, 213, 225, 1);
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: rgba(148, 163, 184, 1);
+    }
+  </style>
+</head>
+<body class="bg-[#F8FAFC] text-slate-800 min-h-screen flex">
+
+  <!-- Sidebar -->
+  <aside class="w-80 bg-[#0F172A] flex flex-col shadow-2xl h-screen sticky top-0 z-30">
+    <!-- Brand -->
+    <div class="p-8 border-b border-white/5 flex items-center gap-3">
+      <div class="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center shadow-lg shadow-amber-500/20">
+        <i class="fa-solid fa-calculator text-[#0F172A] text-lg"></i>
+      </div>
+      <div>
+        <h1 class="font-black text-xl tracking-tighter text-white leading-none">ANALISIS<span class="text-amber-500">aja</span></h1>
+        <p class="text-[9px] font-bold text-amber-500/80 uppercase tracking-widest mt-1">Psychometrics Suite</p>
+      </div>
+    </div>
+
+    <!-- Active Project -->
+    <div class="px-6 py-4 border-b border-white/5">
+      <span class="text-[8px] font-black text-slate-500 uppercase tracking-widest block mb-2">Proyek Aktif</span>
+      <div class="bg-white/5 border border-white/10 rounded-xl p-3 flex items-center justify-between text-xs text-white">
+        <span class="truncate font-bold">Proyek Utama: Literasi Digital</span>
+        <i class="fa-solid fa-chevron-down text-slate-400 text-[10px]"></i>
+      </div>
+    </div>
+
+    <!-- Menu -->
+    <nav class="flex-1 p-6 space-y-4 overflow-y-auto custom-scrollbar text-[10px] font-black uppercase tracking-widest text-slate-400">
+      
+      <!-- Group 1: Portal Utama -->
+      <div class="space-y-1">
+        <p class="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-2 ml-2">Portal Utama</p>
+        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-300 bg-amber-500 text-[#0F172A] shadow-lg shadow-amber-500/20">
+          <i class="fa-solid fa-gauge-high text-sm"></i>
+          <span>Dashboard</span>
+        </button>
+        <button onclick="switchTab('upload')" id="nav-upload" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-300 hover:bg-white/5 hover:text-white">
+          <i class="fa-solid fa-cloud-arrow-up text-sm"></i>
+          <span>Upload & Screening</span>
+        </button>
+      </div>
+
+      <!-- Group 2: Evaluasi Instrumen -->
+      <div class="space-y-1 pt-2">
+        <p class="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-2 ml-2">Evaluasi Instrumen</p>
+        <button onclick="switchTab('delphi')" id="nav-delphi" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-300 hover:bg-white/5 hover:text-white">
+          <i class="fa-solid fa-comments-dollar text-sm"></i>
+          <span>Delphi Method</span>
+        </button>
+        <button onclick="switchTab('cvi')" id="nav-cvi" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-300 hover:bg-white/5 hover:text-white">
+          <i class="fa-solid fa-clipboard-check text-sm"></i>
+          <span>CVI / CVR Validasi</span>
+        </button>
+        <button onclick="switchTab('ctt')" id="nav-ctt" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-300 hover:bg-white/5 hover:text-white">
+          <i class="fa-solid fa-vial-circle-check text-sm"></i>
+          <span>CTT Analisis</span>
+        </button>
+        <button onclick="switchTab('irt')" id="nav-irt" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-300 hover:bg-white/5 hover:text-white">
+          <i class="fa-solid fa-stairs text-sm"></i>
+          <span>Rasch / IRT Model</span>
+        </button>
+        <button onclick="switchTab('factor')" id="nav-factor" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-300 hover:bg-white/5 hover:text-white">
+          <i class="fa-solid fa-diagram-project text-sm"></i>
+          <span>Analisis Faktor</span>
+        </button>
+        <button onclick="switchTab('sem')" id="nav-sem" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-300 hover:bg-white/5 hover:text-white">
+          <i class="fa-solid fa-network-wired text-sm"></i>
+          <span>Analisis SEM</span>
+        </button>
+        <button onclick="switchTab('scoring')" id="nav-scoring" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-300 hover:bg-white/5 hover:text-white">
+          <i class="fa-solid fa-calculator text-sm"></i>
+          <span>Skoring & Norma</span>
+        </button>
+      </div>
+
+      <!-- Group 3: Evaluasi Program -->
+      <div class="space-y-1 pt-2">
+        <p class="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-2 ml-2">Evaluasi Program</p>
+        <button onclick="switchTab('cipp')" id="nav-cipp" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-300 hover:bg-white/5 hover:text-white">
+          <i class="fa-solid fa-briefcase text-sm"></i>
+          <span>Model CIPP</span>
+        </button>
+        <button onclick="switchTab('kirkpatrick')" id="nav-kirkpatrick" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-300 hover:bg-white/5 hover:text-white">
+          <i class="fa-solid fa-graduation-cap text-sm"></i>
+          <span>Kirkpatrick Model</span>
+        </button>
+        <button onclick="switchTab('qualitative')" id="nav-qualitative" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-300 hover:bg-white/5 hover:text-white">
+          <i class="fa-solid fa-comment-dots text-sm"></i>
+          <span>Kualitatif (NVIVO R)</span>
+        </button>
+      </div>
+
+      <!-- Group 4: Laporan & Ekspor -->
+      <div class="space-y-1 pt-2">
+        <p class="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-2 ml-2">Laporan & Ekspor</p>
+        <button onclick="switchTab('reports')" id="nav-reports" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-300 hover:bg-white/5 hover:text-white">
+          <i class="fa-solid fa-file-pdf text-sm"></i>
+          <span>Laporan Terpadu</span>
+        </button>
+      </div>
+
+    </nav>
+
+    <!-- Footer -->
+    <div class="p-6 border-t border-white/5">
+      <div class="p-3 bg-white/5 rounded-xl text-center">
+        <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest">Infrastruktur</p>
+        <span class="flex items-center justify-center gap-1.5 text-emerald-500 text-[10px] font-bold mt-1">
+          <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span> LOCALHOST:3001
+        </span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <div class="flex-1 flex flex-col h-screen overflow-hidden">
+    <!-- Topbar -->
+    <header class="h-20 bg-white border-b border-slate-200 px-8 flex items-center justify-between z-20">
+      <div class="flex items-center gap-4">
+        <div class="h-7 w-1 bg-purple-600 rounded-full"></div>
+        <h2 id="topbar-title" class="text-sm font-black text-slate-900 tracking-wider uppercase">Dashboard Utama</h2>
+      </div>
+      <div class="flex items-center gap-3">
+        <span id="licBadge" style="display:none;align-items:center;gap:4px;padding:3px 10px;background:#f3e8ff;border:1px solid #d8b4fe;color:#6b21a8;border-radius:999px;font-size:11px;font-weight:700">
+          <span>🛡️</span>
+          <span id="licBadgeText">Lisensi Aktif</span>
+          <button type="button" id="btnDeactLic" style="background:none;border:none;color:#991b1b;cursor:pointer;font-size:10px;text-decoration:underline;margin-left:4px" title="Ganti kunci">(Ganti)</button>
+        </span>
+        <a href="/" style="text-decoration:none;display:inline-flex;align-items:center;gap:4px;padding:6px 12px;background:#f8fafc;border:1px solid #cbd5e1;color:#334155;border-radius:10px;font-size:11px;font-weight:700">
+          <span>←</span>
+          <span>Portal RisetKu</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Dynamic Screen Workspace -->
+    <main class="flex-1 overflow-y-auto p-10 bg-slate-50/50 custom-scrollbar">
+      
+      <!-- Screen 1: Dashboard -->
+      <div id="screen-dashboard" class="space-y-10">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div class="lg:col-span-2 bg-gradient-to-br from-[#0F172A] to-[#1E293B] p-8 rounded-[32px] text-white flex flex-col justify-between shadow-xl relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-amber-500/10 rounded-full blur-2xl"></div>
+            <div>
+              <span class="px-3 py-1 bg-amber-500/10 text-amber-500 border border-amber-500/20 rounded-full text-[9px] font-black uppercase tracking-widest">Analisis Aktif</span>
+              <h3 class="text-2xl font-black mt-4 tracking-tight leading-tight">Selamat Datang di Portal Eksklusif ANALISIS<span class="text-amber-500 font-black">aja</span></h3>
+              <p class="text-xs text-slate-300 font-medium mt-2 max-w-lg">Sistem terpadu pengukuran evaluasi PEP. Gunakan modul navigasi di sebelah kiri untuk memproses teori tes klasik, IRT/Rasch, analisis faktor, hingga skoring norma.</p>
+            </div>
+            <div class="flex gap-4 mt-8">
+              <button onclick="switchTab('upload')" class="px-5 py-3 bg-amber-500 text-[#0F172A] font-black text-[10px] uppercase tracking-wider rounded-xl hover:bg-amber-600 transition-all">
+                Unggah Data Respons
+              </button>
+            </div>
+          </div>
+
+          <div class="bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm flex flex-col justify-between">
+            <div>
+              <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Status Database</span>
+              <h4 class="text-lg font-black text-slate-900 tracking-tight">PostgreSQL: 5433</h4>
+              <p class="text-[10px] text-emerald-600 font-bold uppercase tracking-wider mt-1.5 flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> Terkoneksi (Internal Docker)
+              </p>
+            </div>
+            <div class="border-t border-slate-100 pt-6 mt-6 grid grid-cols-2 gap-4">
+              <div>
+                <span class="text-[8px] font-black text-slate-400 uppercase">Total Items</span>
+                <p class="text-base font-black text-slate-900">25 Soal</p>
+              </div>
+              <div>
+                <span class="text-[8px] font-black text-slate-400 uppercase">Responden</span>
+                <p class="text-base font-black text-slate-900">80 Orang</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metric Graphs Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm">
+            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-4">Grafik Tren Validitas CTT (p vs r-it)</span>
+            <div class="h-64 flex items-center justify-center bg-slate-50 border border-dashed border-slate-200 rounded-2xl">
+              <canvas id="overviewChart"></canvas>
+            </div>
+          </div>
+          <div class="bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm">
+            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-4">Informasi Tambahan & Panduan Jurnal</span>
+            <div class="space-y-4 text-xs font-bold text-slate-600">
+              <div class="p-4 bg-amber-50/50 rounded-2xl border border-amber-100 flex gap-3">
+                <i class="fa-solid fa-graduation-cap text-amber-600 text-lg mt-0.5"></i>
+                <div>
+                  <h5 class="text-slate-900 font-black uppercase text-[10px]">Standard Scopus Q1</h5>
+                  <p class="text-[10px] text-slate-500 mt-1">Gunakan tab CFA untuk mendapatkan visualisasi Path Diagram yang siap diekspor ke naskah artikel Anda.</p>
+                </div>
+              </div>
+              <div class="p-4 bg-indigo-50/50 rounded-2xl border border-indigo-100 flex gap-3">
+                <i class="fa-solid fa-code text-indigo-600 text-lg mt-0.5"></i>
+                <div>
+                  <h5 class="text-slate-900 font-black uppercase text-[10px]">Dukungan R / SPSS</h5>
+                  <p class="text-[10px] text-slate-500 mt-1">Seluruh layout output didesain presisi menyerupai SPSS format untuk mempermudah cross-validation data.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screen 2: Upload -->
+      <div id="screen-upload" class="hidden space-y-10">
+        <div>
+          <h3 class="text-xl font-black text-slate-900 tracking-tight uppercase">Upload & Screening Data</h3>
+          <p class="text-slate-500 text-xs font-medium mt-1">Unggah berkas CSV respons butir instrumen Anda untuk memproses data statistik awal.</p>
+        </div>
+
+        <div class="bg-white p-10 rounded-[32px] border border-slate-200 shadow-sm flex flex-col items-center justify-center text-center">
+          <div class="w-16 h-16 bg-amber-500/10 text-amber-500 rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
+            <i class="fa-solid fa-file-csv"></i>
+          </div>
+          <h4 class="text-base font-black text-slate-900">dataset_literasi_digital.csv</h4>
+          <p class="text-[10px] text-emerald-600 font-bold uppercase tracking-wider mt-1">Dataset Aktif Berhasil Dimuat</p>
+          <div class="flex justify-center gap-4 mt-6">
+            <button onclick="alert('Script R untuk RStudio berhasil diunduh (Mockup Mode)')" class="px-6 py-3 bg-amber-500 hover:bg-amber-600 text-[#0F172A] font-black rounded-xl text-xs uppercase tracking-wider transition-all flex items-center gap-1.5">
+              <i class="fa-solid fa-code"></i> Download Script RStudio
+            </button>
+            <button class="px-6 py-3 bg-rose-50 text-rose-500 border border-rose-200 font-black rounded-xl text-xs uppercase tracking-wider hover:bg-rose-100 transition-all">
+              Hapus & Ganti File
+            </button>
+          </div>
+        </div>
+
+        <!-- screening metrics -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+            <div class="flex justify-between items-center mb-4">
+              <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-xl">
+                <i class="fa-solid fa-users"></i>
+              </div>
+              <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Total Responden</span>
+            </div>
+            <h4 class="text-lg font-black text-slate-900 tracking-tight">80 Orang</h4>
+          </div>
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+            <div class="flex justify-between items-center mb-4">
+              <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-xl">
+                <i class="fa-solid fa-list-ol"></i>
+              </div>
+              <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Jumlah Butir</span>
+            </div>
+            <h4 class="text-lg font-black text-slate-900 tracking-tight">25 Item</h4>
+          </div>
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+            <div class="flex justify-between items-center mb-4">
+              <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-xl">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+              </div>
+              <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Missing Rate</span>
+            </div>
+            <h4 class="text-lg font-black text-slate-900 tracking-tight">0.00%</h4>
+          </div>
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+            <div class="flex justify-between items-center mb-4">
+              <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center text-xl">
+                <i class="fa-solid fa-chart-line"></i>
+              </div>
+              <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Mean (SD) Kelompok</span>
+            </div>
+            <h4 class="text-lg font-black text-slate-900 tracking-tight">84.50 (SD: 12.18)</h4>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screen 3: CTT -->
+      <div id="screen-ctt" class="hidden space-y-10">
+        <div class="flex justify-between items-center">
+          <div>
+            <h3 class="text-xl font-black text-slate-900 tracking-tight uppercase">Analisis Teori Tes Klasik (CTT)</h3>
+            <p class="text-slate-500 text-xs font-medium mt-1">Estimasi indeks reliabilitas dan analisis butir soal secara tradisional (SPSS/R format).</p>
+          </div>
+          <button class="px-6 py-3 bg-amber-500 hover:bg-amber-600 text-[#0F172A] font-black rounded-xl text-xs uppercase tracking-widest transition-all">
+            <i class="fa-solid fa-bolt mr-1.5"></i> Run Analisis CTT
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Cronbach's Alpha (α)</span>
+            <div class="flex items-baseline gap-2 mt-2">
+              <h4 class="text-3xl font-black text-slate-900">0.865</h4>
+              <span class="text-[10px] font-bold text-emerald-500 uppercase">Sangat Reliable</span>
+            </div>
+          </div>
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Split-Half Reliability</span>
+            <div class="flex items-baseline gap-2 mt-2">
+              <h4 class="text-3xl font-black text-slate-900">0.812</h4>
+              <span class="text-[10px] font-bold text-emerald-500 uppercase">Spearman-Brown</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-[32px] border border-slate-200 shadow-sm overflow-hidden">
+          <div class="p-8 border-b border-slate-100 flex justify-between items-center">
+            <h4 class="text-xs font-black text-slate-900 uppercase tracking-widest">Tabel Parameter Analisis Butir CTT</h4>
+            <button class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-[9px] font-black uppercase tracking-wider transition-all flex items-center gap-1.5">
+              <i class="fa-solid fa-file-csv"></i> Download CSV
+            </button>
+          </div>
+          <div class="overflow-x-auto max-h-[400px] custom-scrollbar">
+            <table class="w-full text-left">
+              <thead class="bg-slate-50 text-[9px] font-black text-slate-400 uppercase border-b border-slate-100 sticky top-0">
+                <tr>
+                  <th class="px-8 py-5">Item ID</th>
+                  <th class="px-6 py-5">Difficulty Index (p)</th>
+                  <th class="px-6 py-5">Difficulty Level</th>
+                  <th class="px-6 py-5">Discrimination Index (r-it)</th>
+                  <th class="px-6 py-5">Discrimination Level</th>
+                  <th class="px-8 py-5">Keputusan Rekomendasi</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 text-xs font-bold text-slate-600">
+                <tr>
+                  <td class="px-8 py-5 font-black text-slate-900">Item_1</td>
+                  <td class="px-6 py-5 font-mono text-purple-600">0.82</td>
+                  <td class="px-6 py-5 uppercase text-[10px] text-slate-400">Mudah</td>
+                  <td class="px-6 py-5 font-mono text-blue-600">0.45</td>
+                  <td class="px-6 py-5 uppercase text-[10px] text-slate-400">Tinggi</td>
+                  <td class="px-8 py-5">
+                    <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase bg-emerald-50 text-emerald-600 border border-emerald-100">Retain</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="px-8 py-5 font-black text-slate-900">Item_2</td>
+                  <td class="px-6 py-5 font-mono text-purple-600">0.52</td>
+                  <td class="px-6 py-5 uppercase text-[10px] text-slate-400">Sedang</td>
+                  <td class="px-6 py-5 font-mono text-blue-600">0.12</td>
+                  <td class="px-6 py-5 uppercase text-[10px] text-slate-400">Rendah</td>
+                  <td class="px-8 py-5">
+                    <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase bg-rose-50 text-rose-600 border border-rose-100">Drop</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="px-8 py-5 font-black text-slate-900">Item_3</td>
+                  <td class="px-6 py-5 font-mono text-purple-600">0.41</td>
+                  <td class="px-6 py-5 uppercase text-[10px] text-slate-400">Sedang</td>
+                  <td class="px-6 py-5 font-mono text-blue-600">0.23</td>
+                  <td class="px-6 py-5 uppercase text-[10px] text-slate-400">Cukup</td>
+                  <td class="px-8 py-5">
+                    <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase bg-amber-50 text-amber-600 border border-amber-100">Revise</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screen 4: IRT -->
+      <div id="screen-irt" class="hidden space-y-10">
+        <div class="flex justify-between items-center">
+          <div>
+            <h3 class="text-xl font-black text-slate-900 tracking-tight uppercase">Analisis Teori Respons Butir (IRT) / Rasch</h3>
+            <p class="text-slate-500 text-xs font-medium mt-1">Estimasi parameter butir berbasis modern Rasch dan polytomous model.</p>
+          </div>
+          <div class="flex gap-4">
+            <select class="text-xs font-black bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-700 focus:outline-none">
+              <option>Rasch (1PL)</option>
+              <option>2PL Model</option>
+              <option>3PL Model</option>
+            </select>
+            <button class="px-6 py-3 bg-amber-500 hover:bg-amber-600 text-[#0F172A] font-black rounded-xl text-xs uppercase tracking-widest transition-all">
+              Run Analisis IRT
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div class="bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm">
+            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-4">Wright Map (Item-Person Parameter Map)</span>
+            <div class="h-64 flex items-center justify-center bg-slate-50 border border-dashed border-slate-200 rounded-2xl overflow-hidden p-4">
+              <!-- Wright Map Visual Mockup -->
+              <div class="w-full flex justify-between h-full text-[10px] font-bold text-slate-500">
+                <div class="w-1/2 flex flex-col justify-between border-r border-slate-200 pr-2">
+                  <span class="text-right text-emerald-600">### (Ability Max)</span>
+                  <span class="text-right">######</span>
+                  <span class="text-right">##########</span>
+                  <span class="text-right">#######</span>
+                  <span class="text-right text-slate-400">### (Ability Mean)</span>
+                  <span class="text-right">####</span>
+                  <span class="text-right">#</span>
+                </div>
+                <div class="w-1/2 flex flex-col justify-between pl-2">
+                  <span class="text-rose-600">Item_12 (Difficult)</span>
+                  <span>Item_1, Item_5</span>
+                  <span>Item_6</span>
+                  <span class="text-slate-400">Mean Item Difficulty</span>
+                  <span>Item_2, Item_8</span>
+                  <span>Item_3</span>
+                  <span class="text-emerald-600">Item_15 (Easy)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm">
+            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-4">Category Response Curves (CRC) / ICC</span>
+            <div class="h-64 flex items-center justify-center bg-slate-50 border border-dashed border-slate-200 rounded-2xl overflow-hidden p-4">
+              <!-- ICC curves mock -->
+              <div class="relative w-full h-full flex items-end">
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <span class="text-[9px] font-black uppercase text-slate-400 tracking-wider">CRC Curve Plot (Likert 1-5 Categories)</span>
+                </div>
+                <svg viewBox="0 0 100 50" class="w-full h-full stroke-amber-500 fill-none stroke-2">
+                  <path d="M 0 50 Q 25 10 50 50" class="stroke-rose-500" />
+                  <path d="M 25 50 Q 50 10 75 50" class="stroke-blue-500" />
+                  <path d="M 50 50 Q 75 10 100 50" class="stroke-emerald-500" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screen 5: Factor -->
+      <div id="screen-factor" class="hidden space-y-10">
+        <div>
+          <h3 class="text-xl font-black text-slate-900 tracking-tight uppercase">Analisis Faktor (EFA/CFA)</h3>
+          <p class="text-slate-500 text-xs font-medium mt-1">Uji validitas konstruk menggunakan Exploratory (EFA) & Confirmatory (CFA) Factor Analysis.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div class="bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm flex flex-col justify-between">
+            <div>
+              <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-4">CFA Fit Indices</span>
+              <div class="space-y-4">
+                <div class="flex justify-between border-b border-slate-100 pb-2">
+                  <span class="text-[10px] font-black uppercase text-slate-400">CFI (Comparative Fit Index)</span>
+                  <span class="text-xs font-black text-emerald-600">0.968</span>
+                </div>
+                <div class="flex justify-between border-b border-slate-100 pb-2">
+                  <span class="text-[10px] font-black uppercase text-slate-400">TLI (Tucker-Lewis Index)</span>
+                  <span class="text-xs font-black text-emerald-600">0.954</span>
+                </div>
+                <div class="flex justify-between border-b border-slate-100 pb-2">
+                  <span class="text-[10px] font-black uppercase text-slate-400">RMSEA</span>
+                  <span class="text-xs font-black text-emerald-600">0.042</span>
+                </div>
+                <div class="flex justify-between border-b border-slate-100 pb-2">
+                  <span class="text-[10px] font-black uppercase text-slate-400">SRMR</span>
+                  <span class="text-xs font-black text-emerald-600">0.048</span>
+                </div>
+              </div>
+            </div>
+            <div class="pt-6 border-t border-slate-100 text-[9px] font-bold text-emerald-600 uppercase">
+              <i class="fa-solid fa-circle-check mr-1"></i> Model Fit Asumsi Terpenuhi
+            </div>
+          </div>
+
+          <div class="lg:col-span-2 bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm">
+            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-4">CFA Path Diagram (Factor Loadings)</span>
+            <div class="h-64 flex items-center justify-center bg-slate-50 border border-dashed border-slate-200 rounded-2xl p-4">
+              <!-- Path Diagram Mockup -->
+              <div class="flex items-center gap-12 w-full justify-center">
+                <!-- Latent -->
+                <div class="w-16 h-16 rounded-full bg-amber-500 text-[#0F172A] font-black flex items-center justify-center text-[10px] uppercase shadow-lg shadow-amber-500/20">
+                  LITERASI
+                </div>
+                <!-- Arrows -->
+                <div class="flex flex-col gap-6 font-mono text-[9px] font-bold text-emerald-600">
+                  <div>──► [Item_1] (0.81)</div>
+                  <div>──► [Item_6] (0.74)</div>
+                  <div>──► [Item_11] (0.85)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screen 5b: SEM -->
+      <div id="screen-sem" class="hidden space-y-10">
+        <div class="flex justify-between items-center">
+          <div>
+            <h3 class="text-xl font-black text-slate-900 tracking-tight uppercase">Analisis Structural Equation Modeling (SEM)</h3>
+            <p class="text-slate-500 text-xs font-medium mt-1">Pengujian model struktural, hipotesis hubungan kausalitas, dan estimasi kecocokan model (Goodness of Fit).</p>
+          </div>
+          <button class="px-6 py-3 bg-amber-500 hover:bg-amber-600 text-[#0F172A] font-black rounded-xl text-xs uppercase tracking-widest transition-all">
+            <i class="fa-solid fa-circle-nodes mr-1.5"></i> Run Analisis SEM
+          </button>
+        </div>
+
+        <!-- Auto decision system panel -->
+        <div class="bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm space-y-6">
+          <div class="flex items-center gap-3 border-b border-slate-100 pb-4">
+            <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center">
+              <i class="fa-solid fa-robot"></i>
+            </div>
+            <h4 class="text-xs font-black text-slate-900 uppercase tracking-widest">Auto-Decision Model Recommendation System</h4>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="border border-slate-100 p-5 rounded-2xl bg-slate-50/50 space-y-1">
+              <span class="text-[8px] font-black text-slate-400 uppercase tracking-wider block">Ukuran Sampel (N)</span>
+              <p class="text-lg font-black text-slate-800">80 Responden</p>
+              <span class="text-[9px] font-bold text-slate-500">Status: Sampel Kecil</span>
+            </div>
+            <div class="border border-slate-100 p-5 rounded-2xl bg-slate-50/50 space-y-1">
+              <span class="text-[8px] font-black text-slate-400 uppercase tracking-wider block">Skala Pengukuran Indikator</span>
+              <p class="text-sm font-black text-slate-800 truncate">Likert Panjang (>= 5 kategori)</p>
+              <span class="text-[9px] font-bold text-slate-500">Skala Pengukuran Likert 1-5</span>
+            </div>
+            <div class="border border-slate-100 p-5 rounded-2xl bg-slate-50/50 space-y-1">
+              <span class="text-[8px] font-black text-slate-400 uppercase tracking-wider block">Rekomendasi Pendekatan</span>
+              <p class="text-base font-black text-indigo-600">PLS-SEM (Partial Least Squares)</p>
+              <span class="text-[9px] font-bold text-indigo-500">Estimator: PLS Path Modeling</span>
+            </div>
+          </div>
+
+          <div class="p-4 bg-amber-50 rounded-2xl border border-amber-100/50">
+            <p class="text-[11px] text-amber-800 font-bold leading-relaxed">
+              <i class="fa-solid fa-lightbulb mr-1.5 text-amber-600"></i>
+              <strong>Justifikasi Akademik:</strong> Sampel berukuran kecil (N = 80 < 100). Pendekatan PLS-SEM sangat direkomendasikan karena tidak mensyaratkan asumsi normalitas multivariat dan terbukti tangguh serta memiliki power statistik yang tinggi pada sampel berukuran kecil.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div class="lg:col-span-2 space-y-8">
+            <div class="bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm">
+              <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-4">Structural SEM Path Diagram</span>
+              <div class="h-64 flex items-center justify-center bg-slate-50 border border-dashed border-slate-200 rounded-2xl p-4">
+                <div class="flex items-center gap-12 w-full justify-center">
+                  <div class="w-16 h-16 rounded-full bg-slate-900 text-white font-black border-2 border-amber-500 flex items-center justify-center text-[10px] uppercase shadow-lg text-center">
+                    Digital<br/>Literacy
+                  </div>
+                  <div class="flex flex-col gap-6 font-mono text-[9px] font-bold text-emerald-600">
+                    <div>──► [Productivity] (β=0.54*)</div>
+                    <div>──► [Safety Behavior] (β=0.42*)</div>
+                  </div>
+                  <div class="w-16 h-16 rounded-full bg-slate-900 text-white font-black border-2 border-amber-500 flex items-center justify-center text-[10px] uppercase shadow-lg text-center">
+                    Productivity
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-[32px] border border-slate-200 shadow-sm overflow-hidden">
+              <div class="p-8 border-b border-slate-100">
+                <h4 class="text-xs font-black text-slate-900 uppercase tracking-widest">Structural Path Coefficients (Regression Weights)</h4>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                  <thead class="bg-slate-50 text-[9px] font-black text-slate-400 uppercase border-b border-slate-100">
+                    <tr>
+                      <th class="px-8 py-4">Hubungan Jalur (Path)</th>
+                      <th class="px-6 py-4 text-center">Koefisien Jalur (β)</th>
+                      <th class="px-6 py-4 text-center">p-value</th>
+                      <th class="px-8 py-4">Signifikansi (α=0.05)</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100 text-xs font-bold text-slate-600">
+                    <tr>
+                      <td class="px-8 py-4 font-black text-slate-900">Digital_Literacy <i class="fa-solid fa-arrow-right text-[10px] text-amber-500 mx-2"></i> Productivity</td>
+                      <td class="px-6 py-4 text-center font-mono text-indigo-600">0.54</td>
+                      <td class="px-6 py-4 text-center font-mono text-purple-600">0.001</td>
+                      <td class="px-8 py-4">
+                        <span class="px-3 py-1 rounded-full text-[9px] font-black bg-emerald-50 text-emerald-600 border border-emerald-100 uppercase">Signifikan</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="px-8 py-4 font-black text-slate-900">Digital_Literacy <i class="fa-solid fa-arrow-right text-[10px] text-amber-500 mx-2"></i> Safety_Behavior</td>
+                      <td class="px-6 py-4 text-center font-mono text-indigo-600">0.42</td>
+                      <td class="px-6 py-4 text-center font-mono text-purple-600">0.005</td>
+                      <td class="px-8 py-4">
+                        <span class="px-3 py-1 rounded-full text-[9px] font-black bg-emerald-50 text-emerald-600 border border-emerald-100 uppercase">Signifikan</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-8">
+            <div class="bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm space-y-6">
+              <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block border-b border-slate-100 pb-3">Goodness of Fit (GoF) Indices</span>
+              <div class="space-y-5">
+                <div class="flex justify-between items-center text-xs font-bold">
+                  <div>
+                    <p class="text-slate-900 font-black">CFI</p>
+                    <span class="text-[9px] text-slate-400 uppercase">Cut-off: &gt;= 0.95</span>
+                  </div>
+                  <div class="text-right">
+                    <p class="font-mono text-sm text-emerald-600">0.974</p>
+                    <span class="px-2 py-0.5 rounded text-[8px] font-black uppercase bg-emerald-50 text-emerald-600">Fit</span>
+                  </div>
+                </div>
+                <div class="flex justify-between items-center text-xs font-bold">
+                  <div>
+                    <p class="text-slate-900 font-black">TLI</p>
+                    <span class="text-[9px] text-slate-400 uppercase">Cut-off: &gt;= 0.95</span>
+                  </div>
+                  <div class="text-right">
+                    <p class="font-mono text-sm text-emerald-600">0.962</p>
+                    <span class="px-2 py-0.5 rounded text-[8px] font-black uppercase bg-emerald-50 text-emerald-600">Fit</span>
+                  </div>
+                </div>
+                <div class="flex justify-between items-center text-xs font-bold">
+                  <div>
+                    <p class="text-slate-900 font-black">RMSEA</p>
+                    <span class="text-[9px] text-slate-400 uppercase">Cut-off: &lt;= 0.06</span>
+                  </div>
+                  <div class="text-right">
+                    <p class="font-mono text-sm text-emerald-600">0.038</p>
+                    <span class="px-2 py-0.5 rounded text-[8px] font-black uppercase bg-emerald-50 text-emerald-600">Fit</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-[#0F172A] p-6 rounded-[32px] border border-white/5 text-white flex flex-col justify-between gap-6 shadow-xl">
+              <div>
+                <h5 class="text-xs font-black uppercase tracking-widest text-amber-500">Download Paket Laporan SEM</h5>
+                <p class="text-[10px] text-slate-300 font-bold uppercase mt-1">Dapatkan path diagram beresolusi tinggi beserta data summary lengkap.</p>
+              </div>
+              <button class="w-full text-center py-3 bg-amber-500 hover:bg-amber-600 text-[#0F172A] font-black rounded-xl text-[10px] uppercase tracking-widest transition-all">
+                Download SEM Package
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screen 5c: Qualitative (NVIVO R) -->
+      <div id="screen-qualitative" class="hidden space-y-10">
+        <div class="flex justify-between items-center">
+          <div>
+            <h3 class="text-xl font-black text-slate-900 tracking-tight uppercase">Analisis Tematik Kualitatif (NVIVO R)</h3>
+            <p class="text-slate-500 text-xs font-medium mt-1">Ekstraksi kata kunci, visualisasi word cloud, dan pengelompokan tema otomatis dari data teks tanggapan responden.</p>
+          </div>
+          <button onclick="alert('Script R untuk Analisis Kualitatif/QDA berhasil diunduh')" class="px-5 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-black rounded-xl text-xs uppercase tracking-widest transition-all flex items-center gap-2">
+            <i class="fa-solid fa-code"></i> Download Script RStudio (QDA)
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <!-- Text Input Panel Mockup -->
+          <div class="lg:col-span-1 bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm flex flex-col justify-between space-y-6">
+            <div class="space-y-4">
+              <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Input Data Teks / Transkrip</span>
+              <textarea placeholder="Masukkan transkrip wawancara..." readonly class="w-full h-80 text-xs font-semibold p-4 border border-slate-200 rounded-2xl bg-slate-50/50 resize-none outline-none">Menurut saya penggunaan teknologi AI dalam pembelajaran sangat membantu untuk mencari referensi tugas kuliah.
+Namun, tantangan terbesarnya adalah mahasiswa seringkali menyalin jawaban secara langsung tanpa memahaminya terlebih dahulu.
+Dosen harus merancang metode evaluasi kurikulum yang kreatif agar tidak mudah dimanipulasi oleh mahasiswa yang menggunakan ChatGPT.
+Integrasi teknologi di kelas harus seimbang dengan pemahaman etika akademik agar proses belajar mengajar tetap efektif.</textarea>
+            </div>
+            <button class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-[#0F172A] font-black rounded-xl text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2">
+              <i class="fa-solid fa-tags"></i> Proses Analisis Tematik
+            </button>
+          </div>
+
+          <!-- Results Panel Mockup -->
+          <div class="lg:col-span-2 space-y-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="bg-white p-6 rounded-[24px] border border-slate-200 shadow-sm space-y-4">
+                <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block">Top Word Frequencies</span>
+                <div class="space-y-3">
+                  <div class="flex justify-between items-center text-xs font-bold text-slate-700">
+                    <span class="bg-slate-100 px-2.5 py-1 rounded-lg text-slate-900 font-mono">#1 teknologi</span>
+                    <span class="text-amber-600 font-black">8 kali</span>
+                  </div>
+                  <div class="flex justify-between items-center text-xs font-bold text-slate-700">
+                    <span class="bg-slate-100 px-2.5 py-1 rounded-lg text-slate-900 font-mono">#2 mahasiswa</span>
+                    <span class="text-amber-600 font-black">6 kali</span>
+                  </div>
+                  <div class="flex justify-between items-center text-xs font-bold text-slate-700">
+                    <span class="bg-slate-100 px-2.5 py-1 rounded-lg text-slate-900 font-mono">#3 pembelajaran</span>
+                    <span class="text-amber-600 font-black">5 kali</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-white p-6 rounded-[24px] border border-slate-200 shadow-sm flex flex-col justify-between">
+                <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block">Word Cloud Visualization</span>
+                <div class="flex-1 flex flex-wrap gap-2 items-center justify-center p-4 border border-slate-100 rounded-xl bg-slate-50/50 mt-4">
+                  <span class="text-xl font-black text-indigo-600">teknologi</span>
+                  <span class="text-lg font-extrabold text-amber-500">mahasiswa</span>
+                  <span class="text-base font-bold text-emerald-500">pembelajaran</span>
+                  <span class="text-sm font-semibold text-rose-500">evaluasi</span>
+                  <span class="text-xs font-medium text-slate-600">akademik</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Extracted Themes -->
+            <div class="bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm space-y-6">
+              <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block border-b border-slate-100 pb-3">Daftar Tema & Node Tematik (Koding NVIVO-Style)</span>
+              <div class="space-y-6">
+                <div class="border border-slate-100 rounded-2xl p-5 bg-slate-50/50 space-y-3">
+                  <div class="flex flex-col md:flex-row justify-between md:items-center gap-2">
+                    <h5 class="text-xs font-black text-slate-900 uppercase tracking-wide">Tema 1: Integrasi & Pemanfaatan Teknologi AI</h5>
+                    <div class="flex gap-1.5 flex-wrap">
+                      <span class="px-2 py-0.5 bg-amber-500/10 text-amber-600 border border-amber-500/20 rounded-md text-[9px] font-black uppercase font-mono">teknologi</span>
+                      <span class="px-2 py-0.5 bg-amber-500/10 text-amber-600 border border-amber-500/20 rounded-md text-[9px] font-black uppercase font-mono">ai</span>
+                    </div>
+                  </div>
+                  <div class="flex gap-2 text-[11px] text-slate-600 font-medium italic bg-white p-3 rounded-xl border border-slate-100 mt-2">
+                    <i class="fa-solid fa-quote-left text-amber-500 text-xs mt-0.5 opacity-60"></i>
+                    <p>Penggunaan teknologi AI dalam pembelajaran sangat membantu untuk mencari referensi tugas kuliah.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screen 5d: Delphi Method -->
+      <div id="screen-delphi" class="hidden space-y-10">
+        <div class="flex justify-between items-center">
+          <div>
+            <h3 class="text-xl font-black text-slate-900 tracking-tight uppercase">Metode Konsensus Delphi (Validasi Ahli)</h3>
+            <p class="text-slate-500 text-xs font-medium mt-1">Konsensus bertahap panel pakar untuk merumuskan indikator dan item instrumen final.</p>
+          </div>
+          <button onclick="alert('Putaran Delphi direkalkulasi')" class="px-6 py-3 bg-amber-500 hover:bg-amber-600 text-[#0F172A] font-black rounded-xl text-xs uppercase tracking-widest transition-all">
+            <i class="fa-solid fa-sync mr-1.5"></i> Rekalkulasi Putaran
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <!-- Expert list mockup -->
+          <div class="bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm space-y-6">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+              <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Daftar Panel Pakar (Delphi)</span>
+            </div>
+            <div class="space-y-4">
+              <div class="p-4 border border-slate-100 rounded-2xl bg-slate-50/50 flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-500 flex items-center justify-center font-bold text-xs">P1</div>
+                <div>
+                  <h5 class="text-xs font-black text-slate-800 font-bold">Prof. Dr. Heru Setiawan</h5>
+                  <p class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Metodologi PEP / Evaluasi</p>
+                </div>
+              </div>
+              <div class="p-4 border border-slate-100 rounded-2xl bg-slate-50/50 flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-500 flex items-center justify-center font-bold text-xs">P2</div>
+                <div>
+                  <h5 class="text-xs font-black text-slate-800 font-bold">Dr. Maria Ulfah</h5>
+                  <p class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Teknologi Informasi</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Delphi Rounds and Decision table -->
+          <div class="lg:col-span-2 bg-white rounded-[32px] border border-slate-200 shadow-sm overflow-hidden">
+            <div class="p-8 border-b border-slate-100 flex justify-between items-center">
+              <h4 class="text-xs font-black text-slate-900 uppercase tracking-widest">Peta Consensus & Keputusan Butir Indikator</h4>
+              <div class="flex gap-2">
+                <button class="px-3 py-1.5 rounded-lg text-[9px] font-black bg-slate-100 text-slate-500">Putaran 1</button>
+                <button class="px-3 py-1.5 rounded-lg text-[9px] font-black bg-amber-500 text-[#0F172A] shadow-md">Putaran 2 (Final)</button>
+              </div>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left">
+                <thead class="bg-slate-50 text-[9px] font-black text-slate-400 uppercase border-b border-slate-100">
+                  <tr>
+                    <th class="px-8 py-5">ID Indikator</th>
+                    <th class="px-6 py-5">Uraian Indikator</th>
+                    <th class="px-6 py-5 text-center">Konsensus</th>
+                    <th className="px-6 py-5">Status</th>
+                    <th className="px-8 py-5">Keputusan</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 text-xs font-bold text-slate-600">
+                  <tr>
+                    <td class="px-8 py-5 font-black text-slate-900">IND_01</td>
+                    <td class="px-6 py-5">Mengakses & Mencari Informasi Digital</td>
+                    <td class="px-6 py-5 text-center font-mono"><span class="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-600">90%</span></td>
+                    <td class="px-6 py-5"><span class="text-[9px] font-black text-emerald-500 uppercase">Tercapai</span></td>
+                    <td class="px-8 py-5"><span class="px-3 py-1 rounded-full text-[9px] font-black uppercase bg-emerald-50 text-emerald-600 border border-emerald-100">Diterima</span></td>
+                  </tr>
+                  <tr>
+                    <td class="px-8 py-5 font-black text-slate-900">IND_04</td>
+                    <td class="px-6 py-5">Netiket & Etika Komunikasi Media Sosial</td>
+                    <td class="px-6 py-5 text-center font-mono"><span class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-600">50%</span></td>
+                    <td class="px-6 py-5"><span class="text-[9px] font-black text-rose-500 uppercase">Gagal</span></td>
+                    <td class="px-8 py-5"><span class="px-3 py-1 rounded-full text-[9px] font-black uppercase bg-rose-50 text-rose-600 border border-rose-100">Dibuang</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screen 5e: CVI / CVR Validasi -->
+      <div id="screen-cvi" class="hidden space-y-10">
+        <div class="flex justify-between items-center">
+          <div>
+            <h3 class="text-xl font-black text-slate-900 tracking-tight uppercase">Kalkulator Validitas Isi (CVI & CVR)</h3>
+            <p class="text-slate-500 text-xs font-medium mt-1">Kuantifikasi validitas isi berdasarkan rating relevansi butir oleh para ahli.</p>
+          </div>
+          <button onclick="alert('Kalkulasi CVI / CVR berhasil diselesaikan')" class="px-6 py-3 bg-amber-500 hover:bg-amber-600 text-[#0F172A] font-black rounded-xl text-xs uppercase tracking-widest transition-all">
+            <i class="fa-solid fa-calculator mr-1.5"></i> Run CVI/CVR
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">S-CVI / Ave (Scale-Level Average)</span>
+            <h4 class="text-3xl font-black text-slate-900 mt-2">0.925</h4>
+            <span class="text-[9px] font-bold text-emerald-500 uppercase">Sangat Memadai</span>
+          </div>
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">S-CVI / UA (Universal Agreement)</span>
+            <h4 class="text-3xl font-black text-slate-900 mt-2">0.850</h4>
+            <span class="text-[9px] font-bold text-indigo-500 uppercase">Kategori Tinggi</span>
+          </div>
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Total Pakar Validasi</span>
+            <h4 class="text-3xl font-black text-slate-900 mt-2">5 Pakar</h4>
+            <span class="text-[9px] font-bold text-slate-500 uppercase">Rating Relevansi 1-4</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screen 5f: Model CIPP -->
+      <div id="screen-cipp" class="hidden space-y-10">
+        <div class="flex justify-between items-center">
+          <div>
+            <h3 class="text-xl font-black text-slate-900 tracking-tight uppercase">Model Evaluasi Program CIPP</h3>
+            <p class="text-slate-500 text-xs font-medium mt-1">Evaluasi terstruktur program pendidikan (Context, Input, Process, Product).</p>
+          </div>
+          <button onclick="alert('Evaluasi CIPP Berhasil')" class="px-6 py-3 bg-amber-500 hover:bg-amber-600 text-[#0F172A] font-black rounded-xl text-xs uppercase tracking-widest transition-all">
+            <i class="fa-solid fa-clipboard-list mr-1.5"></i> Run Evaluasi CIPP
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm space-y-4">
+            <div class="flex items-center gap-3 border-b border-slate-100 pb-3">
+              <div class="w-10 h-10 bg-slate-950 text-amber-500 rounded-xl flex items-center justify-center font-black">C</div>
+              <div>
+                <h4 class="text-xs font-black text-slate-900 uppercase">Context Evaluation</h4>
+                <span class="text-[8px] font-bold text-emerald-500">Skor: 82.5%</span>
+              </div>
+            </div>
+            <p class="text-xs text-slate-500">Menilai keselarasan tujuan pelatihan literasi digital dengan kebutuhan guru di lapangan.</p>
+            <div class="p-3 bg-slate-50 rounded-xl text-[9px] font-semibold text-slate-600 border border-slate-100">
+              <strong>Rekomendasi:</strong> Tujuan sangat relevan, kurikulum utama dapat dipertahankan.
+            </div>
+          </div>
+          <div class="bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm space-y-4">
+            <div class="flex items-center gap-3 border-b border-slate-100 pb-3">
+              <div class="w-10 h-10 bg-slate-950 text-amber-500 rounded-xl flex items-center justify-center font-black">I</div>
+              <div>
+                <h4 class="text-xs font-black text-slate-900 uppercase">Input Evaluation</h4>
+                <span class="text-[8px] font-bold text-amber-500">Skor: 75.0%</span>
+              </div>
+            </div>
+            <p class="text-xs text-slate-500">Menilai kesiapan modul ajar, kompetensi instruktur, dan infrastruktur pelatihan.</p>
+            <div class="p-3 bg-slate-50 rounded-xl text-[9px] font-semibold text-slate-600 border border-slate-100">
+              <strong>Rekomendasi:</strong> Kualitas LMS kurang memuaskan, lakukan optimasi UI.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screen 5g: Kirkpatrick Model -->
+      <div id="screen-kirkpatrick" class="hidden space-y-10">
+        <div class="flex justify-between items-center">
+          <div>
+            <h3 class="text-xl font-black text-slate-900 tracking-tight uppercase">Evaluasi Pelatihan Model Kirkpatrick (Level 1-4)</h3>
+            <p class="text-slate-500 text-xs font-medium mt-1">Mengukur efektivitas program diklat/pelatihan dari reaksi awal hingga dampak organisasi jangka panjang.</p>
+          </div>
+          <button onclick="alert('Evaluasi Kirkpatrick Berhasil')" class="px-6 py-3 bg-amber-500 hover:bg-amber-600 text-[#0F172A] font-black rounded-xl text-xs uppercase tracking-widest transition-all">
+            <i class="fa-solid fa-graduation-cap mr-1.5"></i> Run Kirkpatrick
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="p-6 rounded-3xl border border-blue-100 bg-blue-50/50 flex justify-between items-center">
+            <div>
+              <span class="text-[9px] bg-slate-950 text-amber-500 px-3 py-1 rounded-full uppercase font-black">Level 1: Reaksi</span>
+              <p class="text-xs text-slate-600 font-semibold mt-2">Mengukur tingkat kepuasan guru terhadap pemateri dan media ajar.</p>
+            </div>
+            <h5 class="text-2xl font-black text-slate-900">88.5%</h5>
+          </div>
+          <div class="p-6 rounded-3xl border border-purple-100 bg-purple-50/50 flex justify-between items-center">
+            <div>
+              <span class="text-[9px] bg-slate-950 text-amber-500 px-3 py-1 rounded-full uppercase font-black">Level 2: Pembelajaran</span>
+              <p class="text-xs text-slate-600 font-semibold mt-2">Menghitung rata-rata gain score pre-test dan post-test peserta.</p>
+            </div>
+            <h5 class="text-2xl font-black text-slate-900">82.0%</h5>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screen 5h: Laporan Terpadu -->
+      <div id="screen-reports" class="hidden space-y-10">
+        <div>
+          <h3 class="text-xl font-black text-slate-900 tracking-tight uppercase">Laporan Terpadu & Ekspor Hasil</h3>
+          <p class="text-slate-500 text-xs font-medium mt-1">Konsolidasi seluruh hasil validasi instrumen dan evaluasi program dalam satu dashboard siap cetak.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm space-y-3">
+            <span class="text-[9px] font-black text-slate-400 uppercase">Validasi Ahli (CVI)</span>
+            <h5 class="text-2xl font-black text-slate-900">S-CVI: 0.925</h5>
+            <p class="text-[9px] font-bold text-emerald-500 uppercase">Sangat Memadai</p>
+          </div>
+          <div class="bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm space-y-3">
+            <span class="text-[9px] font-black text-slate-400 uppercase">Analisis Butir (Rasch)</span>
+            <h5 class="text-2xl font-black text-slate-900">Reliabilitas: 0.85</h5>
+            <p class="text-[9px] font-bold text-emerald-500 uppercase">Reliable</p>
+          </div>
+          <div class="bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm space-y-3">
+            <span class="text-[9px] font-black text-slate-400 uppercase">Evaluasi Program (CIPP)</span>
+            <h5 class="text-2xl font-black text-slate-900">Rata-rata CIPP: 80.4%</h5>
+            <p class="text-[9px] font-bold text-emerald-500 uppercase">Efektif</p>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-r from-[#0F172A] to-[#1E293B] p-10 rounded-[40px] border border-white/5 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8 text-white">
+          <div class="flex items-center gap-6">
+            <div class="w-16 h-16 bg-amber-500 rounded-3xl flex items-center justify-center text-2xl shadow-lg shadow-amber-500/20 text-[#0F172A]">
+              <i class="fa-solid fa-file-invoice-dollar"></i>
+            </div>
+            <div>
+              <h4 class="text-base font-black uppercase tracking-widest text-amber-500">Ekspor Laporan Komprehensif Siap Cetak</h4>
+              <p class="text-[10px] text-slate-300 font-bold uppercase tracking-wider mt-1">Mengekspor gabungan ringkasan ahli (Delphi/CVI), butir soal, dan analisis kinerja program evaluasi.</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <button onclick="alert('Laporan PDF Sedang Dicetak...')" class="px-6 py-4 bg-amber-500 hover:bg-amber-600 text-[#0F172A] font-black rounded-xl text-xs uppercase tracking-widest transition-all">
+              Cetak Laporan PDF
+            </button>
+            <button onclick="alert('Laporan MS Word Sedang Diekspor...')" class="px-6 py-4 bg-slate-700 hover:bg-slate-600 text-white font-black rounded-xl text-xs uppercase tracking-widest transition-all border border-slate-600">
+              Ekspor MS Word
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screen 6: Scoring -->
+      <div id="screen-scoring" class="hidden space-y-10">
+        <div class="flex justify-between items-center">
+          <div>
+            <h3 class="text-xl font-black text-slate-900 tracking-tight uppercase">Skoring, Norma, & Laporan</h3>
+            <p class="text-slate-500 text-xs font-medium mt-1">Konversi skor mentah responden ke bentuk Z-Score, T-Score, dan persentil berdasarkan norma populasi.</p>
+          </div>
+          <button class="px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-xl text-xs uppercase tracking-widest transition-all">
+            <i class="fa-solid fa-file-csv mr-1.5"></i> Download CSV Norma
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div class="bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm flex flex-col justify-between">
+            <div>
+              <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-4">Statistik Deskriptif Kelompok</span>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="border border-slate-100 p-4 rounded-2xl bg-slate-50/50">
+                  <span class="text-[9px] font-black text-slate-400 uppercase">Rata-rata</span>
+                  <h5 class="text-2xl font-black text-slate-900 mt-1">84.5</h5>
+                </div>
+                <div class="border border-slate-100 p-4 rounded-2xl bg-slate-50/50">
+                  <span class="text-[9px] font-black text-slate-400 uppercase">Stdev (SD)</span>
+                  <h5 class="text-2xl font-black text-slate-900 mt-1">12.18</h5>
+                </div>
+                <div class="border border-slate-100 p-4 rounded-2xl bg-slate-50/50">
+                  <span class="text-[9px] font-black text-slate-400 uppercase">Skor Min</span>
+                  <h5 class="text-xl font-black text-rose-600 mt-1">54</h5>
+                </div>
+                <div class="border border-slate-100 p-4 rounded-2xl bg-slate-50/50">
+                  <span class="text-[9px] font-black text-slate-400 uppercase">Skor Maks</span>
+                  <h5 class="text-xl font-black text-emerald-600 mt-1">112</h5>
+                </div>
+              </div>
+            </div>
+            <div class="mt-6 pt-4 border-t border-slate-100">
+              <span class="text-[9px] font-black text-slate-400 uppercase block mb-2">Metode Kategorisasi</span>
+              <select class="w-full text-xs font-bold bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-700 focus:outline-none focus:border-amber-500">
+                <option>Norma Standar Graduasi (SD = 1.0)</option>
+                <option>Norma Seleksi Ketat (SD = 1.5)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm lg:col-span-2">
+            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-4">Distribusi Klasifikasi Responden</span>
+            <div class="space-y-4">
+              <div>
+                <div class="flex justify-between text-[10px] font-black uppercase tracking-wider">
+                  <span class="text-slate-600">Sangat Tinggi</span>
+                  <span class="text-slate-900">8 Responden (10.0%)</span>
+                </div>
+                <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden mt-1.5">
+                  <div class="h-full bg-emerald-500" style="width: 10%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-[10px] font-black uppercase tracking-wider">
+                  <span class="text-slate-600">Tinggi</span>
+                  <span class="text-slate-900">18 Responden (22.5%)</span>
+                </div>
+                <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden mt-1.5">
+                  <div class="h-full bg-emerald-400" style="width: 22.5%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-[10px] font-black uppercase tracking-wider">
+                  <span class="text-slate-600">Sedang</span>
+                  <span class="text-slate-900">42 Responden (52.5%)</span>
+                </div>
+                <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden mt-1.5">
+                  <div class="h-full bg-amber-400" style="width: 52.5%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-[10px] font-black uppercase tracking-wider">
+                  <span class="text-slate-600">Rendah</span>
+                  <span class="text-slate-900">10 Responden (12.5%)</span>
+                </div>
+                <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden mt-1.5">
+                  <div class="h-full bg-rose-400" style="width: 12.5%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-[10px] font-black uppercase tracking-wider">
+                  <span class="text-slate-600">Sangat Rendah</span>
+                  <span class="text-slate-900">2 Responden (2.5%)</span>
+                </div>
+                <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden mt-1.5">
+                  <div class="h-full bg-rose-600" style="width: 2.5%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-r from-[#0F172A] to-[#1E293B] p-8 rounded-[32px] border border-white/5 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6 text-white">
+          <div class="flex items-center gap-5">
+            <div class="w-14 h-14 bg-amber-500 rounded-2xl flex items-center justify-center text-xl shadow-lg shadow-amber-500/20 text-[#0F172A]">
+              <i class="fa-solid fa-file-zipper"></i>
+            </div>
+            <div>
+              <h4 class="text-sm font-black uppercase tracking-widest text-amber-500">Download Paket Laporan Psikometri Lengkap</h4>
+              <p class="text-[10px] text-slate-300 font-bold uppercase tracking-wider mt-1">Mendapatkan laporan PDF/TXT, tabel CSV lengkap, dan seluruh gambar Wright Map, ICC, EFA Scree Plot, & CFA Diagram.</p>
+            </div>
+          </div>
+          <div class="flex gap-3">
+            <button class="px-6 py-3.5 bg-amber-500 hover:bg-amber-600 text-[#0F172A] font-black rounded-xl text-[10px] uppercase tracking-widest transition-all">
+              Download Rasch/IRT Pack
+            </button>
+            <button class="px-6 py-3.5 bg-slate-700 hover:bg-slate-600 text-white font-black rounded-xl text-[10px] uppercase tracking-widest transition-all border border-slate-600">
+              Download EFA Pack
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-[32px] border border-slate-200 shadow-sm overflow-hidden">
+          <div class="p-8 border-b border-slate-100 flex justify-between items-center">
+            <h4 class="text-xs font-black text-slate-900 uppercase tracking-widest">Tabel Konversi & Klasifikasi Norma Responden</h4>
+            <span class="px-4 py-1.5 bg-slate-100 text-slate-500 rounded-xl text-[9px] font-black uppercase">Hasil Skoring</span>
+          </div>
+          <div class="overflow-x-auto max-h-[400px] custom-scrollbar">
+            <table class="w-full text-left">
+              <thead class="bg-slate-50 text-[9px] font-black text-slate-400 uppercase border-b border-slate-100 sticky top-0">
+                <tr>
+                  <th class="px-8 py-5">Respondent ID</th>
+                  <th class="px-6 py-5 text-center">Raw Score</th>
+                  <th class="px-6 py-5 text-center">Z-Score</th>
+                  <th class="px-6 py-5 text-center">T-Score</th>
+                  <th class="px-6 py-5 text-center">Percentile Rank</th>
+                  <th class="px-8 py-5">Klasifikasi Norma</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 text-xs font-bold text-slate-600">
+                <tr>
+                  <td class="px-8 py-5 font-black text-slate-900">Responden_1</td>
+                  <td class="px-6 py-5 text-center font-mono">92</td>
+                  <td class="px-6 py-5 text-center font-mono text-blue-600">+0.62</td>
+                  <td class="px-6 py-5 text-center font-mono text-purple-600">56.2</td>
+                  <td class="px-6 py-5 text-center font-mono text-emerald-600">72.4%</td>
+                  <td class="px-8 py-5">
+                    <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase bg-emerald-50 text-emerald-600 border border-emerald-100">Tinggi</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="px-8 py-5 font-black text-slate-900">Responden_2</td>
+                  <td class="px-6 py-5 text-center font-mono">74</td>
+                  <td class="px-6 py-5 text-center font-mono text-blue-600">-0.86</td>
+                  <td class="px-6 py-5 text-center font-mono text-purple-600">41.4</td>
+                  <td class="px-6 py-5 text-center font-mono text-emerald-600">21.8%</td>
+                  <td class="px-8 py-5">
+                    <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase bg-rose-50 text-rose-600 border border-rose-100">Rendah</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="px-8 py-5 font-black text-slate-900">Responden_3</td>
+                  <td class="px-6 py-5 text-center font-mono">85</td>
+                  <td class="px-6 py-5 text-center font-mono text-blue-600">+0.04</td>
+                  <td class="px-6 py-5 text-center font-mono text-purple-600">50.4</td>
+                  <td class="px-6 py-5 text-center font-mono text-emerald-600">51.2%</td>
+                  <td class="px-8 py-5">
+                    <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase bg-amber-50 text-amber-600 border border-amber-100">Sedang</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    // Tab switching logic
+    function switchTab(tabId) {
+      // Hide all screens
+      const screens = ['dashboard', 'upload', 'delphi', 'cvi', 'ctt', 'irt', 'factor', 'sem', 'cipp', 'kirkpatrick', 'qualitative', 'scoring', 'reports'];
+      screens.forEach(s => {
+        const el = document.getElementById('screen-' + s);
+        if (el) el.classList.add('hidden');
+        
+        // Reset navigation styles
+        const navBtn = document.getElementById('nav-' + s);
+        if (navBtn) {
+          navBtn.className = "w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-300 text-slate-400 hover:bg-white/5 hover:text-white";
+        }
+      });
+
+      // Show target screen
+      const targetEl = document.getElementById('screen-' + tabId);
+      if (targetEl) targetEl.classList.remove('hidden');
+
+      // Make target nav active
+      const activeNav = document.getElementById('nav-' + tabId);
+      if (activeNav) {
+        activeNav.className = "w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-300 bg-amber-500 text-[#0F172A] shadow-lg shadow-amber-500/20";
+      }
+
+      // Change Topbar title
+      const titleMap = {
+        'dashboard': 'Dashboard Utama',
+        'upload': 'Upload & Screening Data',
+        'delphi': 'Metode Konsensus Delphi (Validasi Ahli)',
+        'cvi': 'Kalkulator Validitas Isi (CVI & CVR)',
+        'ctt': 'Analisis Teori Tes Klasik (CTT)',
+        'irt': 'Rasch / IRT Model',
+        'factor': 'Analisis Faktor (CFA/EFA)',
+        'sem': 'Analisis Structural Equation Modeling (SEM)',
+        'cipp': 'Model Evaluasi Program CIPP',
+        'kirkpatrick': 'Evaluasi Pelatihan Model Kirkpatrick (Level 1-4)',
+        'qualitative': 'Analisis Tematik Kualitatif (NVIVO R)',
+        'scoring': 'Skoring & Norma Kelompok',
+        'reports': 'Laporan Terpadu & Ekspor Hasil'
+      };
+      document.getElementById('topbar-title').innerText = titleMap[tabId];
+    }
+
+    // Chart.js render in Dashboard screen
+    document.addEventListener("DOMContentLoaded", function() {
+      const ctx = document.getElementById('overviewChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6', 'Item 7', 'Item 8'],
+          datasets: [{
+            label: 'Difficulty Index (p)',
+            data: [0.82, 0.52, 0.41, 0.65, 0.35, 0.72, 0.58, 0.49],
+            borderColor: '#f59e0b',
+            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+            borderWidth: 2,
+            tension: 0.3,
+            fill: true
+          }, {
+            label: 'Discrimination Index (r-it)',
+            data: [0.45, 0.12, 0.23, 0.38, 0.42, 0.51, 0.15, 0.33],
+            borderColor: '#3b82f6',
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            borderWidth: 2,
+            tension: 0.3,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: {
+                font: {
+                  family: 'Outfit',
+                  size: 9,
+                  weight: 'bold'
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 1.0,
+              grid: {
+                color: 'rgba(226, 232, 240, 0.6)'
+              }
+            },
+            x: {
+              grid: {
+                display: false
+              }
+            }
+          }
+        }
+      });
+    });
+  </script>
+
+  <!-- Modal Aktivasi Lisensi Analisis-Aja -->
+  <div id="licModal" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.85);backdrop-filter:blur(6px);z-index:999999;align-items:center;justify-content:center;padding:16px;">
+    <div style="background:#ffffff;border-radius:20px;max-width:440px;width:100%;box-shadow:0 25px 50px -12px rgba(0,0,0,0.35);overflow:hidden;border:1px solid #e2e8f0;font-family:'Outfit',sans-serif">
+      <div style="background:linear-gradient(135deg,#6b21a8,#9333ea);color:#ffffff;padding:24px;text-align:center">
+        <div style="width:48px;height:48px;background:rgba(255,255,255,0.2);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 10px auto;border:1px solid rgba(255,255,255,0.4)">
+          📊
+        </div>
+        <h3 style="margin:0;font-size:18px;font-weight:800;letter-spacing:-0.5px">Aktivasi Lisensi Analisis-Aja</h3>
+        <p style="margin:4px 0 0 0;font-size:12px;color:#f3e8ff">Psychometrics Suite &bull; Ekosistem RisetKu</p>
+      </div>
+
+      <form id="licForm" style="padding:22px 24px">
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;font-weight:700;color:#334155;margin-bottom:4px">Nama Lengkap Peneliti:</label>
+          <input type="text" id="licName" placeholder="Nama lengkap Anda..." required style="width:100%;padding:10px 12px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:13px;font-weight:600;box-sizing:border-box">
+        </div>
+
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;font-weight:700;color:#334155;margin-bottom:4px">Email Kampus / Peneliti:</label>
+          <input type="email" id="licEmail" placeholder="nama@kampus.ac.id" required style="width:100%;padding:10px 12px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:13px;box-sizing:border-box">
+        </div>
+
+        <div style="margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+            <label style="font-size:12px;font-weight:700;color:#334155">Kunci Lisensi Analisis-Aja:</label>
+            <span style="color:#9333ea;font-size:11px;font-weight:700">Wajib Diisi</span>
+          </div>
+          <input type="text" id="licKey" placeholder="ANALIS-30D-XXXX-XXXX" required style="width:100%;padding:10px 12px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:14px;font-family:monospace;font-weight:800;letter-spacing:1px;text-transform:uppercase;box-sizing:border-box">
+        </div>
+
+        <p id="licErr" style="color:#dc2626;font-size:12px;margin:0 0 12px 0;display:none;font-weight:600"></p>
+
+        <button type="submit" style="width:100%;padding:12px;font-size:14px;background:linear-gradient(135deg,#9333ea,#7e22ce);font-weight:800;border:none;border-radius:10px;cursor:pointer;color:#ffffff;box-shadow:0 4px 12px rgba(147,51,234,0.3)">
+          🔑 Aktivasi Lisensi &amp; Buka Olah Data
+        </button>
+
+        <div style="margin-top:16px;padding-top:14px;border-top:1px dashed #cbd5e1;text-align:center">
+          <p style="font-size:11px;color:#475569;margin:0 0 8px 0;font-weight:600">Belum memiliki Kunci Lisensi Analisis-Aja?</p>
+          <a id="btnRequestLic" href="https://wa.me/6281234567890?text=Halo%20Pemilik%2FAdmin%20RisetKu%2C%20saya%20ingin%20meminta%20Kunci%20Lisensi%20Analisis-Aja." target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#10b981;color:#ffffff;text-decoration:none;border-radius:10px;padding:10px;font-size:12px;font-weight:700;box-shadow:0 4px 12px rgba(16,185,129,0.2)">
+            <span>💬 Minta Kunci Lisensi ke Pemilik (WhatsApp)</span>
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="license.js"></script>
+  <script>
+    let analisUser = null;
+    try { analisUser = JSON.parse(localStorage.getItem('analis-user') || 'null'); } catch (e) { analisUser = null; }
+
+    let analisLicense = null;
+    try {
+      if (new URLSearchParams(window.location.search).has('reset') || new URLSearchParams(window.location.search).has('ganti')) {
+        localStorage.removeItem('analis-license');
+        localStorage.removeItem('analis-user');
+        analisLicense = null;
+        analisUser = null;
+      } else {
+        analisLicense = JSON.parse(localStorage.getItem('analis-license') || 'null');
+      }
+    } catch (e) { analisLicense = null; }
+
+    function verifyAnalisLic() {
+      if (!window.AnalisisLicense) return { active: false, message: 'Modul lisensi belum siap.' };
+      return window.AnalisisLicense.checkLicenseStatus(analisLicense);
+    }
+
+    function applyAnalisLicUI() {
+      const licStatus = verifyAnalisLic();
+      const hasValidLic = licStatus && licStatus.active;
+      const isUnlocked = !!(analisUser && hasValidLic);
+
+      const modal = document.getElementById('licModal');
+      const badge = document.getElementById('licBadge');
+      const badgeText = document.getElementById('licBadgeText');
+
+      if (modal) {
+        modal.style.display = isUnlocked ? 'none' : 'flex';
+        if (!isUnlocked && analisUser) {
+          const n = document.getElementById('licName');
+          const em = document.getElementById('licEmail');
+          if (n && !n.value) n.value = analisUser.nama || '';
+          if (em && !em.value) em.value = analisUser.email || '';
+        }
+      }
+
+      if (badge) {
+        if (isUnlocked) {
+          badge.style.display = 'inline-flex';
+          if (badgeText) {
+            if (licStatus.isMaster) {
+              badgeText.textContent = '👑 Master VIP (Permanen)';
+            } else if (licStatus.remainingDays >= 3000) {
+              badgeText.textContent = '🛡️ Lisensi Lifetime';
+            } else {
+              badgeText.textContent = `🛡️ Lisensi: ${licStatus.remainingDays} hari tersisa`;
+            }
+          }
+        } else {
+          badge.style.display = 'none';
+          if (analisUser && !hasValidLic && document.getElementById('licErr')) {
+            document.getElementById('licErr').style.display = 'block';
+            document.getElementById('licErr').textContent = licStatus.expired 
+              ? 'Masa berlaku lisensi Analisis-Aja Anda telah habis. Silakan hubungi pemilik untuk perpanjangan.' 
+              : 'Kunci lisensi Analisis-Aja belum aktif.';
+          }
+        }
+      }
+    }
+
+    applyAnalisLicUI();
+
+    const btnDeact = document.getElementById('btnDeactLic');
+    if (btnDeact) {
+      btnDeact.addEventListener('click', () => {
+        if (confirm('Apakah Anda ingin mengganti kunci lisensi Analisis-Aja dengan kunci lain?')) {
+          analisLicense = null;
+          localStorage.removeItem('analis-license');
+          applyAnalisLicUI();
+          const licKeyInput = document.getElementById('licKey');
+          if (licKeyInput) {
+            licKeyInput.value = '';
+            licKeyInput.focus();
+          }
+        }
+      });
+    }
+
+    const licForm = document.getElementById('licForm');
+    if (licForm) {
+      licForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const nama = document.getElementById('licName')?.value.trim() || '';
+        const email = document.getElementById('licEmail')?.value.trim().toLowerCase() || '';
+        const key = document.getElementById('licKey')?.value.trim() || '';
+        const errEl = document.getElementById('licErr');
+
+        if (errEl) { errEl.textContent = ''; errEl.style.display = 'none'; }
+
+        if (nama.length < 3) {
+          if (errEl) { errEl.textContent = 'Isi nama lengkap (minimal 3 huruf).'; errEl.style.display = 'block'; }
+          document.getElementById('licName')?.focus();
+          return;
+        }
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          if (errEl) { errEl.textContent = 'Masukkan alamat email yang valid.'; errEl.style.display = 'block'; }
+          document.getElementById('licEmail')?.focus();
+          return;
+        }
+
+        if (!key) {
+          if (errEl) { errEl.textContent = 'Kunci lisensi wajib diisi.'; errEl.style.display = 'block'; }
+          document.getElementById('licKey')?.focus();
+          return;
+        }
+
+        if (!window.AnalisisLicense) {
+          if (errEl) { errEl.textContent = 'Modul lisensi sedang memuat. Coba lagi.'; errEl.style.display = 'block'; }
+          return;
+        }
+
+        const valResult = window.AnalisisLicense.validateLicense(key);
+        if (!valResult.valid) {
+          if (errEl) { errEl.textContent = valResult.message || 'Kunci lisensi tidak valid.'; errEl.style.display = 'block'; }
+          document.getElementById('licKey')?.focus();
+          return;
+        }
+
+        analisLicense = {
+          key: valResult.key,
+          activatedAt: new Date().toISOString(),
+          label: valResult.label,
+          days: valResult.days,
+          durationCode: valResult.durationCode,
+          isMaster: !!valResult.isMaster
+        };
+        localStorage.setItem('analis-license', JSON.stringify(analisLicense));
+
+        analisUser = { nama, email, loginAt: new Date().toISOString() };
+        localStorage.setItem('analis-user', JSON.stringify(analisUser));
+
+        applyAnalisLicUI();
+      });
+    }
+  </script>
+</body>
+</html>

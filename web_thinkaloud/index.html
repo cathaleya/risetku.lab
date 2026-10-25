@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Think A Loud-In | Protokol Probing Kognitif Pascasarjana S2 & S3 • RisetKu</title>
+  <meta name="description" content="Platform wawancara kognitif Think-Aloud terstandar untuk mahasiswa S2/S3 calon dosen. Penggalian proses respons verbal, penalaran aset intelektual, dan analisis kebutuhan instrumen.">
+  
+  <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            heading: ['Outfit', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .font-heading { font-family: 'Outfit', sans-serif; }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+  <!-- TOPBAR -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-rose-200/80 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Brand -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-500 to-rose-700 text-white flex items-center justify-center text-lg shadow-md shadow-rose-500/20">
+          <i class="fa-solid fa-microphone-lines"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-heading font-black text-lg tracking-tight text-slate-900 leading-none">Think A Loud<span class="text-rose-600">-In</span></span>
+            <span class="text-[9px] bg-rose-100 text-rose-800 border border-rose-200 px-2 py-0.5 rounded-full font-bold">RisetKu S2/S3</span>
+          </div>
+          <p class="text-[10px] font-semibold text-slate-500 mt-0.5"><em>Cognitive Probing &amp; Deep Interview Protocol</em></p>
+        </div>
+      </div>
+
+      <!-- Center Progress Indicator -->
+      <div class="hidden md:flex items-center gap-2 text-xs font-bold text-slate-600 bg-slate-100 px-3.5 py-1.5 rounded-xl border border-slate-200">
+        <span id="activeSessionText">Sesi 1 (Butir 1–5)</span>
+        <span class="text-slate-300">|</span>
+        <span id="progressRatio" class="text-rose-600 font-black">Butir 1 dari 5</span>
+      </div>
+
+      <!-- Top Right Actions -->
+      <div class="flex items-center gap-3">
+        <span id="licBadge" style="display:none;align-items:center;gap:4px;padding:3px 10px;background:#ffe4e6;border:1px solid #fecdd3;color:#9f1239;border-radius:999px;font-size:11px;font-weight:700">
+          <span>🛡️</span>
+          <span id="licBadgeText">Lisensi Aktif</span>
+          <button type="button" id="btnDeactLic" style="background:none;border:none;color:#991b1b;cursor:pointer;font-size:10px;text-decoration:underline;margin-left:4px" title="Ganti kunci">(Ganti)</button>
+        </span>
+        <a href="/" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold shadow-sm transition-all">
+          <span>←</span>
+          <span>Portal RisetKu</span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN WORKSPACE -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col lg:flex-row gap-8">
+    
+    <!-- LEFT SIDEBAR: PROFILE & SESSION NAVIGATION -->
+    <aside class="w-full lg:w-80 shrink-0 space-y-6">
+      
+      <!-- Session Switcher -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+        <p class="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-3">Pilihan Sesi Wawancara</p>
+        <div class="grid grid-cols-2 gap-2">
+          <button id="btnSesi1" onclick="switchSession(1)" class="p-2.5 rounded-xl font-bold text-xs flex flex-col items-center justify-center transition-all bg-rose-600 text-white shadow-md shadow-rose-600/20">
+            <span>Sesi 1</span>
+            <span class="text-[10px] opacity-80 font-normal">TA_01 s.d. TA_05</span>
+          </button>
+          <button id="btnSesi2" onclick="switchSession(2)" class="p-2.5 rounded-xl font-bold text-xs flex flex-col items-center justify-center transition-all bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200">
+            <span>Sesi 2</span>
+            <span class="text-[10px] opacity-80 font-normal">TA_06 s.d. TA_10</span>
+          </button>
+        </div>
+        <p class="text-[10px] text-slate-500 mt-3 leading-relaxed">
+          Setiap sesi berdurasi 30–40 menit, memuat 5 butir situasi mewakili dimensi C1 sampai C5.
+        </p>
+      </div>
+
+      <!-- Item List Navigator in Active Session -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-2">
+        <p class="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-2">Daftar Butir Sesi Ini</p>
+        <div id="itemListNav" class="space-y-1.5">
+          <!-- Will be injected by JS -->
+        </div>
+      </div>
+
+      <!-- Participant Profile Form (Modal Trigger or Compact Card) -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+        <div class="flex items-center justify-between mb-3">
+          <p class="text-[10px] font-black uppercase tracking-wider text-slate-400">Profil Partisipan (S2/S3)</p>
+          <button onclick="toggleProfileCard()" class="text-rose-600 text-xs font-bold hover:underline" id="toggleProfBtn">Edit</button>
+        </div>
+        <div id="profSummary" class="text-xs space-y-1.5 text-slate-700">
+          <p><span class="font-bold">Kode:</span> <span id="sumKode">P-01</span></p>
+          <p><span class="font-bold">Prodi:</span> <span id="sumProdi">Pendidikan Dasar (S3)</span></p>
+          <p><span class="font-bold">Pengalaman:</span> <span id="sumAjar">3 tahun</span></p>
+        </div>
+      </div>
+
+      <!-- Audio Recorder Widget -->
+      <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-5 shadow-lg border border-slate-700">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-[10px] font-black uppercase tracking-wider text-rose-400 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+            Voice Think-Aloud
+          </span>
+          <span id="recTimer" class="font-mono text-xs text-slate-300">00:00</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btnRecToggle" onclick="toggleAudioRecording()" class="flex-1 py-2 px-3 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md transition-all">
+            <i id="recIcon" class="fa-solid fa-microphone"></i>
+            <span id="recBtnText">Mulai Rekam Suara</span>
+          </button>
+        </div>
+        <div id="audioPlayWrap" class="mt-3 hidden">
+          <audio id="audioPlayback" controls class="w-full h-8 rounded"></audio>
+        </div>
+        <p class="text-[9px] text-slate-400 mt-2 leading-tight">
+          Perekaman audio opsional untuk dokumentasi verbal dan transkripsi analisis kualitatif.
+        </p>
+      </div>
+
+      <!-- Action: Export Transcript -->
+      <div class="space-y-2">
+        <button onclick="exportTranscriptDoc()" class="w-full py-3 px-4 rounded-xl bg-slate-900 hover:bg-black text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md transition-all">
+          <i class="fa-solid fa-file-word text-blue-400"></i>
+          <span>Unduh Transkrip Verbatim (.doc)</span>
+        </button>
+        <button onclick="exportDataJson()" class="w-full py-2.5 px-4 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all">
+          <i class="fa-solid fa-file-code text-amber-500"></i>
+          <span>Ekspor Data JSON Riset</span>
+        </button>
+      </div>
+
+    </aside>
+
+    <!-- RIGHT: INTERVIEW PROTOCOL WORKSPACE -->
+    <section class="flex-1 space-y-6">
+      
+      <!-- ITEM HEADER CARD -->
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm relative overflow-hidden">
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-100">
+          <div class="flex items-center gap-2.5">
+            <span id="badgeKode" class="px-3 py-1 rounded-full text-xs font-black bg-rose-100 text-rose-800 border border-rose-200">
+              TA_01
+            </span>
+            <span id="badgeDimensi" class="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200">
+              C1 Contextual Understanding
+            </span>
+          </div>
+          <span id="badgeHaki" class="text-[11px] font-bold text-amber-800 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-full">
+            Tema: Literasi Aset Digital
+          </span>
+        </div>
+
+        <div class="mt-4">
+          <h2 id="itemTitle" class="text-xl sm:text-2xl font-heading font-black text-slate-900 tracking-tight">
+            Rujukan dari AI yang Tidak Ditemukan
+          </h2>
+          <p id="itemIndikator" class="text-xs text-slate-500 mt-1">
+            <strong>Indikator:</strong> C1.2 Memverifikasi sitasi dan referensi hasil AI generatif
+          </p>
+        </div>
+
+        <!-- Skenario Situasi Nyata (Card Terang Berbingkai) -->
+        <div class="mt-6 p-5 sm:p-6 rounded-2xl bg-rose-50/70 border-2 border-rose-200/80">
+          <p class="text-[10px] font-black uppercase tracking-wider text-rose-800 mb-2 flex items-center gap-1.5">
+            <i class="fa-solid fa-file-lines text-rose-600"></i> SKENARIO SITUASI NYATA
+          </p>
+          <p id="itemScenario" class="text-sm sm:text-base leading-relaxed text-slate-800 font-medium">
+            Anda memakai asisten AI generatif untuk menyusun tinjauan pustaka. AI menghasilkan teks yang rapi dengan 12 rujukan lengkap berisi nama penulis, tahun, dan DOI. Saat Anda mencari lima di antaranya, tiga tidak ditemukan dan satu muncul dengan judul berbeda. Naskah harus dikirim ke promotor besok pagi.
+          </p>
+          <div class="mt-4 pt-3 border-t border-rose-200/60">
+            <p class="text-xs font-bold text-rose-950 flex items-center gap-2">
+              <i class="fa-solid fa-circle-question text-rose-600"></i>
+              <span id="itemQuestion">Apa yang Anda lakukan terhadap teks dan rujukan tersebut?</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROTOKOL PROBING 3 TAHAP -->
+      <div class="space-y-6">
+
+        <!-- TAHAP 1: MENJAWAB (BERPIKIR BERSUARA & KEPUTUSAN TINDAKAN) -->
+        <div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm space-y-4">
+          <div class="flex items-center gap-2.5 text-rose-700">
+            <span class="w-7 h-7 rounded-xl bg-rose-100 flex items-center justify-center font-black text-xs">1</span>
+            <h3 class="font-heading font-black text-base text-slate-900 uppercase tracking-wide">
+              Tahap 1: Menjawab (Keputusan Tindakan Verbal)
+            </h3>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed font-medium">
+            <em>Bacalah situasi dengan suara keras, lalu ceritakan tindakan yang akan Anda ambil sambil menyuarakan semua yang Anda pikirkan.</em>
+          </p>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5">Tindakan yang Anda Putuskan / Catatan Berpikir Bersuara:</label>
+            <textarea id="ansTindakan" rows="4" placeholder="Tuliskan tindakan konkret yang Anda putuskan beserta apa yang terpikir saat membaca skenario..." class="w-full p-3.5 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-rose-500 focus:border-rose-500 outline-none leading-relaxed transition-all"></textarea>
+          </div>
+          
+          <!-- Skala Keyakinan 1 - 5 -->
+          <div class="pt-2">
+            <label class="block text-xs font-bold text-slate-700 mb-2">Nilai Keyakinan Anda Terhadap Keputusan Tersebut:</label>
+            <div class="grid grid-cols-5 gap-2 sm:gap-3">
+              <label class="cursor-pointer">
+                <input type="radio" name="ansYakin" value="1" class="peer sr-only">
+                <div class="p-2.5 sm:p-3 rounded-xl border border-slate-200 peer-checked:border-rose-600 peer-checked:bg-rose-50 text-center transition-all">
+                  <div class="font-heading font-black text-sm text-slate-800 peer-checked:text-rose-700">1</div>
+                  <div class="text-[9px] text-slate-500 font-bold mt-0.5">Sangat Tidak Yakin</div>
+                </div>
+              </label>
+              <label class="cursor-pointer">
+                <input type="radio" name="ansYakin" value="2" class="peer sr-only">
+                <div class="p-2.5 sm:p-3 rounded-xl border border-slate-200 peer-checked:border-rose-600 peer-checked:bg-rose-50 text-center transition-all">
+                  <div class="font-heading font-black text-sm text-slate-800 peer-checked:text-rose-700">2</div>
+                  <div class="text-[9px] text-slate-500 font-bold mt-0.5">Tidak Yakin</div>
+                </div>
+              </label>
+              <label class="cursor-pointer">
+                <input type="radio" name="ansYakin" value="3" class="peer sr-only">
+                <div class="p-2.5 sm:p-3 rounded-xl border border-slate-200 peer-checked:border-rose-600 peer-checked:bg-rose-50 text-center transition-all">
+                  <div class="font-heading font-black text-sm text-slate-800 peer-checked:text-rose-700">3</div>
+                  <div class="text-[9px] text-slate-500 font-bold mt-0.5">Ragu-ragu</div>
+                </div>
+              </label>
+              <label class="cursor-pointer">
+                <input type="radio" name="ansYakin" value="4" class="peer sr-only">
+                <div class="p-2.5 sm:p-3 rounded-xl border border-slate-200 peer-checked:border-rose-600 peer-checked:bg-rose-50 text-center transition-all">
+                  <div class="font-heading font-black text-sm text-slate-800 peer-checked:text-rose-700">4</div>
+                  <div class="text-[9px] text-slate-500 font-bold mt-0.5">Yakin</div>
+                </div>
+              </label>
+              <label class="cursor-pointer">
+                <input type="radio" name="ansYakin" value="5" class="peer sr-only">
+                <div class="p-2.5 sm:p-3 rounded-xl border border-slate-200 peer-checked:border-rose-600 peer-checked:bg-rose-50 text-center transition-all">
+                  <div class="font-heading font-black text-sm text-slate-800 peer-checked:text-rose-700">5</div>
+                  <div class="text-[9px] text-slate-500 font-bold mt-0.5">Sangat Yakin</div>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAHAP 2: MENJELASKAN (ALASAN & LANDASAN PENGETAHUAN) -->
+        <div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm space-y-4">
+          <div class="flex items-center gap-2.5 text-blue-700">
+            <span class="w-7 h-7 rounded-xl bg-blue-100 flex items-center justify-center font-black text-xs">2</span>
+            <h3 class="font-heading font-black text-base text-slate-900 uppercase tracking-wide">
+              Tahap 2: Menjelaskan (Alasan &amp; Landasan Pengetahuan)
+            </h3>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <label id="lblProbExplain1" class="block text-xs font-bold text-slate-700 mb-1.5 leading-relaxed">
+                1. Dengan kata-kata Anda sendiri, apa masalah utama dalam situasi ini, dan mengapa Anda memilih tindakan itu dibandingkan tindakan lain yang mungkin?
+              </label>
+              <textarea id="ansExplain1" rows="3" placeholder="Uraikan masalah utama situasi ini dan alasan pemilihan tindakan Anda..." class="w-full p-3.5 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none leading-relaxed transition-all"></textarea>
+            </div>
+
+            <div>
+              <label id="lblProbExplain2" class="block text-xs font-bold text-slate-700 mb-1.5 leading-relaxed">
+                2. Bagaimana Anda biasanya memastikan sebuah rujukan benar-benar ada dan isinya sesuai dengan yang dikutip, dan alat atau sumber apa yang Anda pakai?
+              </label>
+              <textarea id="ansExplain2" rows="3" placeholder="Jelaskan prosedur, alat/sumber, atau kriteria yang Anda pakai..." class="w-full p-3.5 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none leading-relaxed transition-all"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAHAP 3: MENGEVALUASI (PENGALAMAN NYATA & KEWAJARAN SITUASI) -->
+        <div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm space-y-4">
+          <div class="flex items-center gap-2.5 text-emerald-700">
+            <span class="w-7 h-7 rounded-xl bg-emerald-100 flex items-center justify-center font-black text-xs">3</span>
+            <h3 class="font-heading font-black text-base text-slate-900 uppercase tracking-wide">
+              Tahap 3: Mengevaluasi (Pengalaman Nyata &amp; Validitas Situasi)
+            </h3>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <label id="lblProbEval1" class="block text-xs font-bold text-slate-700 mb-1.5 leading-relaxed">
+                1. Pernahkah Anda atau orang yang Anda kenal menghadapi situasi serupa, dan pengetahuan, keterampilan, atau dukungan apa yang masih Anda perlukan untuk menghadapinya dengan lebih baik?
+              </label>
+              <textarea id="ansEval1" rows="3" placeholder="Ceritakan pengalaman nyata serupa dan dukungan/pengetahuan yang dirasa masih kurang..." class="w-full p-3.5 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none leading-relaxed transition-all"></textarea>
+            </div>
+
+            <div>
+              <label id="lblProbEval2" class="block text-xs font-bold text-slate-700 mb-1.5 leading-relaxed">
+                2. Apakah situasi ini realistis bagi mahasiswa S3 calon dosen, dan adakah kata atau bagian yang sulit dipahami atau hal penting yang belum tergambar?
+              </label>
+              <textarea id="ansEval2" rows="3" placeholder="Berikan masukan apakah skenario ini realistis dan jika ada istilah yang membingungkan..." class="w-full p-3.5 border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none leading-relaxed transition-all"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- NAVIGATION BETWEEN ITEMS -->
+        <div class="flex items-center justify-between pt-4">
+          <button id="btnPrev" onclick="prevItem()" class="py-2.5 px-5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs flex items-center gap-2 shadow-sm transition-all">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Butir Sebelumnya</span>
+          </button>
+          
+          <div class="flex items-center gap-3">
+            <button onclick="saveCurrentItemData(true)" class="py-2.5 px-4 rounded-xl border border-emerald-300 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all">
+              <i class="fa-solid fa-floppy-disk"></i>
+              <span>Simpan Butir</span>
+            </button>
+            <button id="btnNext" onclick="nextItem()" class="py-2.5 px-6 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs flex items-center gap-2 shadow-md shadow-rose-600/20 transition-all">
+              <span>Butir Berikutnya</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- MODAL EDIT PROFIL PARTISIPAN S2/S3 -->
+  <div id="profModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto custom-scrollbar">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+        <h3 class="font-heading font-black text-lg text-slate-900">Lembar Profil Partisipan S2/S3</h3>
+        <button onclick="toggleProfileCard()" class="text-slate-400 hover:text-slate-700 text-sm font-bold">✕</button>
+      </div>
+
+      <form id="formProfile" onsubmit="saveProfile(event)" class="mt-4 space-y-3.5 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Kode Partisipan:</label>
+          <input type="text" id="pKode" value="P-01" class="w-full p-2.5 border rounded-xl font-bold">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Program Studi &amp; Bidang Ilmu:</label>
+          <input type="text" id="pProdi" value="Pendidikan Dasar (S3)" class="w-full p-2.5 border rounded-xl font-medium">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Semester:</label>
+            <input type="text" id="pSemester" value="4 (Empat)" class="w-full p-2.5 border rounded-xl font-medium">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Perguruan Tinggi:</label>
+            <input type="text" id="pPT" value="Universitas Negeri Jakarta" class="w-full p-2.5 border rounded-xl font-medium">
+          </div>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Pengalaman Mengajar (Tahun):</label>
+          <input type="number" id="pAjar" value="3" class="w-full p-2.5 border rounded-xl font-medium">
+        </div>
+        
+        <div class="pt-2 border-t border-slate-100 space-y-2">
+          <p class="font-bold text-slate-700">Pengalaman Terkait Produk Digital &amp; HKI:</p>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" id="pProduk" checked class="rounded text-rose-600">
+            <span>Pernah mengembangkan produk digital (aplikasi, modul, media)</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" id="pKontrak" class="rounded text-rose-600">
+            <span>Pernah bekerja sama / kontrak dengan pengembang eksternal</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" id="pHki" class="rounded text-rose-600">
+            <span>Pernah mendaftarkan HKI (Hak Cipta / Paten)</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" id="pPelatihan" checked class="rounded text-rose-600">
+            <span>Pernah mendapat pelatihan literasi digital atau HKI</span>
+          </label>
+        </div>
+
+        <div class="pt-4 flex justify-end gap-2">
+          <button type="button" onclick="toggleProfileCard()" class="px-4 py-2 rounded-xl bg-slate-100 text-slate-700 font-bold">Batal</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold shadow-md">Simpan Profil</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL AKTIVASI LISENSI THINK A LOUD-IN -->
+  <div id="licModal" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.85);backdrop-filter:blur(6px);z-index:999999;align-items:center;justify-content:center;padding:16px;">
+    <div style="background:#ffffff;border-radius:20px;max-width:440px;width:100%;box-shadow:0 25px 50px -12px rgba(0,0,0,0.35);overflow:hidden;border:1px solid #e2e8f0;font-family:'Plus Jakarta Sans',sans-serif">
+      <div style="background:linear-gradient(135deg,#be123c,#e11d48);color:#ffffff;padding:24px;text-align:center">
+        <div style="width:48px;height:48px;background:rgba(255,255,255,0.2);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 10px auto;border:1px solid rgba(255,255,255,0.4)">
+          🎙️
+        </div>
+        <h3 style="margin:0;font-size:18px;font-weight:800;letter-spacing:-0.5px">Aktivasi Lisensi Think A Loud-In</h3>
+        <p style="margin:4px 0 0 0;font-size:12px;color:#fecdd3">Cognitive Probing S2/S3 &bull; RisetKu Lab</p>
+      </div>
+
+      <form id="licForm" style="padding:22px 24px">
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;font-weight:700;color:#334155;margin-bottom:4px">Nama Lengkap Peneliti:</label>
+          <input type="text" id="licName" placeholder="Nama lengkap Anda..." required style="width:100%;padding:10px 12px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:13px;font-weight:600;box-sizing:border-box">
+        </div>
+
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;font-weight:700;color:#334155;margin-bottom:4px">Email Kampus / Peneliti:</label>
+          <input type="email" id="licEmail" placeholder="nama@kampus.ac.id" required style="width:100%;padding:10px 12px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:13px;box-sizing:border-box">
+        </div>
+
+        <div style="margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+            <label style="font-size:12px;font-weight:700;color:#334155">Kunci Lisensi Think A Loud-In:</label>
+            <span style="color:#e11d48;font-size:11px;font-weight:700">Wajib Diisi</span>
+          </div>
+          <input type="text" id="licKey" placeholder="THINK-30D-XXXX-XXXX" required style="width:100%;padding:10px 12px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:14px;font-family:monospace;font-weight:800;letter-spacing:1px;text-transform:uppercase;box-sizing:border-box">
+        </div>
+
+        <p id="licErr" style="color:#dc2626;font-size:12px;margin:0 0 12px 0;display:none;font-weight:600"></p>
+
+        <button type="submit" style="width:100%;padding:12px;font-size:14px;background:linear-gradient(135deg,#e11d48,#be123c);font-weight:800;border:none;border-radius:10px;cursor:pointer;color:#ffffff;box-shadow:0 4px 12px rgba(225,29,72,0.3)">
+          🔑 Aktivasi Lisensi &amp; Buka Protokol Probing
+        </button>
+
+        <div style="margin-top:16px;padding-top:14px;border-top:1px dashed #cbd5e1;text-align:center">
+          <p style="font-size:11px;color:#475569;margin:0 0 8px 0;font-weight:600">Belum memiliki Kunci Lisensi Think A Loud-In?</p>
+          <a id="btnRequestLic" href="https://wa.me/6281234567890?text=Halo%20Pemilik%2FAdmin%20RisetKu%2C%20saya%20ingin%20meminta%20Kunci%20Lisensi%20Think%20A%20Loud-In." target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#10b981;color:#ffffff;text-decoration:none;border-radius:10px;padding:10px;font-size:12px;font-weight:700;box-shadow:0 4px 12px rgba(16,185,129,0.2)">
+            <span>💬 Minta Kunci Lisensi ke Pemilik (WhatsApp)</span>
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="license.js"></script>
+  <script>
+    // =========================================================================
+    // DATA 10 BUTIR INSTRUMEN THINK-ALOUD S2/S3 ASLI
+    // =========================================================================
+    const THINK_ALOUD_ITEMS = [
+      // --- SESI 1 (TA_01 s.d. TA_05) ---
+      {
+        sesi: 1,
+        idx: 0,
+        kode: "TA_01",
+        dimensi: "C1 Contextual Understanding",
+        indikator: "C1.2 Memverifikasi sitasi dan referensi hasil AI generatif",
+        haki: "Literasi Informasi & AI",
+        judul: "Rujukan dari AI yang Tidak Ditemukan",
+        skenario: "Anda memakai asisten AI generatif untuk menyusun tinjauan pustaka. AI menghasilkan teks yang rapi dengan 12 rujukan lengkap berisi nama penulis, tahun, dan DOI. Saat Anda mencari lima di antaranya, tiga tidak ditemukan dan satu muncul dengan judul berbeda. Naskah harus dikirim ke promotor besok pagi.",
+        pertanyaan: "Apa yang Anda lakukan terhadap teks dan rujukan tersebut?",
+        explain1: "1. Dengan kata-kata Anda sendiri, apa masalah utama dalam situasi ini, dan mengapa Anda memilih tindakan itu dibandingkan tindakan lain yang mungkin?",
+        explain2: "2. Bagaimana Anda biasanya memastikan sebuah rujukan benar-benar ada dan isinya sesuai dengan yang dikutip, dan alat atau sumber apa yang Anda pakai?",
+        eval1: "1. Pernahkah Anda atau orang yang Anda kenal menghadapi situasi serupa, dan pengetahuan, keterampilan, atau dukungan apa yang masih Anda perlukan untuk menghadapinya dengan lebih baik?",
+        eval2: "2. Apakah situasi ini realistis bagi mahasiswa S3 calon dosen, dan adakah kata atau bagian yang sulit dipahami atau hal penting yang belum tergambar?"
+      },
+      {
+        sesi: 1,
+        idx: 1,
+        kode: "TA_02",
+        dimensi: "C2 Communication",
+        indikator: "C2.1 Etika sitasi dan kepengarangan (Authorship)",
+        haki: "Etika Kepengarangan (Gift Authorship)",
+        judul: "Tawaran Nama sebagai Penulis Kedua",
+        skenario: "Seorang dosen senior di kampus Anda menawarkan bantuan mengurus korespondensi ke jurnal, dengan syarat namanya dicantumkan sebagai penulis kedua. Beliau tidak terlibat dalam perancangan penelitian, pengumpulan data, maupun penulisan naskah.",
+        pertanyaan: "Bagaimana Anda menanggapi tawaran ini?",
+        explain1: "1. Dengan kata-kata Anda sendiri, apa masalah utama dalam situasi ini, dan mengapa Anda memilih tindakan itu dibandingkan tindakan lain yang mungkin?",
+        explain2: "2. Menurut Anda, apa yang membuat seseorang berhak dicantumkan sebagai penulis, dan dari mana Anda mengetahui kriteria itu?",
+        eval1: "1. Pernahkah Anda atau orang yang Anda kenal menghadapi situasi serupa, dan pengetahuan, keterampilan, atau dukungan apa yang masih Anda perlukan untuk menghadapinya dengan lebih baik?",
+        eval2: "2. Apakah situasi ini realistis bagi mahasiswa S3 calon dosen, dan adakah kata atau bagian yang sulit dipahami atau hal penting yang belum tergambar?"
+      },
+      {
+        sesi: 1,
+        idx: 2,
+        kode: "TA_03",
+        dimensi: "C3 Collaboration",
+        indikator: "C3.5 Mengatur kerja sama dengan pengembang eksternal",
+        haki: "Aset Digital & Akses Repositori (Inti)",
+        judul: "Domain dan Repositori atas Nama Pengembang",
+        skenario: "Pengembang menyatakan aplikasi Anda sudah selesai dan dipakai mahasiswa. Anda baru menyadari bahwa domain, hosting, dan repositori kodenya terdaftar atas nama pengembang, dan Anda hanya diberi akun admin dengan akses terbatas.",
+        pertanyaan: "Apa yang Anda pikirkan dan lakukan?",
+        explain1: "1. Dengan kata-kata Anda sendiri, apa masalah utama dalam situasi ini, dan mengapa Anda memilih tindakan itu dibandingkan tindakan lain yang mungkin?",
+        explain2: "2. Dengan kata-kata Anda sendiri, apa yang dimaksud domain, hosting, dan repositori, dan apa risikonya bagi Anda jika semuanya atas nama pengembang?",
+        eval1: "1. Pernahkah Anda atau orang yang Anda kenal menghadapi situasi serupa, dan pengetahuan, keterampilan, atau dukungan apa yang masih Anda perlukan untuk menghadapinya dengan lebih baik?",
+        eval2: "2. Apakah situasi ini realistis bagi mahasiswa S3 calon dosen, dan adakah kata atau bagian yang sulit dipahami atau hal penting yang belum tergambar?"
+      },
+      {
+        sesi: 1,
+        idx: 3,
+        kode: "TA_04",
+        dimensi: "C4 Content Creation",
+        indikator: "C4.5 Memastikan kepemilikan ciptaan digital",
+        haki: "Klausul Kepemilikan & Hak Cipta (Inti)",
+        judul: "Kontrak Pengembangan Aplikasi dari Gagasan Sendiri",
+        skenario: "Anda ingin memakai aplikasi evaluasi pembelajaran hasil disertasi Anda di beberapa program studi. Gagasan, alur, dan rancangan pedagogisnya sepenuhnya dari Anda. Seorang pengembang web menawarkan pembuatan aplikasi dengan harga terjangkau dan mengirim draf kontrak sederhana yang hanya memuat harga dan tenggat.",
+        pertanyaan: "Apa yang Anda lakukan sebelum menandatangani kontrak tersebut?",
+        explain1: "1. Dengan kata-kata Anda sendiri, apa masalah utama dalam situasi ini, dan mengapa Anda memilih tindakan itu dibandingkan tindakan lain yang mungkin?",
+        explain2: "2. Menurut Anda, setelah aplikasi selesai dan dibayar, siapa yang berhak atas kode program dan rancangannya, dan dari mana Anda memperoleh anggapan itu?",
+        eval1: "1. Pernahkah Anda atau orang yang Anda kenal menghadapi situasi serupa, dan pengetahuan, keterampilan, atau dukungan apa yang masih Anda perlukan untuk menghadapinya dengan lebih baik?",
+        eval2: "2. Apakah situasi ini realistis bagi mahasiswa S3 calon dosen, dan adakah kata atau bagian yang sulit dipahami atau hal penting yang belum tergambar?"
+      },
+      {
+        sesi: 1,
+        idx: 4,
+        kode: "TA_05",
+        dimensi: "C5 Critical Problem Solving",
+        indikator: "C5.3 Menghadapi pengembang yang menghilang atau vendor lock-in",
+        haki: "Vendor Lock-in & Penguasaan Kode (Inti)",
+        judul: "Pengembang Meminta Biaya Tambahan",
+        skenario: "Dua tahun lalu aplikasi Anda dikembangkan pihak ketiga dan kini dipakai tiga fakultas. Server sering gagal dan Anda ingin pindah ke pengembang lain. Pengembang awal menolak menyerahkan kode sumber kecuali Anda membayar biaya tambahan. Di kontrak tidak ada klausul serah terima.",
+        pertanyaan: "Apa langkah Anda?",
+        explain1: "1. Dengan kata-kata Anda sendiri, apa masalah utama dalam situasi ini, dan mengapa Anda memilih tindakan itu dibandingkan tindakan lain yang mungkin?",
+        explain2: "2. Apa saja yang perlu Anda periksa atau kumpulkan sebelum bernegosiasi dengan pengembang, dan siapa yang dapat Anda hubungi untuk membantu?",
+        eval1: "1. Pernahkah Anda atau orang yang Anda kenal menghadapi situasi serupa, dan pengetahuan, keterampilan, atau dukungan apa yang masih Anda perlukan untuk menghadapinya dengan lebih baik?",
+        eval2: "2. Apakah situasi ini realistis bagi mahasiswa S3 calon dosen, dan adakah kata atau bagian yang sulit dipahami atau hal penting yang belum tergambar?"
+      },
+
+      // --- SESI 2 (TA_06 s.d. TA_10) ---
+      {
+        sesi: 2,
+        idx: 5,
+        kode: "TA_06",
+        dimensi: "C1 Contextual Understanding",
+        indikator: "C1.4 Mengelola data riset, kepemilikan, dan repositori",
+        haki: "Kepemilikan Data Proyek Bersama",
+        judul: "Data Proyek Bersama yang Ingin Dipakai Teman",
+        skenario: "Anda memegang data survei dari proyek hibah yang dipimpin promotor Anda. Seorang teman sesama mahasiswa S3 mengajak Anda memakai data itu untuk artikelnya sendiri, dan mengatakan, “Toh datanya ada di laptopmu.”",
+        pertanyaan: "Bagaimana Anda menanggapi ajakan tersebut?",
+        explain1: "1. Dengan kata-kata Anda sendiri, apa masalah utama dalam situasi ini, dan mengapa Anda memilih tindakan itu dibandingkan tindakan lain yang mungkin?",
+        explain2: "2. Menurut Anda, data itu milik siapa dan siapa yang berhak mengizinkan pemakaiannya, dan dari mana Anda mengetahuinya?",
+        eval1: "1. Pernahkah Anda atau orang yang Anda kenal menghadapi situasi serupa, dan pengetahuan, keterampilan, atau dukungan apa yang masih Anda perlukan untuk menghadapinya dengan lebih baik?",
+        eval2: "2. Apakah situasi ini realistis bagi mahasiswa S3 calon dosen, dan adakah kata atau bagian yang sulit dipahami atau hal penting yang belum tergambar?"
+      },
+      {
+        sesi: 2,
+        idx: 6,
+        kode: "TA_07",
+        dimensi: "C2 Communication",
+        indikator: "C2.3 Bernegosiasi dengan pihak ketiga secara profesional",
+        haki: "Negosiasi Kode & Dokumentasi",
+        judul: "“Itu Dapur Kami”",
+        skenario: "Anda menghubungi seorang pengembang untuk membuat aplikasi latihan soal dari rancangan Anda. Ketika Anda menanyakan apakah kode sumber dan dokumentasi akan diserahkan, ia menjawab: “Itu dapur kami. Yang penting aplikasinya jalan; kalau ada masalah, tinggal hubungi kami.”",
+        pertanyaan: "Bagaimana Anda menanggapi jawaban tersebut dan melanjutkan percakapan?",
+        explain1: "1. Dengan kata-kata Anda sendiri, apa masalah utama dalam situasi ini, dan mengapa Anda memilih tindakan itu dibandingkan tindakan lain yang mungkin?",
+        explain2: "2. Kalimat apa yang akan Anda ucapkan atau tulis kepada pengembang, dan bagian mana yang terasa paling sulit dikatakan?",
+        eval1: "1. Pernahkah Anda atau orang yang Anda kenal menghadapi situasi serupa, dan pengetahuan, keterampilan, atau dukungan apa yang masih Anda perlukan untuk menghadapinya dengan lebih baik?",
+        eval2: "2. Apakah situasi ini realistis bagi mahasiswa S3 calon dosen, dan adakah kata atau bagian yang sulit dipahami atau hal penting yang belum tergambar?"
+      },
+      {
+        sesi: 2,
+        idx: 7,
+        kode: "TA_08",
+        dimensi: "C3 Collaboration",
+        indikator: "C3.2 Memediasi konflik kewenangan atas produk bersama",
+        haki: "Kebijakan HKI Kampus & Hubungan Dinas",
+        judul: "Aplikasi Disertasi: Milik Siapa?",
+        skenario: "Aplikasi pembelajaran hasil disertasi Anda mulai dipakai dua fakultas. Pimpinan program studi meminta aplikasi dicatat sebagai aset kampus karena Anda memperoleh beasiswa dan memakai fasilitas kampus. Sementara itu promotor Anda ingin namanya tercantum sebagai pencipta utama. Menurut Anda, gagasan dan pengembangannya berasal dari Anda.",
+        pertanyaan: "Bagaimana Anda menyikapi situasi ini?",
+        explain1: "1. Dengan kata-kata Anda sendiri, apa masalah utama dalam situasi ini, dan mengapa Anda memilih tindakan itu dibandingkan tindakan lain yang mungkin?",
+        explain2: "2. Apakah kampus Anda memiliki kebijakan HKI, dan apa yang Anda ketahui atau belum ketahui tentang isinya?",
+        eval1: "1. Pernahkah Anda atau orang yang Anda kenal menghadapi situasi serupa, dan pengetahuan, keterampilan, atau dukungan apa yang masih Anda perlukan untuk menghadapinya dengan lebih baik?",
+        eval2: "2. Apakah situasi ini realistis bagi mahasiswa S3 calon dosen, dan adakah kata atau bagian yang sulit dipahami atau hal penting yang belum tergambar?"
+      },
+      {
+        sesi: 2,
+        idx: 8,
+        kode: "TA_09",
+        dimensi: "C4 Content Creation",
+        indikator: "C4.4 Memakai konten AI tanpa melanggar hak pihak lain",
+        haki: "Hak Atas Konten Generatif AI",
+        judul: "Buku Ajar dengan Ilustrasi Buatan AI",
+        skenario: "Anda menyusun buku ajar digital dan memakai alat AI generatif untuk membuat ilustrasi serta sebagian teks pengantar. Penerbit menanyakan apakah naskah dan ilustrasi itu “karya asli” dan bebas dari klaim hak cipta pihak lain.",
+        pertanyaan: "Bagaimana Anda menjawab penerbit dan menyiapkan naskah Anda?",
+        explain1: "1. Dengan kata-kata Anda sendiri, apa masalah utama dalam situasi ini, dan mengapa Anda memilih tindakan itu dibandingkan tindakan lain yang mungkin?",
+        explain2: "2. Menurut Anda, siapa pemilik ilustrasi buatan AI tersebut, dan apakah penggunaan AI perlu dinyatakan kepada penerbit beserta alasannya?",
+        eval1: "1. Pernahkah Anda atau orang yang Anda kenal menghadapi situasi serupa, dan pengetahuan, keterampilan, atau dukungan apa yang masih Anda perlukan untuk menghadapinya dengan lebih baik?",
+        eval2: "2. Apakah situasi ini realistis bagi mahasiswa S3 calon dosen, dan adakah kata atau bagian yang sulit dipahami atau hal penting yang belum tergambar?"
+      },
+      {
+        sesi: 2,
+        idx: 9,
+        kode: "TA_10",
+        dimensi: "C5 Critical Problem Solving",
+        indikator: "C5.1 Mengenali celah kompetensi dan belajar mandiri tentang HKI",
+        haki: "Hilirisasi Riset & Pengurusan HKI",
+        judul: "Ditugaskan Menyusun Proposal Hilirisasi",
+        skenario: "Fakultas menugaskan Anda menyusun proposal hilirisasi untuk produk digital hasil penelitian Anda, termasuk mendaftarkan HKI-nya. Anda belum pernah mengurus pendaftaran hak cipta atau paten, dan tenggatnya dua bulan.",
+        pertanyaan: "Bagaimana Anda mempersiapkan diri dan mencari informasi?",
+        explain1: "1. Dengan kata-kata Anda sendiri, apa masalah utama dalam situasi ini, dan mengapa Anda memilih tindakan itu dibandingkan tindakan lain yang mungkin?",
+        explain2: "2. Pada bagian mana Anda merasa paling belum tahu, dan kepada siapa atau ke mana Anda akan bertanya lebih dulu?",
+        eval1: "1. Pernahkah Anda atau orang yang Anda kenal menghadapi situasi serupa, dan pengetahuan, keterampilan, atau dukungan apa yang masih Anda perlukan untuk menghadapinya dengan lebih baik?",
+        eval2: "2. Apakah situasi ini realistis bagi mahasiswa S3 calon dosen, dan adakah kata atau bagian yang sulit dipahami atau hal penting yang belum tergambar?"
+      }
+    ];
+
+    // =========================================================================
+    // STATE MANAGEMENT
+    // =========================================================================
+    let currentSession = 1;
+    let currentItemIdx = 0; // 0 to 9
+    let answersStore = {};
+
+    function loadSavedAnswers() {
+      try {
+        answersStore = JSON.parse(localStorage.getItem('thinkaloud_answers') || '{}');
+      } catch (e) {
+        answersStore = {};
+      }
+    }
+
+    function saveCurrentItemData(notify = false) {
+      const item = THINK_ALOUD_ITEMS[currentItemIdx];
+      const tindakan = document.getElementById('ansTindakan').value;
+      const yakinEl = document.querySelector('input[name="ansYakin"]:checked');
+      const yakin = yakinEl ? yakinEl.value : null;
+      const exp1 = document.getElementById('ansExplain1').value;
+      const exp2 = document.getElementById('ansExplain2').value;
+      const ev1 = document.getElementById('ansEval1').value;
+      const ev2 = document.getElementById('ansEval2').value;
+
+      answersStore[item.kode] = {
+        kode: item.kode,
+        tindakan,
+        yakin,
+        exp1,
+        exp2,
+        ev1,
+        ev2,
+        updatedAt: new Date().toISOString()
+      };
+
+      localStorage.setItem('thinkaloud_answers', JSON.stringify(answersStore));
+      renderItemNav();
+
+      if (notify) {
+        alert(`Jawaban untuk butir ${item.kode} tersimpan otomatis di peramban.`);
+      }
+    }
+
+    function renderCurrentItem() {
+      const item = THINK_ALOUD_ITEMS[currentItemIdx];
+      document.getElementById('badgeKode').textContent = item.kode;
+      document.getElementById('badgeDimensi').textContent = item.dimensi;
+      document.getElementById('badgeHaki').textContent = "Tema: " + item.haki;
+      document.getElementById('itemTitle').textContent = item.judul;
+      document.getElementById('itemIndikator').innerHTML = `<strong>Indikator:</strong> ${item.indikator}`;
+      document.getElementById('itemScenario').textContent = item.skenario;
+      document.getElementById('itemQuestion').textContent = item.pertanyaan;
+
+      document.getElementById('lblProbExplain1').textContent = item.explain1;
+      document.getElementById('lblProbExplain2').textContent = item.explain2;
+      document.getElementById('lblProbEval1').textContent = item.eval1;
+      document.getElementById('lblProbEval2').textContent = item.eval2;
+
+      // Populate answers if exists
+      const saved = answersStore[item.kode] || {};
+      document.getElementById('ansTindakan').value = saved.tindakan || '';
+      document.getElementById('ansExplain1').value = saved.exp1 || '';
+      document.getElementById('ansExplain2').value = saved.exp2 || '';
+      document.getElementById('ansEval1').value = saved.ev1 || '';
+      document.getElementById('ansEval2').value = saved.ev2 || '';
+
+      // Set radio
+      const radios = document.querySelectorAll('input[name="ansYakin"]');
+      radios.forEach(r => {
+        r.checked = (r.value === String(saved.yakin));
+      });
+
+      // Update header indicator
+      const sessionStart = currentSession === 1 ? 0 : 5;
+      const posInSesi = (currentItemIdx - sessionStart) + 1;
+      document.getElementById('activeSessionText').textContent = `Sesi ${currentSession} (Butir ${sessionStart + 1}–${sessionStart + 5})`;
+      document.getElementById('progressRatio').textContent = `Butir ${posInSesi} dari 5`;
+
+      // Update Prev / Next button state
+      document.getElementById('btnPrev').disabled = (currentItemIdx === sessionStart);
+      document.getElementById('btnPrev').classList.toggle('opacity-50', currentItemIdx === sessionStart);
+      document.getElementById('btnNext').disabled = (currentItemIdx === sessionStart + 4);
+      document.getElementById('btnNext').classList.toggle('opacity-50', currentItemIdx === sessionStart + 4);
+
+      renderItemNav();
+    }
+
+    function renderItemNav() {
+      const navContainer = document.getElementById('itemListNav');
+      navContainer.innerHTML = '';
+      const itemsInSession = THINK_ALOUD_ITEMS.filter(it => it.sesi === currentSession);
+
+      itemsInSession.forEach(it => {
+        const hasAns = answersStore[it.kode] && (answersStore[it.kode].tindakan || answersStore[it.kode].yakin);
+        const isActive = (it.idx === currentItemIdx);
+
+        const btn = document.createElement('button');
+        btn.onclick = () => {
+          saveCurrentItemData(false);
+          currentItemIdx = it.idx;
+          renderCurrentItem();
+        };
+        btn.className = `w-full text-left p-2.5 rounded-xl text-xs font-bold flex items-center justify-between transition-all ${
+          isActive 
+            ? 'bg-rose-50 border-2 border-rose-600 text-rose-800' 
+            : 'bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700'
+        }`;
+
+        btn.innerHTML = `
+          <div class="flex items-center gap-2 truncate">
+            <span class="w-6 h-6 rounded-lg ${isActive ? 'bg-rose-600 text-white' : 'bg-slate-200 text-slate-700'} flex items-center justify-center text-[10px] shrink-0 font-black">
+              ${it.kode.replace('TA_', '')}
+            </span>
+            <span class="truncate">${it.judul}</span>
+          </div>
+          ${hasAns ? '<i class="fa-solid fa-circle-check text-emerald-500 text-xs shrink-0"></i>' : '<i class="fa-regular fa-circle text-slate-300 text-xs shrink-0"></i>'}
+        `;
+        navContainer.appendChild(btn);
+      });
+    }
+
+    function switchSession(sesi) {
+      saveCurrentItemData(false);
+      currentSession = sesi;
+      currentItemIdx = sesi === 1 ? 0 : 5;
+
+      const btn1 = document.getElementById('btnSesi1');
+      const btn2 = document.getElementById('btnSesi2');
+
+      if (sesi === 1) {
+        btn1.className = "p-2.5 rounded-xl font-bold text-xs flex flex-col items-center justify-center transition-all bg-rose-600 text-white shadow-md shadow-rose-600/20";
+        btn2.className = "p-2.5 rounded-xl font-bold text-xs flex flex-col items-center justify-center transition-all bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200";
+      } else {
+        btn2.className = "p-2.5 rounded-xl font-bold text-xs flex flex-col items-center justify-center transition-all bg-rose-600 text-white shadow-md shadow-rose-600/20";
+        btn1.className = "p-2.5 rounded-xl font-bold text-xs flex flex-col items-center justify-center transition-all bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200";
+      }
+
+      renderCurrentItem();
+    }
+
+    function nextItem() {
+      const sessionStart = currentSession === 1 ? 0 : 5;
+      if (currentItemIdx < sessionStart + 4) {
+        saveCurrentItemData(false);
+        currentItemIdx++;
+        renderCurrentItem();
+      }
+    }
+
+    function prevItem() {
+      const sessionStart = currentSession === 1 ? 0 : 5;
+      if (currentItemIdx > sessionStart) {
+        saveCurrentItemData(false);
+        currentItemIdx--;
+        renderCurrentItem();
+      }
+    }
+
+    // =========================================================================
+    // PROFILE MANAGEMENT
+    // =========================================================================
+    function toggleProfileCard() {
+      const m = document.getElementById('profModal');
+      m.classList.toggle('hidden');
+    }
+
+    function saveProfile(e) {
+      e.preventDefault();
+      const prof = {
+        kode: document.getElementById('pKode').value,
+        prodi: document.getElementById('pProdi').value,
+        semester: document.getElementById('pSemester').value,
+        pt: document.getElementById('pPT').value,
+        ajar: document.getElementById('pAjar').value,
+        produk: document.getElementById('pProduk').checked,
+        kontrak: document.getElementById('pKontrak').checked,
+        hki: document.getElementById('pHki').checked,
+        pelatihan: document.getElementById('pPelatihan').checked,
+      };
+      localStorage.setItem('thinkaloud_profile', JSON.stringify(prof));
+      updateProfileDisplay(prof);
+      toggleProfileCard();
+    }
+
+    function updateProfileDisplay(prof) {
+      document.getElementById('sumKode').textContent = prof.kode || 'P-01';
+      document.getElementById('sumProdi').textContent = prof.prodi || 'Pendidikan Dasar (S3)';
+      document.getElementById('sumAjar').textContent = (prof.ajar || '3') + ' tahun';
+    }
+
+    // =========================================================================
+    // VOICE THINK-ALOUD RECORDER
+    // =========================================================================
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let recInterval = null;
+    let recSeconds = 0;
+
+    async function toggleAudioRecording() {
+      const btn = document.getElementById('btnRecToggle');
+      const icon = document.getElementById('recIcon');
+      const text = document.getElementById('recBtnText');
+      const timer = document.getElementById('recTimer');
+      const playWrap = document.getElementById('audioPlayWrap');
+      const audio = document.getElementById('audioPlayback');
+
+      if (!mediaRecorder || mediaRecorder.state === 'inactive') {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          mediaRecorder = new MediaRecorder(stream);
+          audioChunks = [];
+
+          mediaRecorder.ondataavailable = (e) => {
+            if (e.data.size > 0) audioChunks.push(e.data);
+          };
+
+          mediaRecorder.onstop = () => {
+            const blob = new Blob(audioChunks, { type: 'audio/webm' });
+            const audioUrl = URL.createObjectURL(blob);
+            audio.src = audioUrl;
+            playWrap.classList.remove('hidden');
+          };
+
+          mediaRecorder.start();
+          recSeconds = 0;
+          recInterval = setInterval(() => {
+            recSeconds++;
+            const m = String(Math.floor(recSeconds / 60)).padStart(2, '0');
+            const s = String(recSeconds % 60).padStart(2, '0');
+            timer.textContent = `${m}:${s}`;
+          }, 1000);
+
+          btn.className = "flex-1 py-2 px-3 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md transition-all";
+          icon.className = "fa-solid fa-stop";
+          text.textContent = "Hentikan Rekaman";
+        } catch (err) {
+          alert('Mikrofon tidak dapat diakses atau izin ditolak: ' + err.message);
+        }
+      } else {
+        mediaRecorder.stop();
+        clearInterval(recInterval);
+        btn.className = "flex-1 py-2 px-3 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md transition-all";
+        icon.className = "fa-solid fa-microphone";
+        text.textContent = "Rekam Ulang";
+      }
+    }
+
+    // =========================================================================
+    // EXPORT TRANSCRIPT DOCUMENT
+    // =========================================================================
+    function exportTranscriptDoc() {
+      saveCurrentItemData(false);
+      let prof = {};
+      try { prof = JSON.parse(localStorage.getItem('thinkaloud_profile') || '{}'); } catch (e) {}
+
+      let content = `
+TRANSKRIP WAWANCARA KOGNITIF & PROTOKOL THINK-ALOUD (S2/S3)
+Ekosistem RisetKu Lab • www.riset-ku-lab.my.id
+================================================================================
+LEMBAR PROFIL PARTISIPAN:
+- Kode Partisipan : ${prof.kode || 'P-01'}
+- Program Studi   : ${prof.prodi || 'Pendidikan Dasar (S3)'}
+- Semester / PT   : ${prof.semester || '4'} / ${prof.pt || 'Universitas Negeri Jakarta'}
+- Masa Mengajar   : ${prof.ajar || '3'} Tahun
+- Produk Digital  : ${prof.produk ? 'Pernah' : 'Belum'}
+- Kontrak Vendor  : ${prof.kontrak ? 'Pernah' : 'Belum'}
+- Kepemilikan HKI : ${prof.hki ? 'Pernah' : 'Belum'}
+================================================================================\n\n`;
+
+      THINK_ALOUD_ITEMS.forEach((it, i) => {
+        const a = answersStore[it.kode] || {};
+        content += `--------------------------------------------------------------------------------\n`;
+        content += `BUTIR ${i+1}: ${it.kode} — ${it.judul}\n`;
+        content += `Dimensi: ${it.dimensi} | Indikator: ${it.indikator}\n`;
+        content += `Skenario: "${it.skenario}"\n`;
+        content += `Pertanyaan: ${it.pertanyaan}\n\n`;
+        content += `[TAHAP 1: MENJAWAB & KEPUTUSAN TINDAKAN]\n`;
+        content += `Tindakan Partisipan:\n${a.tindakan || '(Belum dijawab)'}\n`;
+        content += `Skala Keyakinan (1-5): ${a.yakin ? a.yakin + ' / 5' : '(Belum dinilai)'}\n\n`;
+        content += `[TAHAP 2: MENJELASKAN]\n`;
+        content += `${it.explain1}\nJawaban: ${a.exp1 || '-'}\n\n`;
+        content += `${it.explain2}\nJawaban: ${a.exp2 || '-'}\n\n`;
+        content += `[TAHAP 3: MENGEVALUASI]\n`;
+        content += `${it.eval1}\nJawaban: ${a.ev1 || '-'}\n\n`;
+        content += `${it.eval2}\nJawaban: ${a.ev2 || '-'}\n\n`;
+      });
+
+      const blob = new Blob([content], { type: 'application/msword;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Transkrip_ThinkAloud_${prof.kode || 'S3'}_RisetKu.doc`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function exportDataJson() {
+      saveCurrentItemData(false);
+      let prof = {};
+      try { prof = JSON.parse(localStorage.getItem('thinkaloud_profile') || '{}'); } catch (e) {}
+
+      const exportObj = {
+        platform: "Think A Loud-In • RisetKu Lab",
+        domain: "www.riset-ku-lab.my.id",
+        exportedAt: new Date().toISOString(),
+        profile: prof,
+        answers: answersStore
+      };
+
+      const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ThinkAloud_Data_${prof.kode || 'S3'}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // =========================================================================
+    // LICENSE VERIFICATION ENGINE INTEGRATION
+    // =========================================================================
+    let thinkUser = null;
+    try { thinkUser = JSON.parse(localStorage.getItem('think-user') || 'null'); } catch (e) { thinkUser = null; }
+
+    let thinkLicense = null;
+    try {
+      if (new URLSearchParams(window.location.search).has('reset') || new URLSearchParams(window.location.search).has('ganti')) {
+        localStorage.removeItem('think-license');
+        localStorage.removeItem('think-user');
+        thinkLicense = null;
+        thinkUser = null;
+      } else {
+        thinkLicense = JSON.parse(localStorage.getItem('think-license') || 'null');
+      }
+    } catch (e) { thinkLicense = null; }
+
+    function verifyThinkLic() {
+      if (!window.ThinkLicense) return { active: false, message: 'Modul lisensi belum siap.' };
+      return window.ThinkLicense.checkLicenseStatus(thinkLicense);
+    }
+
+    function applyThinkLicUI() {
+      const licStatus = verifyThinkLic();
+      const hasValidLic = licStatus && licStatus.active;
+      const isUnlocked = !!(thinkUser && hasValidLic);
+
+      const modal = document.getElementById('licModal');
+      const badge = document.getElementById('licBadge');
+      const badgeText = document.getElementById('licBadgeText');
+
+      if (modal) {
+        modal.style.display = isUnlocked ? 'none' : 'flex';
+        if (!isUnlocked && thinkUser) {
+          const n = document.getElementById('licName');
+          const em = document.getElementById('licEmail');
+          if (n && !n.value) n.value = thinkUser.nama || '';
+          if (em && !em.value) em.value = thinkUser.email || '';
+        }
+      }
+
+      if (badge) {
+        if (isUnlocked) {
+          badge.style.display = 'inline-flex';
+          if (badgeText) {
+            if (licStatus.isMaster) {
+              badgeText.textContent = '👑 Master VIP (Permanen)';
+            } else if (licStatus.remainingDays >= 3000) {
+              badgeText.textContent = '🛡️ Lisensi Lifetime';
+            } else {
+              badgeText.textContent = `🛡️ Lisensi: ${licStatus.remainingDays} hari tersisa`;
+            }
+          }
+        } else {
+          badge.style.display = 'none';
+          if (thinkUser && !hasValidLic && document.getElementById('licErr')) {
+            document.getElementById('licErr').style.display = 'block';
+            document.getElementById('licErr').textContent = licStatus.expired 
+              ? 'Masa berlaku lisensi Think A Loud-In Anda telah habis. Silakan hubungi pemilik untuk perpanjangan.' 
+              : 'Kunci lisensi Think A Loud-In belum aktif.';
+          }
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadSavedAnswers();
+      renderCurrentItem();
+
+      let prof = {};
+      try { prof = JSON.parse(localStorage.getItem('thinkaloud_profile') || '{}'); } catch (e) {}
+      if (prof.kode) updateProfileDisplay(prof);
+
+      applyThinkLicUI();
+
+      const btnDeact = document.getElementById('btnDeactLic');
+      if (btnDeact) {
+        btnDeact.addEventListener('click', () => {
+          if (confirm('Apakah Anda ingin mengganti kunci lisensi Think A Loud-In dengan kunci lain?')) {
+            thinkLicense = null;
+            localStorage.removeItem('think-license');
+            applyThinkLicUI();
+            const licKeyInput = document.getElementById('licKey');
+            if (licKeyInput) {
+              licKeyInput.value = '';
+              licKeyInput.focus();
+            }
+          }
+        });
+      }
+
+      const licForm = document.getElementById('licForm');
+      if (licForm) {
+        licForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const nama = document.getElementById('licName')?.value.trim() || '';
+          const email = document.getElementById('licEmail')?.value.trim().toLowerCase() || '';
+          const key = document.getElementById('licKey')?.value.trim() || '';
+          const errEl = document.getElementById('licErr');
+
+          if (errEl) { errEl.textContent = ''; errEl.style.display = 'none'; }
+
+          if (nama.length < 3) {
+            if (errEl) { errEl.textContent = 'Isi nama lengkap (minimal 3 huruf).'; errEl.style.display = 'block'; }
+            document.getElementById('licName')?.focus();
+            return;
+          }
+
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            if (errEl) { errEl.textContent = 'Masukkan alamat email yang valid.'; errEl.style.display = 'block'; }
+            document.getElementById('licEmail')?.focus();
+            return;
+          }
+
+          if (!key) {
+            if (errEl) { errEl.textContent = 'Kunci lisensi wajib diisi.'; errEl.style.display = 'block'; }
+            document.getElementById('licKey')?.focus();
+            return;
+          }
+
+          if (!window.ThinkLicense) {
+            if (errEl) { errEl.textContent = 'Modul lisensi sedang memuat. Coba lagi.'; errEl.style.display = 'block'; }
+            return;
+          }
+
+          const valResult = window.ThinkLicense.validateLicense(key);
+          if (!valResult.valid) {
+            if (errEl) { errEl.textContent = valResult.message || 'Kunci lisensi tidak valid.'; errEl.style.display = 'block'; }
+            document.getElementById('licKey')?.focus();
+            return;
+          }
+
+          thinkLicense = {
+            key: valResult.key,
+            activatedAt: new Date().toISOString(),
+            label: valResult.label,
+            days: valResult.days,
+            durationCode: valResult.durationCode,
+            isMaster: !!valResult.isMaster
+          };
+          localStorage.setItem('think-license', JSON.stringify(thinkLicense));
+
+          thinkUser = { nama, email, loginAt: new Date().toISOString() };
+          localStorage.setItem('think-user', JSON.stringify(thinkUser));
+
+          applyThinkLicUI();
+        });
+      }
+    });
+  </script>
+</body>
+</html>

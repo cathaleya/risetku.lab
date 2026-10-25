@@ -1,0 +1,11 @@
+.git
+.gitignore
+.dockerignore
+node_modules
+npm-debug.log
+Generator_Lisensi_RisetKu.html
+generate_license.js
+Buka_Generator_Lisensi.bat
+*.bat
+scratch
+*.md

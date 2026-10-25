@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Periksa Naskah · Cek-In</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" href="img/logo_cekin.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="css/cekin.css">
+</head>
+<body>
+<!-- ikon -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="m9 14 2 2 4-4"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1.2" fill="currentColor"/><circle cx="4.5" cy="12" r="1.2" fill="currentColor"/><circle cx="4.5" cy="18" r="1.2" fill="currentColor"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/></symbol>
+  <symbol id="i-type" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7V5h16v2M12 5v14M9 19h6"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2z"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+</svg>
+
+<nav class="nav" aria-label="Navigasi utama">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <img class="mark" src="img/logo_cekin.svg" alt="" width="54" height="54">
+      <span class="words"><span class="name">Cek-In</span><span class="tag">Tesis &amp; Disertasi Checker</span></span>
+    </a>
+    <div class="nav-links">
+      <div class="nav-logos"><img src="img/logo_madel5c.png" alt="MADEL-5C"></div>
+      <a class="l" href="index.html">Beranda</a>
+      <a class="l" href="index.html#fitur">Yang diperiksa</a>
+      <a class="l" href="index.html#panduan">Panduan</a>
+      <a class="btn primary" id="navMasuk" href="#login">Masuk</a>
+      <span class="who" id="navUser" hidden><span class="avatar" id="navAvatar"></span><span class="who-t"><b id="navNama"></b><small id="navEmail"></small></span><button class="btn link" id="logout">Keluar</button></span>
+    </div>
+  </div>
+</nav>
+
+<main id="app">
+<section class="loginpage" id="loginPage">
+  <div class="wrap lp">
+    <div class="lp-intro">
+      <span class="eyebrow"><i></i>Halaman masuk</span>
+      <h1><span class="solid timbul-heading">Masuk</span><span class="emboss">ke Cek-In</span></h1>
+      <p>Pemeriksa tesis &amp; disertasi berdasarkan Panduan Penulisan SPs UNJ 2025. Masuk dengan nama dan email kampus, lalu unggah naskah Anda.</p>
+      <ul class="lp-list">
+        <li><span class="badge b-ok">✓</span> Sistematika dan isi tiap bab sesuai jenis penelitian</li>
+        <li><span class="badge b-ok">✓</span> Koherensi judul, rumusan masalah, sampai simpulan</li>
+        <li><span class="badge b-ok">✓</span> Dimensi, paradigma, analisis data, tabel, dan rujukan</li>
+        <li><span class="badge b-ok">✓</span> Salin catatan per bab, masukan AI, dan laporan revisi</li>
+      </ul>
+      <p class="privacy">Belum tahu caranya? <a href="index.html#panduan">Baca panduan penggunaan</a> · <a href="index.html">Kembali ke beranda</a></p>
+    </div>
+    <form class="login card-timbul" id="login" novalidate>
+          <img src="img/logo_cekin.svg" alt="" width="76" height="76">
+          <h2>Aktivasi &amp; Masuk Cek-In</h2>
+          <p class="privacy">Masukkan data pengguna dan <b>Kunci Lisensi Resmi</b> yang diberikan langsung oleh Pemilik / Admin RisetKu.</p>
+          <div class="field"><label for="uNama">Nama lengkap</label><input type="text" id="uNama" autocomplete="name" placeholder="mis. Bima Prasetyo"></div>
+          <div class="field"><label for="uEmail">Email aktif</label><input type="text" id="uEmail" inputmode="email" autocomplete="email" placeholder="nama@kampus.ac.id atau email@gmail.com"></div>
+          <div class="field">
+            <label for="uLicense" style="display:flex;justify-content:space-between;align-items:center">
+              <span>Kunci Lisensi (License Key)</span>
+              <span style="color:#2563eb;font-size:11px;font-weight:700">Wajib Diisi</span>
+            </label>
+            <input type="text" id="uLicense" style="font-family:'JetBrains Mono',monospace;letter-spacing:1px;text-transform:uppercase;font-weight:700" placeholder="CEKIN-30D-XXXX-XXXX">
+          </div>
+          <p class="err" id="uErr" role="alert"></p>
+          <button class="btn primary" type="submit" style="width:100%;padding:12px;font-size:1rem;background:linear-gradient(135deg,#0284c7,#2563eb)">🔑 Aktivasi Lisensi &amp; Masuk</button>
+          
+          <div style="margin-top:14px;padding-top:14px;border-top:1px dashed #cbd5e1;text-align:center">
+            <p style="font-size:11px;color:#475569;margin-bottom:8px;font-weight:600">Belum memiliki Kunci Lisensi Cek-In?</p>
+            <a id="btnRequestLicense" href="https://wa.me/6281234567890?text=Halo%20Pemilik%2FAdmin%20RisetKu%2C%20saya%20ingin%20meminta%20Kunci%20Lisensi%20Cek-In%20untuk%20naskah%20saya." target="_blank" class="btn" style="width:100%;background:#10b981;color:#ffffff;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;border-radius:10px;padding:10px;box-shadow:0 4px 12px rgba(16,185,129,0.25)">
+              <svg class="ico" style="width:16px;height:16px"><use href="#i-spark"/></svg>
+              <span>Minta Kunci Lisensi ke Pemilik (WhatsApp)</span>
+            </a>
+          </div>
+        </form>
+  </div>
+</section>
+
+<section id="tool" hidden>
+  <div class="wrap" style="padding-block:56px 64px">
+    <div class="sec-head">
+      <span class="eyebrow"><i></i>Periksa naskah</span>
+      <h2 class="timbul-heading" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <span>Halo, <span id="helloNama"></span></span>
+        <span id="licBadge" style="display:inline-flex;align-items:center;gap:6px;padding:3px 12px;background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;border-radius:999px;font-size:11px;font-weight:700">
+          <span>🛡️</span>
+          <span id="licBadgeText">Lisensi Aktif</span>
+          <button type="button" id="btnDeactLic" style="background:none;border:none;color:#991b1b;cursor:pointer;font-size:10px;text-decoration:underline;margin-left:4px" title="Ganti atau masukkan kunci lisensi lain">(Ganti)</button>
+        </span>
+      </h2>
+      <p>Unggah naskah di panel kiri. <a href="index.html#panduan">Lihat panduan</a> bila baru pertama kali.</p>
+    </div>
+    <div class="layout">
+      <aside class="panel card-timbul" aria-label="Pengaturan pemeriksaan">
+        
+        <div class="tool">
+        <div class="me"><span class="avatar" id="meAvatar"></span><span><b id="meNama"></b><small id="meEmail"></small></span></div>
+        <h2>Naskah yang diperiksa</h2>
+        <label class="drop" id="drop" for="file">
+          <input type="file" id="file" accept=".docx,.pdf">
+          <svg class="ico" style="color:var(--accent);width:30px;height:30px"><use href="#i-check"/></svg>
+          <strong>Pilih atau seret berkas</strong>
+          <small>.docx (paling lengkap) atau .pdf berbasis teks</small>
+          <span class="fn" id="filename"></span>
+        </label>
+        <div class="field">
+          <label for="jenis">Jenis penelitian</label>
+          <select id="jenis">
+            <option value="auto">Deteksi otomatis dari isi naskah</option>
+            <option value="kualitatif">Kualitatif</option>
+            <option value="asosiatif">Kuantitatif asosiatif</option>
+            <option value="eksperimen">Eksperimen</option>
+            <option value="rnd">R&amp;D – pengembangan model/produk</option>
+            <option value="instrumen">Pengembangan instrumen</option>
+            <option value="kebijakan">Kebijakan</option>
+            <option value="evaluasi">Evaluasi</option>
+            <option value="tindakan">Tindakan</option>
+          </select>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="field">
+            <label for="jenjang">Jenjang</label>
+            <select id="jenjang">
+              <option value="auto">Otomatis</option>
+              <option value="tesis">Tesis</option>
+              <option value="disertasi">Disertasi</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="tahap">Sistematika / Bab Diperiksa</label>
+            <select id="tahap">
+              <option value="auto">Deteksi Otomatis (Per Bab / Seluruh)</option>
+              <option value="bab1">Khusus Bab I (Pendahuluan)</option>
+              <option value="bab2">Khusus Bab II (Kajian Pustaka)</option>
+              <option value="bab3">Khusus Bab III (Metodologi)</option>
+              <option value="bab4">Khusus Bab IV (Hasil &amp; Pembahasan)</option>
+              <option value="bab5">Khusus Bab V (Simpulan &amp; Saran)</option>
+              <option value="proposal">Proposal Lengkap (Bab I–III)</option>
+              <option value="lengkap">Naskah Lengkap (Bab I–V)</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="judul">Judul (opsional, untuk cek koherensi)</label>
+          <input id="judul" type="text" placeholder="Kosongkan agar ditebak dari sampul">
+        </div>
+        <div class="row" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <button id="run" class="btn primary" disabled>Periksa naskah</button>
+          <button id="btnReset" class="btn" type="button" style="background:#f1f5f9;color:#334155;border:1px solid #cbd5e1" title="Kosongkan naskah dan mulai pemeriksaan baru">🔄 Reset</button>
+          <span id="progress" role="status"></span>
+        </div>
+        <p class="privacy">Berkas dibaca di browser Anda dan tidak diunggah ke server mana pun.</p>
+        <div class="acct" id="acct" hidden>
+          <h2>Akun AI (opsional)</h2>
+          <p class="privacy" id="acctStatus">Belum terhubung. Masuk sebelum mengunggah naskah, karena halaman dimuat ulang setelah login.</p>
+          <div class="row">
+            <button class="btn" id="orLogin">Masuk dengan OpenRouter</button>
+            <button class="btn link" id="orLogout" hidden>Keluar</button>
+          </div>
+          <p class="privacy">Satu akun OpenRouter membuka model Gemini, GPT, Claude, DeepSeek, dan model gratis. Biaya/kuota mengikuti akun Anda sendiri.</p>
+        </div>
+        </div>
+      </aside>
+
+      <main class="report" id="report">
+        <section class="sheet card-timbul empty" id="empty">
+          <h2>Belum ada naskah</h2>
+          <p>Unggah berkas tesis atau disertasi di panel kiri, lalu klik <b>Periksa naskah</b>. Baru pertama kali? Baca <a href="index.html#panduan">Panduan penggunaan</a> dulu. Laporan akan muncul di sini dengan bagian berikut:</p>
+          <ul class="what">
+            <li><b>Catatan perbaikan</b><span>Semua yang belum ada atau perlu dicek, lengkap dengan halaman panduan.</span></li>
+            <li><b>Per bab</b><span>Temuan dan statistik (kata, subjudul, tabel, gambar, sitasi) dipisah per bab.</span></li>
+            <li><b>Koherensi</b><span>Judul dan rumusan masalah dilacak ke tujuan, Bab II, Bab III, hasil, dan simpulan.</span></li>
+            <li><b>Dimensi &amp; paradigma</b><span>Dimensi ke definisi operasional, kisi-kisi, hasil; paradigma ↔ pendekatan ↔ grand theory.</span></li>
+            <li><b>Analisis data &amp; tabel</b><span>Teknik Bab III ↔ hasil, nilai statistik ↔ kriteria, angka teks ↔ tabel.</span></li>
+            <li><b>Masukan AI</b><span>Telaah substansi per bab dengan Gemini, ChatGPT, atau AI lain milik Anda.</span></li>
+          </ul>
+        </section>
+        <div id="filled" class="filled" hidden>
+          <section class="summary card-timbul" aria-label="Ringkasan">
+            <div class="ring" id="ring"><div><strong id="scoreVal">–</strong><small>kesesuaian</small></div></div>
+            <div style="min-width:0">
+              <h2 id="sumTitle"></h2>
+              <dl class="facts" id="facts"></dl>
+              <div class="bars" id="bars"></div>
+              <div class="dl" id="dl">
+                <button class="btn primary" id="dlDoc"><svg class="ico" style="width:16px;height:16px"><use href="#i-down"/></svg> Laporan revisi (.doc)</button>
+                <button class="btn" id="dlTxt">Catatan (.txt)</button>
+                <button class="btn" id="dlPrint">Cetak / PDF</button>
+                <button class="btn" id="btnResetReport" type="button" style="background:#fee2e2;color:#991b1b;border:1px solid #fecaca;font-weight:700">🔄 Ganti Naskah (Reset)</button>
+                <span class="muted" id="dlNote" hidden>Unduhan diblokir di pratinjau claude.ai. Buka Cek-In di madel5c.com untuk mengunduh; tombol "Salin catatan" tetap bisa dipakai.</span>
+              </div>
+            </div>
+          </section>
+          <div id="alerts" style="display:grid;gap:8px"></div>
+          <nav class="tabs" id="tabs" role="tablist">
+            <button role="tab" data-tab="catatan" aria-selected="true">Catatan perbaikan<span class="n" id="nCat"></span></button>
+            <button role="tab" data-tab="perbab" aria-selected="false">Per bab</button>
+            <button role="tab" data-tab="sistematika" aria-selected="false">Sistematika</button>
+            <button role="tab" data-tab="koherensi" aria-selected="false">Koherensi</button>
+            <button role="tab" data-tab="dimensi" aria-selected="false">Dimensi &amp; paradigma</button>
+            <button role="tab" data-tab="analisis" aria-selected="false">Analisis data &amp; tabel</button>
+            <button role="tab" data-tab="isi" aria-selected="false">Isi &amp; substansi</button>
+            <button role="tab" data-tab="awal" aria-selected="false">Bagian awal &amp; lampiran</button>
+            <button role="tab" data-tab="rujukan" aria-selected="false">Kuantitas &amp; rujukan</button>
+            <button role="tab" data-tab="format" aria-selected="false">Format</button>
+            <button role="tab" data-tab="ai" aria-selected="false">Masukan AI</button>
+            <button role="tab" data-tab="struktur" aria-selected="false">Struktur terbaca</button>
+          </nav>
+          <section class="sheet card-timbul" id="panel" role="tabpanel"></section>
+        </div>
+      </main>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <b>Cek-In · bagian dari MADEL-5C</b>
+      <p>Pemeriksaan otomatis bersifat indikatif dan berbasis pencocokan istilah. Panduan mengizinkan tiap bab disesuaikan dengan pendekatan, model, dan metode penelitian (hal. 3), sehingga keputusan akhir tetap pada pembimbing atau promotor.</p>
+    </div>
+    <a class="btn" href="https://madel5c.com/" rel="noopener">Kembali ke MADEL-5C</a>
+  </div>
+</footer>
+
+<script src="vendor/jszip.min.js"></script>
+<script src="vendor/pdf.worker.min.js"></script>
+<script src="vendor/pdf.min.js"></script>
+<script src="js/parser.js"></script>
+<script src="js/rules.js"></script>
+<script src="js/lanjut.js"></script>
+<script src="js/analyzer.js"></script>
+<script src="js/license.js"></script>
+<script src="js/web.js"></script>
+</body>
+</html>

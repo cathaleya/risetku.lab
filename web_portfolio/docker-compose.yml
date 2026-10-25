@@ -1,0 +1,8 @@
+services:
+  portfolio:
+    build: .
+    container_name: bima-portfolio-app
+    restart: always
+    ports:
+      # Port 8080 diikat hanya ke localhost agar aman, diarahkan oleh Nginx domain utama
+      - "127.0.0.1:8080:80"

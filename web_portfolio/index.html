@@ -1,0 +1,1862 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RisetKu | Ekosistem Solusi Riset & E-Asesmen Akademik Terpadu</title>
+  <meta name="description" content="Platform ekosistem aplikasi riset akademik modern: MADEL-5C, Cek-In, SLR-In Aja, Terjemahin_Aja, Analisis-Aja, dan Think A Loud-In. Cepat, terstandar, dan terintegrasi untuk mahasiswa S2/S3, dosen, dan peneliti.">
+  <link rel="canonical" href="https://www.riset-ku-lab.my.id/">
+
+  <!-- Google Fonts: Bricolage Grotesque, Outfit & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800;12..96,900&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            heading: ['Outfit', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom Stylesheet (Soft Light Pink Theme + Tactile 3D Cards) -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-pink-500 selection:text-white relative">
+
+  <!-- BACKGROUND MOTIF GEOMETRIC ILMIAH & BATIK SPIRAL (PERSIS MADEL-5C) -->
+  <div class="fixed inset-0 z-0 opacity-[0.14] pointer-events-none overflow-hidden">
+    <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+      <defs>
+        <pattern id="risetkuMotifBg" width="140" height="140" patternUnits="userSpaceOnUse">
+          <!-- Traditional Carving Diamond & Academic Grid -->
+          <path d="M 70,0 L 140,70 L 70,140 L 0,70 Z" fill="none" stroke="#f43f5e" stroke-width="1.6" />
+          <path d="M 70,18 L 122,70 L 70,122 L 18,70 Z" fill="none" stroke="#e11d48" stroke-width="1.1" stroke-dasharray="4 4" />
+          <!-- Tribal Spiral Motif & Atom Circle -->
+          <path d="M 70,40 Q 98,70 70,100 Q 42,70 70,40" fill="none" stroke="#d97706" stroke-width="1.6" />
+          <circle cx="70" cy="70" r="10" fill="none" stroke="#f43f5e" stroke-width="1.6" />
+          <circle cx="70" cy="70" r="4" fill="#fb7185" />
+          <!-- Wave Lines -->
+          <path d="M 0,0 Q 35,35 70,0 Q 105,35 140,0" fill="none" stroke="#f43f5e" stroke-width="1.3" />
+          <path d="M 0,140 Q 35,105 70,140 Q 105,105 140,140" fill="none" stroke="#f43f5e" stroke-width="1.3" />
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#risetkuMotifBg)" />
+    </svg>
+  </div>
+
+  <!-- ========================================================================
+       TOP HEADER NAVIGATION (SMOOTH SCROLL LINKS)
+       ======================================================================== -->
+  <header class="sticky top-0 z-50 backdrop-blur-md bg-white/90 border-b border-pink-200/70 shadow-sm transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-18 flex items-center justify-between">
+      
+      <!-- Brand Logo (Logo RisetKu Lab Baru Timbul) -->
+      <a href="#beranda" class="flex items-center gap-2.5 group">
+        <img src="logo_risetku_lab.png" alt="RisetKu Lab" class="h-10 sm:h-11 w-auto object-contain logo-nav-timbul group-hover:scale-105 transition-transform">
+        <div class="hidden sm:block">
+          <p class="text-[11px] font-bold text-slate-600"><em>Integrated Academic Research Ecosystem</em></p>
+        </div>
+      </a>
+
+      <!-- NAVIGATION ANCHORS (PANEL FITUR TIMBUL BERWARNA-WARNI) -->
+      <nav class="hidden md:flex items-center p-1 rounded-2xl bg-white/80 border border-pink-200/80 shadow-md gap-1.5 backdrop-blur-sm">
+        <a href="#beranda" class="nav-pill-btn nav-pill-beranda">
+          <i class="fa-solid fa-house"></i>
+          <span>1. Beranda</span>
+        </a>
+        <a href="#modul-aplikasi" class="nav-pill-btn nav-pill-modul">
+          <i class="fa-solid fa-circle-dot"></i>
+          <span>2. Fitur</span>
+        </a>
+        <a href="#penjelasan-aplikasi" class="nav-pill-btn nav-pill-rincian">
+          <i class="fa-solid fa-layer-group"></i>
+          <span>3. Rincian &amp; Coba-IN</span>
+        </a>
+        <a href="#alur-solusi" class="nav-pill-btn nav-pill-alur">
+          <i class="fa-solid fa-diagram-project"></i>
+          <span>4. Alur Riset</span>
+        </a>
+      </nav>
+
+      <!-- Live Indicator Badge (Fitur Siap Diuji) -->
+      <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-pink-50 border border-pink-200 text-xs font-bold text-rose-700 shadow-sm">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="hidden sm:inline">7 Fitur &amp; Layanan Siap Diuji</span>
+        <span class="sm:hidden">7 Fitur</span>
+      </div>
+
+    </div>
+
+    <!-- Mobile Sub-Navigation (Panel Tombol Berwarna) -->
+    <div class="md:hidden flex items-center justify-around py-2 px-2 border-t border-pink-200/60 bg-white/95 text-[10px] font-bold gap-1 overflow-x-auto">
+      <a href="#beranda" class="nav-pill-btn nav-pill-beranda py-1 px-2.5 text-[10px]">
+        <i class="fa-solid fa-house"></i> 1. Beranda
+      </a>
+      <a href="#modul-aplikasi" class="nav-pill-btn nav-pill-modul py-1 px-2.5 text-[10px]">
+        <i class="fa-solid fa-circle-dot"></i> 2. Fitur
+      </a>
+      <a href="#penjelasan-aplikasi" class="nav-pill-btn nav-pill-rincian py-1 px-2.5 text-[10px]">
+        <i class="fa-solid fa-layer-group"></i> 3. Rincian
+      </a>
+      <a href="#alur-solusi" class="nav-pill-btn nav-pill-alur py-1 px-2.5 text-[10px]">
+        <i class="fa-solid fa-diagram-project"></i> 4. Alur
+      </a>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       HALAMAN 1: HERO SATU HALAMAN PENUH (LOGO TIMBUL ANIMASI + PINTASAN CERDAS + TEKS UTAMA)
+       ======================================================================== -->
+  <section id="beranda" class="relative z-10 max-w-7xl mx-auto w-full min-h-[calc(100vh-4.5rem)] flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 py-4 sm:py-6 text-center">
+
+    <!-- ─── CONSTELLATION MOTIF BACKGROUND STATIS ARTISTIK (VARIATIF: GLYPH, DIAMOND, HEX, SYMBOL) ─── -->
+    <div class="hidden md:block absolute inset-0 pointer-events-none overflow-hidden z-0">
+      
+      <!-- Standalone Naked Academic Glyphs (Watermark Bebas Menyebar Tanpa Kotak Kaku) -->
+      <div class="motif-bg-item top-[2%] left-[1.5%] -rotate-12 opacity-80">
+        <i class="fa-solid fa-atom text-5xl sm:text-6xl glyph-rose"></i>
+      </div>
+      <div class="motif-bg-item top-[42%] left-[0.5%] rotate-6 opacity-75">
+        <i class="fa-brands fa-r-project text-5xl sm:text-6xl glyph-blue"></i>
+      </div>
+      <div class="motif-bg-item top-[84%] left-[2%] -rotate-15 opacity-80">
+        <i class="fa-solid fa-graduation-cap text-5xl sm:text-6xl glyph-indigo"></i>
+      </div>
+
+      <div class="motif-bg-item top-[2%] right-[1.5%] rotate-12 opacity-80">
+        <i class="fa-solid fa-dna text-5xl sm:text-6xl glyph-purple"></i>
+      </div>
+      <div class="motif-bg-item top-[42%] right-[0.5%] -rotate-8 opacity-75">
+        <i class="fa-solid fa-chart-line text-5xl sm:text-6xl glyph-teal"></i>
+      </div>
+      <div class="motif-bg-item top-[84%] right-[2%] rotate-15 opacity-80">
+        <i class="fa-solid fa-scale-balanced text-5xl sm:text-6xl glyph-rose"></i>
+      </div>
+
+      <!-- Diamond Facet Badges (Belah Ketupat Geometris) -->
+      <div class="motif-bg-item top-[12%] left-[5%] opacity-85">
+        <div class="motif-diamond motif-purple">
+          <i class="fa-solid fa-brain text-xl text-purple-700"></i>
+        </div>
+      </div>
+      <div class="motif-bg-item top-[68%] left-[4.5%] opacity-85">
+        <div class="motif-diamond motif-amber">
+          <i class="fa-solid fa-feather-pointed text-xl text-amber-700"></i>
+        </div>
+      </div>
+
+      <div class="motif-bg-item top-[12%] right-[5%] opacity-85">
+        <div class="motif-diamond motif-teal">
+          <i class="fa-solid fa-ruler-combined text-xl text-teal-700"></i>
+        </div>
+      </div>
+      <div class="motif-bg-item top-[68%] right-[4.5%] opacity-85">
+        <div class="motif-diamond motif-blue">
+          <i class="fa-solid fa-calculator text-xl text-blue-700"></i>
+        </div>
+      </div>
+
+      <!-- Hexagonal Nodes (Poligon Komputasi Riset) -->
+      <div class="motif-bg-item top-[26%] left-[1.5%] opacity-85">
+        <div class="motif-hex motif-blue">
+          <i class="fa-solid fa-microchip text-xl text-blue-700"></i>
+        </div>
+      </div>
+      <div class="motif-bg-item top-[26%] right-[1.5%] opacity-85">
+        <div class="motif-hex motif-rose">
+          <i class="fa-solid fa-bullseye text-xl text-rose-700"></i>
+        </div>
+      </div>
+
+      <!-- Pill Stamps dengan Label Mini -->
+      <div class="motif-bg-item top-[1%] left-[22%] rotate-6 opacity-75">
+        <div class="motif-stamp motif-amber">
+          <i class="fa-solid fa-book-open-reader text-lg text-amber-700 mb-0.5"></i>
+          <span class="text-[7px] font-black uppercase tracking-wider text-amber-900">PRISMA</span>
+        </div>
+      </div>
+      <div class="motif-bg-item top-[1%] right-[22%] -rotate-6 opacity-75">
+        <div class="motif-stamp motif-indigo">
+          <i class="fa-solid fa-diagram-project text-lg text-indigo-700 mb-0.5"></i>
+          <span class="text-[7px] font-black uppercase tracking-wider text-indigo-900">Lavaan</span>
+        </div>
+      </div>
+
+      <!-- Scientific Mathematical Accent Symbols (Delta, Sigma, Stars, Omega, Lambda) Menyebar Selaras -->
+      <div class="motif-bg-item top-[7%] left-[48%] opacity-70">
+        <span class="motif-symbol text-xl glyph-rose">✦</span>
+      </div>
+      <div class="motif-bg-item top-[88%] left-[20%] opacity-65">
+        <span class="motif-symbol text-2xl glyph-purple">Δ</span>
+      </div>
+      <div class="motif-bg-item top-[88%] right-[20%] opacity-65">
+        <span class="motif-symbol text-2xl glyph-teal">Σ</span>
+      </div>
+      <div class="motif-bg-item top-[92%] left-[49%] opacity-60">
+        <span class="motif-symbol text-xl glyph-amber">◇</span>
+      </div>
+      <div class="motif-bg-item top-[52%] left-[22%] opacity-55">
+        <span class="motif-symbol text-xl glyph-emerald">Ω</span>
+      </div>
+      <div class="motif-bg-item top-[52%] right-[22%] opacity-55">
+        <span class="motif-symbol text-xl glyph-indigo">λ</span>
+      </div>
+
+    </div>
+
+    <!-- HERO HEADER UTAMA DINAMIS: LOGO DI KIRI DIPERBESAR, TEKS & BANNER DI KANAN KOKOH -->
+    <div class="relative z-10 w-full max-w-7xl flex flex-col lg:flex-row items-center justify-center gap-6 lg:gap-8 my-auto py-2 sm:py-4">
+      
+      <!-- SISI KIRI: LOGO RISETKU LAB (DIPERBESAR TANPA MENGGESER TEKS KANAN) -->
+      <div class="w-full lg:w-1/2 flex justify-center lg:justify-end shrink-0">
+        <img src="logo_risetku_lab.png" alt="RisetKu Lab" class="logo-risetku-timbul anim-logo-float w-80 sm:w-96 md:w-[480px] lg:w-[560px] xl:w-[620px] max-w-full h-auto max-h-[380px] sm:max-h-[440px] lg:max-h-[500px] xl:max-h-[540px] object-contain pointer-events-auto">
+      </div>
+
+      <!-- SISI KANAN: BANNER + TEKS PUNCHLINE + TOMBOL JELAJAHI FITUR -->
+      <div class="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left pl-0 lg:pl-6 shrink-0">
+        
+        <!-- BANNER TULISAN WEBSITE MEMBANTU MAHASISWA & DOSEN MENJADI LEBIH PRODUKTIF (DENGAN ITALIC) -->
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-100/90 border border-rose-300/80 text-[10px] sm:text-xs font-black text-rose-800 uppercase tracking-widest mb-3 shadow-sm">
+          <i class="fa-solid fa-sparkles text-rose-600"></i>
+          <span><em>Website</em> Membantu Mahasiswa &amp; Dosen Menjadi Lebih Produktif</span>
+        </div>
+
+        <!-- TEKS PUNCHLINE UTAMA EMBOS TIMBUL (HITAM TIMBUL & VIOLET TIMBUL TANPA KOTAK KARTU) -->
+        <h1 class="punchline-timbul-black text-2xl sm:text-3xl md:text-4xl lg:text-[42px] xl:text-[46px] leading-[1.2] tracking-tight">
+          &ldquo;Kalau ada yang mudah ngapain Ribet,<br class="hidden sm:inline"/>
+          <span class="emboss-timbul-tajam">
+            di-RisetKu Lab
+          </span> kita beresin bareng-bareng&rdquo;
+        </h1>
+
+        <!-- TOMBOL PINTASAN SCROLL KE PANEL FITUR -->
+        <div class="mt-6 sm:mt-7">
+          <a href="#modul-aplikasi" class="inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-gradient-to-r from-rose-500 via-pink-500 to-amber-500 text-white font-black text-xs uppercase tracking-wider shadow-lg hover:shadow-xl hover:scale-105 transition-all">
+            <span>Jelajahi 6 Fitur Ekosistem</span>
+            <i class="fa-solid fa-arrow-down animate-bounce text-[10px]"></i>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ========================================================================
+       HALAMAN 2: 6 PANEL FITUR TACTILE 3D (ORBITAL ECOSYSTEM CONSTELLATION)
+       ======================================================================== -->
+  <section id="modul-aplikasi" class="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-4 pb-6 sm:pt-6 sm:pb-8 flex flex-col items-center border-t border-pink-200/50 scroll-mt-16 sm:scroll-mt-20">
+
+    <!-- ─── MOTIF BACKGROUND SECTION 2 (VARIATIF: DIAMOND, HEX, GLYPH, SIMBOL MENYEBAR SELARAS) ─── -->
+    <div class="hidden md:block absolute inset-0 pointer-events-none overflow-hidden z-0">
+      <!-- Sisi Kiri: Diamond Belah Ketupat & Glyph Standalone -->
+      <div class="motif-bg-item top-[8%] left-[2%] opacity-80">
+        <div class="motif-diamond motif-teal">
+          <i class="fa-solid fa-ruler-combined text-lg text-teal-700"></i>
+        </div>
+      </div>
+      <div class="motif-bg-item top-[48%] left-[1%] -rotate-12 opacity-70">
+        <i class="fa-solid fa-shapes text-5xl glyph-purple"></i>
+      </div>
+      <div class="motif-bg-item bottom-[8%] left-[2%] opacity-80">
+        <div class="motif-hex motif-blue">
+          <i class="fa-solid fa-microchip text-lg text-blue-700"></i>
+        </div>
+      </div>
+
+      <!-- Sisi Kanan: Hexagon & Glyph Standalone -->
+      <div class="motif-bg-item top-[8%] right-[2%] opacity-80">
+        <div class="motif-hex motif-rose">
+          <i class="fa-solid fa-bullseye text-lg text-rose-700"></i>
+        </div>
+      </div>
+      <div class="motif-bg-item top-[48%] right-[1%] rotate-12 opacity-70">
+        <i class="fa-solid fa-calculator text-5xl glyph-blue"></i>
+      </div>
+      <div class="motif-bg-item bottom-[8%] right-[2%] opacity-80">
+        <div class="motif-diamond motif-purple">
+          <i class="fa-solid fa-brain text-lg text-purple-700"></i>
+        </div>
+      </div>
+
+      <!-- Aksen Simbol Matematis & Ilmiah di Latar Belakang Menyebar Selaras -->
+      <div class="motif-bg-item top-[16%] left-[24%] opacity-65">
+        <span class="motif-symbol text-xl glyph-amber">✦</span>
+      </div>
+      <div class="motif-bg-item top-[16%] right-[24%] opacity-65">
+        <span class="motif-symbol text-2xl glyph-rose">Δ</span>
+      </div>
+      <div class="motif-bg-item top-[78%] left-[30%] opacity-55">
+        <span class="motif-symbol text-xl glyph-indigo">Σ</span>
+      </div>
+      <div class="motif-bg-item top-[78%] right-[30%] opacity-55">
+        <span class="motif-symbol text-xl glyph-emerald">Ω</span>
+      </div>
+      <div class="motif-bg-item bottom-[3%] left-[50%] opacity-55">
+        <span class="motif-symbol text-xl glyph-teal">◇</span>
+      </div>
+    </div>
+
+    <div class="relative z-10 text-center mb-2 sm:mb-4">
+      <span class="px-3 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest bg-rose-100 text-rose-700 border border-rose-200 shadow-sm">
+        EKOSISTEM DIGITAL TERPADU
+      </span>
+      <h2 class="text-xl sm:text-2xl lg:text-3xl font-heading font-black text-slate-900 mt-1">
+        Pusat RisetKu &bull; Terhubung ke 7 Fitur &amp; Layanan Riset
+      </h2>
+      <p class="text-[11px] sm:text-xs font-semibold text-slate-600 mt-0.5 max-w-xl mx-auto">
+        Klik bulatan satelit fitur untuk melihat rincian solusi riset, menguji instrumen, atau memesan layanan bantuan.
+      </p>
+    </div>
+
+    <!-- ─── KONSTELASI ORBITAL: LOGO RISETKU DI TENGAH + GARIS PENGHUBUNG + 7 BULATAN ESTETIK ─── -->
+    <div id="orbital-container" class="relative w-full max-w-4xl mx-auto py-2 px-2 sm:px-4">
+
+      <!-- SVG GARIS PENGHUBUNG DINAMIS (AKTIF DI SEMUA PERANGKAT) -->
+      <svg id="hub-connector-svg" class="absolute inset-0 w-full h-full pointer-events-none z-0" style="overflow: visible;">
+        <!-- Akan di-render dan disinkronkan secara presisi oleh drawOrbitalConnectors() ke 7 bulatan -->
+      </svg>
+
+      <!-- STRUKTUR KONTEN ORBITAL: SISI KIRI (3 BULATAN), TENGAH (HUB LOGO + FITUR #7), SISI KANAN (3 BULATAN) -->
+      <div class="relative z-10 flex flex-row items-center justify-center gap-4 sm:gap-8 md:gap-12 lg:gap-14">
+
+        <!-- SISI KIRI: 3 BULATAN ESTETIK SATELIT (FITUR #1, #2, #3) DALAM BUSUR ORBIT -->
+        <div class="flex flex-col items-end justify-center gap-2 sm:gap-2.5 shrink-0">
+          
+          <!-- BULATAN 1: MADEL-5C (Top-Left) -->
+          <a href="#detail-madel" id="orb-madel" class="orb-satelit-timbul orb-indigo group mr-1 sm:mr-2">
+            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center text-sm shadow-inner border border-white/60 mb-0.5 group-hover:scale-110 transition-transform shrink-0">
+              <i class="fa-solid fa-graduation-cap text-amber-300 drop-shadow-sm"></i>
+            </div>
+            <span class="px-1.5 py-0.5 rounded-full text-[6.5px] sm:text-[7px] font-black uppercase mb-0.5 bg-white/20 border border-white/40 text-white shadow-sm leading-none">
+              Fitur #1
+            </span>
+            <h3 class="text-[10px] sm:text-[11px] font-heading font-black text-white tracking-tight italic drop-shadow-md leading-none">
+              MADEL-5C
+            </h3>
+            <p class="text-[7px] sm:text-[7.5px] font-bold text-white/90 leading-tight mt-0.5">
+              E-Asesmen
+            </p>
+            <span class="mt-0.5 text-[6px] sm:text-[6.5px] font-black text-amber-200 uppercase tracking-widest flex items-center gap-0.5 group-hover:translate-y-0.5 transition-transform">
+              <span>Coba</span> <i class="fa-solid fa-arrow-down text-[5px]"></i>
+            </span>
+          </a>
+
+          <!-- BULATAN 2: CEK-IN (Mid-Left, Melengkung ke Kiri Agar Garis Jelas Terlihat) -->
+          <a href="#detail-cekin" id="orb-cekin" class="orb-satelit-timbul orb-cyan group mr-5 sm:mr-8 md:mr-10">
+            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center text-sm shadow-inner border border-white/60 mb-0.5 group-hover:scale-110 transition-transform shrink-0">
+              <i class="fa-solid fa-file-circle-check text-cyan-200 drop-shadow-sm"></i>
+            </div>
+            <span class="px-1.5 py-0.5 rounded-full text-[6.5px] sm:text-[7px] font-black uppercase mb-0.5 bg-white/20 border border-white/40 text-white shadow-sm leading-none">
+              Fitur #2
+            </span>
+            <h3 class="text-[10px] sm:text-[11px] font-heading font-black text-white tracking-tight italic drop-shadow-md leading-none">
+              Cek-IN
+            </h3>
+            <p class="text-[7px] sm:text-[7.5px] font-bold text-white/90 leading-tight mt-0.5">
+              Pemeriksa Tesis
+            </p>
+            <span class="mt-0.5 text-[6px] sm:text-[6.5px] font-black text-cyan-100 uppercase tracking-widest flex items-center gap-0.5 group-hover:translate-y-0.5 transition-transform">
+              <span>Coba</span> <i class="fa-solid fa-arrow-down text-[5px]"></i>
+            </span>
+          </a>
+
+          <!-- BULATAN 3: SLR-IN AJA (Bottom-Left) -->
+          <a href="#detail-slr" id="orb-slr" class="orb-satelit-timbul orb-amber group mr-1 sm:mr-2">
+            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center text-sm shadow-inner border border-white/60 mb-0.5 group-hover:scale-110 transition-transform shrink-0">
+              <i class="fa-solid fa-book-open text-amber-200 drop-shadow-sm"></i>
+            </div>
+            <span class="px-1.5 py-0.5 rounded-full text-[6.5px] sm:text-[7px] font-black uppercase mb-0.5 bg-white/20 border border-white/40 text-white shadow-sm leading-none">
+              Fitur #3
+            </span>
+            <h3 class="text-[10px] sm:text-[11px] font-heading font-black text-white tracking-tight italic drop-shadow-md leading-none">
+              SLR-In Aja
+            </h3>
+            <p class="text-[7px] sm:text-[7.5px] font-bold text-white/90 leading-tight mt-0.5">
+              PRISMA Review
+            </p>
+            <span class="mt-0.5 text-[6px] sm:text-[6.5px] font-black text-yellow-100 uppercase tracking-widest flex items-center gap-0.5 group-hover:translate-y-0.5 transition-transform">
+              <span>Coba</span> <i class="fa-solid fa-arrow-down text-[5px]"></i>
+            </span>
+          </a>
+
+        </div>
+
+        <!-- SISI TENGAH: HUB LOGO RISETKU LAB UTAMA DI TENGAH (PULSE SONAR & PUSAT EKOSISTEM) + FITUR #7 TOLONG-IN AJA -->
+        <div class="flex flex-col items-center justify-center shrink-0 my-0">
+          
+          <div id="hub-center-core" class="hub-risetku-center w-36 h-36 sm:w-44 sm:h-44 md:w-48 md:h-48 p-2.5">
+            <!-- Ripple Concentric Sonar Rings -->
+            <div class="sonar-ring"></div>
+            <div class="sonar-ring-delayed"></div>
+
+            <!-- Logo RisetKu Lab Pusat Mengambang Timbul -->
+            <img src="logo_risetku_lab.png" alt="RisetKu Lab Core Hub" class="w-24 sm:w-28 md:w-32 h-auto object-contain anim-logo-float drop-shadow-md pointer-events-auto">
+
+            <div class="mt-0.5 flex flex-col items-center">
+              <span class="px-2 py-0.5 rounded-full text-[7px] sm:text-[8px] font-black uppercase tracking-wider bg-rose-50 border border-rose-200 text-rose-700 shadow-sm flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                Pusat RisetKu
+              </span>
+              <p class="text-[7px] sm:text-[7.5px] font-bold text-slate-500 mt-0.5 max-w-[120px] leading-tight text-center">
+                7 Fitur Terhubung
+              </p>
+            </div>
+          </div>
+
+          <!-- BULATAN 7: TOLONG-IN AJA (Center-Bottom, Layanan Akses Paper & Konsultasi) -->
+          <a href="#detail-tolongin" id="orb-tolongin" onclick="openTolonginModal(event)" class="orb-satelit-timbul orb-blue group mt-4 sm:mt-6">
+            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center text-sm shadow-inner border border-white/60 mb-0.5 group-hover:scale-110 transition-transform shrink-0">
+              <i class="fa-solid fa-handshake-angle text-sky-200 drop-shadow-sm"></i>
+            </div>
+            <span class="px-1.5 py-0.5 rounded-full text-[6.5px] sm:text-[7px] font-black uppercase mb-0.5 bg-white/20 border border-white/40 text-white shadow-sm leading-none">
+              Fitur #7 &bull; Layanan
+            </span>
+            <h3 class="text-[10px] sm:text-[11px] font-heading font-black text-white tracking-tight italic drop-shadow-md leading-none">
+              Tolong-IN Aja
+            </h3>
+            <p class="text-[7px] sm:text-[7.5px] font-bold text-white/90 leading-tight mt-0.5">
+              Paper &amp; Konsul
+            </p>
+            <span class="mt-0.5 text-[6px] sm:text-[6.5px] font-black text-sky-100 uppercase tracking-widest flex items-center gap-0.5 group-hover:translate-y-0.5 transition-transform">
+              <span>Pilih Opsi</span> <i class="fa-solid fa-arrow-down text-[5px]"></i>
+            </span>
+          </a>
+
+        </div>
+
+        <!-- SISI KANAN: 3 BULATAN ESTETIK SATELIT (FITUR #4, #5, #6) DALAM BUSUR ORBIT -->
+        <div class="flex flex-col items-start justify-center gap-2 sm:gap-2.5 shrink-0">
+          
+          <!-- BULATAN 4: TERJEMAH-IN (Top-Right) -->
+          <a href="#detail-terjemahin" id="orb-terjemahin" class="orb-satelit-timbul orb-emerald group ml-1 sm:ml-2">
+            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center text-sm shadow-inner border border-white/60 mb-0.5 group-hover:scale-110 transition-transform shrink-0">
+              <i class="fa-solid fa-language text-emerald-200 drop-shadow-sm"></i>
+            </div>
+            <span class="px-1.5 py-0.5 rounded-full text-[6.5px] sm:text-[7px] font-black uppercase mb-0.5 bg-white/20 border border-white/40 text-white shadow-sm leading-none">
+              Fitur #4
+            </span>
+            <h3 class="text-[10px] sm:text-[11px] font-heading font-black text-white tracking-tight italic drop-shadow-md leading-none">
+              Terjemah-IN
+            </h3>
+            <p class="text-[7px] sm:text-[7.5px] font-bold text-white/90 leading-tight mt-0.5">
+              <em>Bilingual</em>
+            </p>
+            <span class="mt-0.5 text-[6px] sm:text-[6.5px] font-black text-emerald-100 uppercase tracking-widest flex items-center gap-0.5 group-hover:translate-y-0.5 transition-transform">
+              <span>Coba</span> <i class="fa-solid fa-arrow-down text-[5px]"></i>
+            </span>
+          </a>
+
+          <!-- BULATAN 5: ANALISIS-AJA (Mid-Right, Melengkung ke Kanan Agar Garis Jelas Terlihat) -->
+          <a href="#detail-analisis" id="orb-analisis" class="orb-satelit-timbul orb-purple group ml-5 sm:ml-8 md:ml-10">
+            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center text-sm shadow-inner border border-white/60 mb-0.5 group-hover:scale-110 transition-transform shrink-0">
+              <i class="fa-solid fa-chart-pie text-purple-200 drop-shadow-sm"></i>
+            </div>
+            <span class="px-1.5 py-0.5 rounded-full text-[6.5px] sm:text-[7px] font-black uppercase mb-0.5 bg-white/20 border border-white/40 text-white shadow-sm leading-none">
+              Fitur #5
+            </span>
+            <h3 class="text-[10px] sm:text-[11px] font-heading font-black text-white tracking-tight italic drop-shadow-md leading-none">
+              Analisis-Aja
+            </h3>
+            <p class="text-[7px] sm:text-[7.5px] font-bold text-white/90 leading-tight mt-0.5">
+              Rasch &amp; CFA
+            </p>
+            <span class="mt-0.5 text-[6px] sm:text-[6.5px] font-black text-purple-100 uppercase tracking-widest flex items-center gap-0.5 group-hover:translate-y-0.5 transition-transform">
+              <span>Coba</span> <i class="fa-solid fa-arrow-down text-[5px]"></i>
+            </span>
+          </a>
+
+          <!-- BULATAN 6: THINK A LOUD-IN (Bottom-Right, Pascasarjana S2 & S3) -->
+          <a href="#detail-thinkaloud" id="orb-thinkaloud" class="orb-satelit-timbul orb-rose group ml-1 sm:ml-2">
+            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center text-sm shadow-inner border border-white/60 mb-0.5 group-hover:scale-110 transition-transform shrink-0">
+              <i class="fa-solid fa-microphone-lines text-rose-200 drop-shadow-sm"></i>
+            </div>
+            <span class="px-1.5 py-0.5 rounded-full text-[6.5px] sm:text-[7px] font-black uppercase mb-0.5 bg-white/20 border border-white/40 text-white shadow-sm leading-none">
+              Fitur #6 &bull; S2/S3
+            </span>
+            <h3 class="text-[10px] sm:text-[11px] font-heading font-black text-white tracking-tight italic drop-shadow-md leading-none">
+              Think A Loud-In
+            </h3>
+            <p class="text-[7px] sm:text-[7.5px] font-bold text-white/90 leading-tight mt-0.5">
+              <em>Probing</em> S2/S3
+            </p>
+            <span class="mt-0.5 text-[6px] sm:text-[6.5px] font-black text-rose-100 uppercase tracking-widest flex items-center gap-0.5 group-hover:translate-y-0.5 transition-transform">
+              <span>Coba</span> <i class="fa-solid fa-arrow-down text-[5px]"></i>
+            </span>
+          </a>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Scroll Down Hint to Section 3 -->
+    <div class="mt-6 flex flex-col items-center">
+      <a href="#penjelasan-aplikasi" class="text-slate-600 hover:text-rose-600 text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-colors">
+        <span>Klik Bulatan Fitur di Atas atau Gulir ke Bawah untuk Detail &amp; Tombol Uji</span>
+        <i class="fa-solid fa-arrow-down text-rose-500 animate-bounce"></i>
+      </a>
+    </div>
+
+  </section>
+
+  <!-- ========================================================================
+       HALAMAN 2: RINCIAN FUNGSI 6 APLIKASI & TOMBOL "COBA-IN SEKARANG" (3D EMBOS TIMBUL)
+       ======================================================================== -->
+  <section id="penjelasan-aplikasi" class="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-16 border-t border-pink-200/60">
+
+    <!-- ─── MOTIF BACKGROUND SECTION 3 (WATERMARK MENYEBAR SELARAS SEPANJANG RINCIAN KARTU) ─── -->
+    <div class="hidden md:block absolute inset-0 pointer-events-none overflow-hidden z-0">
+      <!-- Watermark Naked Glyphs & Badges Sepanjang Sisi Kiri & Kanan Menyebar Selaras -->
+      <div class="motif-bg-item top-[3%] left-[1.5%] rotate-6 opacity-70">
+        <i class="fa-solid fa-book-open-reader text-6xl glyph-amber"></i>
+      </div>
+      <div class="motif-bg-item top-[12%] right-[1.5%] -rotate-12 opacity-75">
+        <div class="motif-diamond motif-purple">
+          <i class="fa-solid fa-brain text-lg text-purple-700"></i>
+        </div>
+      </div>
+      <div class="motif-bg-item top-[24%] left-[1%] -rotate-8 opacity-75">
+        <div class="motif-hex motif-blue">
+          <i class="fa-solid fa-file-circle-check text-lg text-blue-700"></i>
+        </div>
+      </div>
+      <div class="motif-bg-item top-[38%] right-[1.5%] rotate-10 opacity-70">
+        <i class="fa-solid fa-language text-6xl glyph-teal"></i>
+      </div>
+      <div class="motif-bg-item top-[54%] left-[1%] rotate-12 opacity-70">
+        <i class="fa-solid fa-chart-pie text-6xl glyph-purple"></i>
+      </div>
+      <div class="motif-bg-item top-[68%] right-[1%] -rotate-10 opacity-75">
+        <div class="motif-diamond motif-rose">
+          <i class="fa-solid fa-microphone-lines text-lg text-rose-700"></i>
+        </div>
+      </div>
+      <div class="motif-bg-item top-[84%] left-[1.5%] rotate-6 opacity-75">
+        <div class="motif-hex motif-teal">
+          <i class="fa-solid fa-spell-check text-lg text-teal-700"></i>
+        </div>
+      </div>
+      <div class="motif-bg-item top-[94%] right-[1.5%] -rotate-8 opacity-70">
+        <i class="fa-solid fa-graduation-cap text-5xl glyph-indigo"></i>
+      </div>
+
+      <!-- Simbol Ilmiah Mengambang Halus di Margin Menyebar Selaras -->
+      <div class="motif-bg-item top-[18%] left-[2%] opacity-60">
+        <span class="motif-symbol text-2xl glyph-indigo">Σ</span>
+      </div>
+      <div class="motif-bg-item top-[32%] right-[2%] opacity-60">
+        <span class="motif-symbol text-2xl glyph-amber">✦</span>
+      </div>
+      <div class="motif-bg-item top-[48%] left-[2%] opacity-60">
+        <span class="motif-symbol text-2xl glyph-emerald">Ω</span>
+      </div>
+      <div class="motif-bg-item top-[62%] right-[2%] opacity-60">
+        <span class="motif-symbol text-2xl glyph-rose">Δ</span>
+      </div>
+      <div class="motif-bg-item top-[78%] left-[2%] opacity-60">
+        <span class="motif-symbol text-xl glyph-purple">◇</span>
+      </div>
+      <div class="motif-bg-item top-[90%] right-[2%] opacity-60">
+        <span class="motif-symbol text-2xl glyph-blue">λ</span>
+      </div>
+    </div>
+
+    <!-- Section Header -->
+    <div class="relative z-10 text-center max-w-3xl mx-auto mb-12">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-pink-100 border border-pink-300 text-[10px] font-black text-rose-700 uppercase tracking-widest mb-3">
+        <i class="fa-solid fa-layer-group"></i> RINCIAN KAPABILITAS &amp; PANDUAN FITUR
+      </div>
+      <h2 class="text-2xl sm:text-4xl font-heading font-black text-slate-900 tracking-tight">
+        Pelajari Fungsi Fitur &amp; Uji Coba Langsung
+      </h2>
+      <p class="text-slate-600 text-xs sm:text-sm mt-3 leading-relaxed">
+        Setiap aplikasi dirancang untuk menyelesaikan hambatan teknis spesifik dalam riset akademik Anda. Klik tombol <strong>&ldquo;Coba-IN Sekarang&rdquo;</strong> untuk masuk ke aplikasi kerja.
+      </p>
+    </div>
+
+    <!-- 6 KARTU RINCIAN TIMBUL ELEGAN -->
+    <div class="space-y-10">
+
+      <!-- ================= RINCIAN 1: MADEL-5C ================= -->
+      <div id="detail-madel" class="detail-card-timbul p-6 sm:p-9 border-t-8 border-t-indigo-600 scroll-mt-28">
+        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-6 border-b border-pink-100">
+          <div class="flex items-start gap-4">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-600 via-blue-600 to-indigo-900 text-white flex items-center justify-center text-3xl shadow-xl shadow-indigo-900/30 shrink-0 border-2 border-white icon-timbul-3d">
+              <i class="fa-solid fa-graduation-cap text-amber-300"></i>
+            </div>
+            <div>
+              <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-indigo-100 text-indigo-800 border border-indigo-200">
+                  Fitur #1 &bull; Model Induk Asesmen
+                </span>
+                <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> <em>Live Production</em>
+                </span>
+              </div>
+              <h3 class="text-2xl sm:text-3xl font-heading font-black text-slate-900 tracking-tight">
+                MADEL-5C <span class="text-indigo-600 font-medium text-lg sm:text-xl">| Model Asesmen Literasi Digital Calon Guru</span>
+              </h3>
+              <p class="text-xs font-semibold text-slate-500 mt-1">Platform E-Asesmen Berbasis 30 Skenario Kasus Pedagogik Situasional (<em>Situational Judgment Test / SJT</em>)</p>
+            </div>
+          </div>
+
+          <!-- TOMBOL COBA-IN MADEL-5C -->
+          <div class="flex items-center gap-3 w-full lg:w-auto shrink-0">
+            <a href="https://madel5c.com" target="_blank" class="btn-cobain btn-cobain-madel w-full sm:w-auto text-xs sm:text-sm">
+              <span>Coba-IN MADEL-5C Sekarang</span>
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-6 text-xs">
+          <div class="p-4 rounded-2xl bg-indigo-50/60 border border-indigo-100">
+            <p class="text-indigo-900 text-[10px] font-black uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <i class="fa-solid fa-bullseye text-indigo-600"></i> Apa Itu &amp; Fungsinya
+            </p>
+            <p class="text-slate-700 leading-relaxed font-medium">
+              Alat ukur literasi digital komprehensif menguji 5 dimensi kritis: Pedagogik Digital, Desain Media, Etika, Kolaborasi, dan Pemecahan Masalah Teknologi.
+            </p>
+          </div>
+          <div class="p-4 rounded-2xl bg-indigo-50/60 border border-indigo-100">
+            <p class="text-indigo-900 text-[10px] font-black uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <i class="fa-solid fa-shield-halved text-indigo-600"></i> Masalah yang Selesai
+            </p>
+            <p class="text-slate-700 leading-relaxed font-medium">
+              Menggantikan kuesioner skala Likert biasa yang rentan manipulasi persepsi dengan soal studi kasus nyata yang menuntut pengambilan keputusan objektif calon guru.
+            </p>
+          </div>
+          <div class="p-4 rounded-2xl bg-indigo-50/60 border border-indigo-100">
+            <p class="text-indigo-900 text-[10px] font-black uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <i class="fa-solid fa-chart-pie text-indigo-600"></i> Output Nyata
+            </p>
+            <p class="text-slate-700 leading-relaxed font-medium">
+              <em>Spider Chart</em> 5 Dimensi per responden, skor <em>logit</em> terkalibrasi Rasch Model PCM, serta catatan refleksi pedagogik siap unduh (PDF/Excel).
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= RINCIAN 2: CEK-IN ================= -->
+      <div id="detail-cekin" class="detail-card-timbul p-6 sm:p-9 border-t-8 border-t-cyan-600 scroll-mt-28">
+        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-6 border-b border-pink-100">
+          <div class="flex items-start gap-4">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-600 via-teal-600 to-cyan-900 text-white flex items-center justify-center text-3xl shadow-xl shadow-cyan-900/30 shrink-0 border-2 border-white icon-timbul-3d">
+              <i class="fa-solid fa-file-circle-check text-cyan-200"></i>
+            </div>
+            <div>
+              <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-cyan-100 text-cyan-800 border border-cyan-200">
+                  Fitur #2 &bull; <em>Quality Assurance</em> Naskah
+                </span>
+                <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-teal-100 text-teal-800 border border-teal-200">
+                  Pedoman SPs UNJ 2025
+                </span>
+              </div>
+              <h3 class="text-2xl sm:text-3xl font-heading font-black text-slate-900 tracking-tight">
+                Cek-In <span class="text-cyan-600 font-medium text-lg sm:text-xl">| Pemeriksa Kepatuhan Tesis &amp; Disertasi</span>
+              </h3>
+              <p class="text-xs font-semibold text-slate-500 mt-1">Audit Sistematika, Koherensi Bab, Paradigma, Dimensi &amp; Analisis Data Otomatis di <em>Browser</em></p>
+            </div>
+          </div>
+
+          <!-- TOMBOL COBA-IN CEK-IN -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full lg:w-auto shrink-0">
+            <a href="/cekin/periksa.html?autostart=1" target="_blank" class="btn-cobain btn-cobain-cekin w-full sm:w-auto text-xs sm:text-sm">
+              <span>Coba-IN Cek-In Sekarang</span>
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+            <a href="/cekin/" target="_blank" class="px-3.5 py-2.5 rounded-xl border border-cyan-200 bg-cyan-50/80 hover:bg-cyan-100 text-cyan-800 font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition-all shrink-0">
+              <i class="fa-solid fa-book-bookmark text-cyan-600"></i>
+              <span>Panduan SPs</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-6 text-xs">
+          <div class="p-4 rounded-2xl bg-cyan-50/60 border border-cyan-100">
+            <p class="text-cyan-900 text-[10px] font-black uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <i class="fa-solid fa-bullseye text-cyan-600"></i> Apa Itu &amp; Fungsinya
+            </p>
+            <p class="text-slate-700 leading-relaxed font-medium">
+              Alat verifikasi mandiri naskah <em>format</em> .docx/.pdf. Memeriksa keselarasan bab dari Judul, Rumusan Masalah, Kajian Teori, Metodologi, hingga Pembahasan &amp; Simpulan.
+            </p>
+          </div>
+          <div class="p-4 rounded-2xl bg-cyan-50/60 border border-cyan-100">
+            <p class="text-cyan-900 text-[10px] font-black uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <i class="fa-solid fa-shield-halved text-cyan-600"></i> Masalah yang Selesai
+            </p>
+            <p class="text-slate-700 leading-relaxed font-medium">
+              Meniadakan revisi berulang karena inkonsistensi format, kesalahan rujukan APA <em>7th Edition</em>, atau ketidaksesuaian metodologi terhadap 8 jenis penelitian (R&amp;D, Kualitatif, Kuantitatif, dll).
+            </p>
+          </div>
+          <div class="p-4 rounded-2xl bg-cyan-50/60 border border-cyan-100">
+            <p class="text-cyan-900 text-[10px] font-black uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <i class="fa-solid fa-file-lines text-cyan-600"></i> Output Nyata
+            </p>
+            <p class="text-slate-700 leading-relaxed font-medium">
+              Laporan matriks koherensi, daftar ketidakpatuhan per bab yang perlu diperbaiki, serta lembar catatan revisi rapi siap cetak untuk bimbingan dosen.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= RINCIAN 3: SLR-IN AJA ================= -->
+      <div id="detail-slr" class="detail-card-timbul p-6 sm:p-9 border-t-8 border-t-amber-500 scroll-mt-28">
+        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-6 border-b border-pink-100">
+          <div class="flex items-start gap-4">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500 via-orange-500 to-amber-800 text-white flex items-center justify-center text-3xl shadow-xl shadow-amber-900/30 shrink-0 border-2 border-white icon-timbul-3d">
+              <i class="fa-solid fa-book-open text-amber-200"></i>
+            </div>
+            <div>
+              <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-200">
+                  Fitur #3 &bull; Tinjauan Literatur Standar Tinggi
+                </span>
+                <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-orange-100 text-orange-800 border border-orange-200">
+                  <em>PRISMA 2020 Protocol</em>
+                </span>
+              </div>
+              <h3 class="text-2xl sm:text-3xl font-heading font-black text-slate-900 tracking-tight">
+                SLR-In Aja <span class="text-amber-600 font-medium text-lg sm:text-xl">| Telaah <em>Systematic Review</em> &amp; Ekstraksi Data</span>
+              </h3>
+              <p class="text-xs font-semibold text-slate-500 mt-1">Platform Skrining Literatur Scopus/WoS, <em>Blind Reviewer Panel</em>, &amp; Generator Diagram Alir PRISMA</p>
+            </div>
+          </div>
+
+          <!-- TOMBOL COBA-IN SLR-IN AJA -->
+          <div class="flex items-center gap-3 w-full lg:w-auto shrink-0">
+            <a href="/slr/" target="_blank" class="btn-cobain btn-cobain-slr w-full sm:w-auto text-xs sm:text-sm">
+              <span>Coba-IN SLR-In Sekarang</span>
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-6 text-xs">
+          <div class="p-4 rounded-2xl bg-amber-50/60 border border-amber-100">
+            <p class="text-amber-900 text-[10px] font-black uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <i class="fa-solid fa-bullseye text-amber-600"></i> Apa Itu &amp; Fungsinya
+            </p>
+            <p class="text-slate-700 leading-relaxed font-medium">
+              Aplikasi berbasis <em>browser</em> untuk mengimpor <em>file</em> ekspor Scopus/WoS (CSV/RIS), melakukan penyaringan judul, abstrak, dan teks lengkap secara sistematis.
+            </p>
+          </div>
+          <div class="p-4 rounded-2xl bg-amber-50/60 border border-amber-100">
+            <p class="text-amber-900 text-[10px] font-black uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <i class="fa-solid fa-shield-halved text-amber-600"></i> Masalah yang Selesai
+            </p>
+            <p class="text-slate-700 leading-relaxed font-medium">
+              Menghilangkan proses skrining manual ribuan metadata artikel yang rentan terlewat serta menyediakan panel <em>blind</em> 2 penelaah dengan penghitungan kesepakatan <em>inter-rater</em> (<em>Cohen's Kappa</em>).
+            </p>
+          </div>
+          <div class="p-4 rounded-2xl bg-amber-50/60 border border-amber-100">
+            <p class="text-amber-900 text-[10px] font-black uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <i class="fa-solid fa-diagram-project text-amber-600"></i> Output Nyata
+            </p>
+            <p class="text-slate-700 leading-relaxed font-medium">
+              Diagram alir PRISMA 2020 standar publikasi (format SVG/PNG tajam) serta berkas ekstraksi variabel penelitian dalam format Excel, CSV, atau arsip ZIP.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= RINCIAN 4: TERJEMAHIN_AJA ================= -->
+      <div id="detail-terjemahin" class="detail-card-timbul p-6 sm:p-9 border-t-8 border-t-emerald-600 scroll-mt-28">
+        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-6 border-b border-pink-100">
+          <div class="flex items-start gap-4">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-600 via-teal-600 to-emerald-900 text-white flex items-center justify-center text-3xl shadow-xl shadow-emerald-900/30 shrink-0 border-2 border-white icon-timbul-3d">
+              <i class="fa-solid fa-language text-emerald-200"></i>
+            </div>
+            <div>
+              <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-200">
+                  Fitur #4 &bull; Presisi Translasi Bahasa
+                </span>
+                <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-teal-100 text-teal-800 border border-teal-200">
+                  Tata Letak Asli Terjaga
+                </span>
+              </div>
+              <h3 class="text-2xl sm:text-3xl font-heading font-black text-slate-900 tracking-tight">
+                Terjemahin_Aja <span class="text-emerald-600 font-medium text-lg sm:text-xl">| Penerjemah Dwibahasa Berdampingan</span>
+              </h3>
+              <p class="text-xs font-semibold text-slate-500 mt-1">Penerjemah Dokumen Ilmiah PDF/Word/PPTX Tanpa Merusak Tabel &amp; Didukung Sitasi APA 7 Otomatis</p>
+            </div>
+          </div>
+
+          <!-- TOMBOL COBA-IN TERJEMAHIN_AJA -->
+          <div class="flex items-center gap-3 w-full lg:w-auto shrink-0">
+            <a href="/terjemahin/" target="_blank" class="btn-cobain btn-cobain-terjemahin w-full sm:w-auto text-xs sm:text-sm">
+              <span>Coba-IN Terjemahin Sekarang</span>
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-6 text-xs">
+          <div class="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-100">
+            <p class="text-emerald-900 text-[10px] font-black uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <i class="fa-solid fa-bullseye text-emerald-600"></i> Apa Itu &amp; Fungsinya
+            </p>
+            <p class="text-slate-700 leading-relaxed font-medium">
+              Alat penerjemah dokumen ilmiah menampilkan teks sumber dan hasil terjemahan secara berdampingan (<em>bilingual side-by-side</em>), mempermudah komparasi konteks kalimat.
+            </p>
+          </div>
+          <div class="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-100">
+            <p class="text-emerald-900 text-[10px] font-black uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <i class="fa-solid fa-shield-halved text-emerald-600"></i> Masalah yang Selesai
+            </p>
+            <p class="text-slate-700 leading-relaxed font-medium">
+              Menghilangkan masalah dokumen berantakan saat diterjemahkan via <em>translator</em> biasa; tabel, bagan, dan formulasi ilmiah tetap berada di posisi aslinya.
+            </p>
+          </div>
+          <div class="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-100">
+            <p class="text-emerald-900 text-[10px] font-black uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <i class="fa-solid fa-quote-right text-emerald-600"></i> Output Nyata
+            </p>
+            <p class="text-slate-700 leading-relaxed font-medium">
+              Fitur &ldquo;❝ Kutip&rdquo; otomatis menghasilkan sitasi format baku APA <em>7th Edition</em> lengkap dengan halaman rujukan, terintegrasi ke <em>database</em> Crossref DOI.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= RINCIAN 5: ANALISIS-AJA ================= -->
+      <div id="detail-analisis" class="detail-card-timbul p-6 sm:p-9 border-t-8 border-t-purple-600 scroll-mt-28">
+        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-6 border-b border-pink-100">
+          <div class="flex items-start gap-4">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-600 via-indigo-600 to-purple-900 text-white flex items-center justify-center text-3xl shadow-xl shadow-purple-900/30 shrink-0 border-2 border-white icon-timbul-3d">
+              <i class="fa-solid fa-chart-pie text-purple-200"></i>
+            </div>
+            <div>
+              <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-purple-100 text-purple-800 border border-purple-200">
+                  Fitur #5 &bull; Komputasi Psikometri Cepat
+                </span>
+                <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-indigo-100 text-indigo-800 border border-indigo-200">
+                  Rasch PCM &amp; CFA
+                </span>
+              </div>
+              <h3 class="text-2xl sm:text-3xl font-heading font-black text-slate-900 tracking-tight">
+                Analisis-Aja <span class="text-purple-600 font-medium text-lg sm:text-xl">| <em>Psychometrics &amp; Factor Analysis Suite</em></span>
+              </h3>
+              <p class="text-xs font-semibold text-slate-500 mt-1">Platform Kalibrasi Model Rasch PCM (<em>IRT</em>), <em>Wright Map</em>, &amp; Validasi Konstruk CFA Berbasis <em>Browser</em></p>
+            </div>
+          </div>
+
+          <!-- TOMBOL COBA-IN ANALISIS-AJA -->
+          <div class="flex items-center gap-3 w-full lg:w-auto shrink-0">
+            <a href="/analisis/" target="_blank" class="btn-cobain btn-cobain-analisis w-full sm:w-auto text-xs sm:text-sm">
+              <span>Coba-IN Analisis-Aja Sekarang</span>
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-6 text-xs">
+          <div class="p-4 rounded-2xl bg-purple-50/60 border border-purple-100">
+            <p class="text-purple-900 text-[10px] font-black uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <i class="fa-solid fa-bullseye text-purple-600"></i> Apa Itu &amp; Fungsinya
+            </p>
+            <p class="text-slate-700 leading-relaxed font-medium">
+              Alat komputasi pengukuran psikometri modern menguji reliabilitas dan validitas instrumen politomi menggunakan <em>Partial Credit Model</em> (PCM) dan <em>Confirmatory Factor Analysis</em> (CFA).
+            </p>
+          </div>
+          <div class="p-4 rounded-2xl bg-purple-50/60 border border-purple-100">
+            <p class="text-purple-900 text-[10px] font-black uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <i class="fa-solid fa-shield-halved text-purple-600"></i> Masalah yang Selesai
+            </p>
+            <p class="text-slate-700 leading-relaxed font-medium">
+              Meniadakan kerumitan menulis sintaks R <em>Lavaan</em> atau membeli lisensi <em>software</em> statistik <em>proprietary</em> yang mahal, cukup unggah data CSV/Excel langsung terkalibrasi.
+            </p>
+          </div>
+          <div class="p-4 rounded-2xl bg-purple-50/60 border border-purple-100">
+            <p class="text-purple-900 text-[10px] font-black uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <i class="fa-solid fa-chart-line text-purple-600"></i> Output Nyata
+            </p>
+            <p class="text-slate-700 leading-relaxed font-medium">
+              <em>Wright Map</em> (<em>Person-Item Map</em>), kurva karakteristik butir (<em>Item Characteristic Curve / ICC</em>), indeks <em>Infit/Outfit MNSQ</em>, parameter estimasi faktor CFA, dan indeks kesesuaian model (<em>Goodness-of-Fit</em>: CFI, TLI, RMSEA).
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= RINCIAN 6: THINK A LOUD-IN (PASCASARJANA S2 & S3) ================= -->
+      <div id="detail-thinkaloud" class="detail-card-timbul p-6 sm:p-9 border-t-8 border-t-rose-600 scroll-mt-28">
+        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-6 border-b border-pink-100">
+          <div class="flex items-start gap-4">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-rose-600 via-pink-600 to-rose-900 text-white flex items-center justify-center text-3xl shadow-xl shadow-rose-900/30 shrink-0 border-2 border-white icon-timbul-3d">
+              <i class="fa-solid fa-microphone-lines text-rose-200"></i>
+            </div>
+            <div>
+              <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-rose-100 text-rose-800 border border-rose-200">
+                  Fitur #6 &bull; Riset Kualitatif Pascasarjana
+                </span>
+                <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-300 font-bold flex items-center gap-1">
+                  <i class="fa-solid fa-graduation-cap text-amber-600"></i> Pascasarjana (S2 &amp; S3)
+                </span>
+              </div>
+              <h3 class="text-2xl sm:text-3xl font-heading font-black text-slate-900 tracking-tight">
+                Think A Loud-In <span class="text-rose-600 font-medium text-lg sm:text-xl">| <em>Cognitive Probing &amp; Deep Interview Protocol</em></span>
+              </h3>
+              <p class="text-xs font-semibold text-slate-500 mt-1">Platform Wawancara Digital Berbasis Protokol <em>Think-Aloud</em> &amp; Validasi Kualitatif Kognitif Mendalam Responden</p>
+            </div>
+          </div>
+
+          <!-- TOMBOL COBA-IN THINK A LOUD-IN -->
+          <div class="flex items-center gap-3 w-full lg:w-auto shrink-0">
+            <a href="/thinkaloud/" target="_blank" class="btn-cobain btn-cobain-thinkaloud w-full sm:w-auto text-xs sm:text-sm">
+              <span>Coba-IN Think A Loud Sekarang</span>
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-6 text-xs">
+          <div class="p-4 rounded-2xl bg-rose-50/60 border border-rose-100">
+            <p class="text-rose-900 text-[10px] font-black uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <i class="fa-solid fa-bullseye text-rose-600"></i> Apa Itu &amp; Fungsinya
+            </p>
+            <p class="text-slate-700 leading-relaxed font-medium">
+              Alat panduan wawancara berbasis protokol kognitif <em>Think-Aloud</em> (sebagaimana dirintis di MADEL-5C) untuk menelusuri alur penalaran, miskonsepsi tersembunyi, dan proses mental responden saat menyelesaikan tugas.
+            </p>
+          </div>
+          <div class="p-4 rounded-2xl bg-rose-50/60 border border-rose-100">
+            <p class="text-rose-900 text-[10px] font-black uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <i class="fa-solid fa-shield-halved text-rose-600"></i> Masalah yang Selesai
+            </p>
+            <p class="text-slate-700 leading-relaxed font-medium">
+              Menghilangkan bias pewawancara, menyediakan struktur pertanyaan <em>probing</em> terstandar kualitatif, serta mempermudah peneliti pascasarjana melakukan triangulasi data kognitif instrumen tesis &amp; disertasi (S2 &amp; S3).
+            </p>
+          </div>
+          <div class="p-4 rounded-2xl bg-rose-50/60 border border-rose-100">
+            <p class="text-rose-900 text-[10px] font-black uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <i class="fa-solid fa-quote-right text-rose-600"></i> Output Nyata
+            </p>
+            <p class="text-slate-700 leading-relaxed font-medium">
+              <em>Log</em> transkrip <em>verbatim</em> otomatis, pengodean kategori kognitif (<em>thematic verbal protocol</em>), matriks validasi isi butir, dan rekapitulasi data siap lampiran uji keabsahan tesis &amp; disertasi (S2 &amp; S3).
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= RINCIAN 7: TOLONG-IN AJA ================= -->
+      <div id="detail-tolongin" class="detail-card-timbul p-6 sm:p-9 border-t-8 border-t-blue-600 scroll-mt-28">
+        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-6 border-b border-pink-100">
+          <div class="flex items-start gap-4">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 via-sky-600 to-indigo-800 text-white flex items-center justify-center text-3xl shadow-xl shadow-blue-900/30 shrink-0 border-2 border-white icon-timbul-3d">
+              <i class="fa-solid fa-handshake-angle text-sky-200"></i>
+            </div>
+            <div>
+              <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-blue-100 text-blue-800 border border-blue-200">
+                  Fitur #7 &bull; Layanan Akademik Terpadu
+                </span>
+                <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-sky-100 text-sky-900 border border-sky-300 font-bold flex items-center gap-1">
+                  <i class="fa-solid fa-bolt text-sky-600"></i> Akses Paper &amp; Akun Riset
+                </span>
+              </div>
+              <h3 class="text-2xl sm:text-3xl font-heading font-black text-slate-900 tracking-tight">
+                Tolong-IN Aja <span class="text-blue-600 font-medium text-lg sm:text-xl">| <em>Academic Access &amp; Expert Mentoring</em></span>
+              </h3>
+              <p class="text-xs font-semibold text-slate-500 mt-1">Layanan Bantuan Unduh Paper Non-Open Access, Langganan Akun Riset Tahunan, dan Bimbingan Akademik Konsul-IN</p>
+            </div>
+          </div>
+
+          <!-- TOMBOL BUKA MODAL / PILIH LAYANAN -->
+          <div class="flex items-center gap-3 w-full lg:w-auto shrink-0">
+            <button onclick="openTolonginModal(event)" class="btn-cobain btn-cobain-tolongin w-full sm:w-auto text-xs sm:text-sm cursor-pointer">
+              <i class="fa-solid fa-layer-group"></i>
+              <span>Pilih Layanan Tolong-IN</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- 3 PILIHAN LAYANAN INTERAKTIF DI DALAM KARTU -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+          
+          <!-- OPSI 1: BANTUAN UNDUH PAPER NON-OPEN ACCESS -->
+          <div class="p-5 rounded-2xl bg-gradient-to-b from-blue-50/80 to-white border-2 border-blue-200 shadow-md flex flex-col justify-between hover:border-blue-400 transition-all group">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="px-2.5 py-1 rounded-xl bg-blue-600 text-white font-black text-[10px] tracking-wide shadow-sm flex items-center gap-1">
+                  <i class="fa-solid fa-file-pdf"></i> Opsi #1
+                </span>
+                <span class="px-2 py-0.5 rounded-lg bg-emerald-100 text-emerald-800 text-[11px] font-black border border-emerald-300">
+                  Rp3.000 <span class="text-[9px] font-normal text-slate-600">/ paper</span>
+                </span>
+              </div>
+              <h4 class="text-base font-heading font-black text-slate-900 leading-snug">
+                Bantuan Download Paper Non-Open Access
+              </h4>
+              <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+                Akses teks lengkap artikel ilmiah resmi (<em>full PDF</em>) dari penerbit jurnal internasional bereputasi tinggi yang terkunci <em>paywall</em>.
+              </p>
+              
+              <!-- Badge Penerbit -->
+              <div class="flex flex-wrap gap-1.5 mt-3">
+                <span class="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-[9.5px] font-bold text-slate-700 shadow-2xs">Springer</span>
+                <span class="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-[9.5px] font-bold text-slate-700 shadow-2xs">Taylor &amp; Francis</span>
+                <span class="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-[9.5px] font-bold text-slate-700 shadow-2xs">Wiley</span>
+                <span class="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-[9.5px] font-bold text-slate-700 shadow-2xs">Elsevier</span>
+              </div>
+            </div>
+
+            <!-- Tombol Order Cepat -->
+            <div class="mt-4 pt-3 border-t border-blue-100">
+              <button onclick="openTolonginModal(event, 'download')" class="w-full py-2.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95 cursor-pointer">
+                <i class="fa-brands fa-whatsapp text-emerald-300 text-sm"></i>
+                <span>Minta Download Paper (Rp3rb)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- OPSI 2: LANGGANAN AKUN RISET TAHUNAN -->
+          <div class="p-5 rounded-2xl bg-gradient-to-b from-sky-50/80 to-white border-2 border-sky-200 shadow-md flex flex-col justify-between hover:border-sky-400 transition-all group">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="px-2.5 py-1 rounded-xl bg-sky-600 text-white font-black text-[10px] tracking-wide shadow-sm flex items-center gap-1">
+                  <i class="fa-solid fa-key"></i> Opsi #2
+                </span>
+                <span class="px-2 py-0.5 rounded-lg bg-sky-100 text-sky-800 text-[10px] font-black border border-sky-300">
+                  Akses 1 Tahun
+                </span>
+              </div>
+              <h4 class="text-base font-heading font-black text-slate-900 leading-snug">
+                Langganan Akun Riset Pertahun
+              </h4>
+              <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+                Penyediaan akses akun resmi bergaransi untuk eksplorasi literatur mendalam, analisis sitasi global, dan kecerdasan buatan akademis mutakhir.
+              </p>
+              
+              <!-- Platform Tersedia -->
+              <div class="space-y-1.5 mt-3 text-xs">
+                <div class="flex items-center gap-2 text-slate-700 font-semibold text-[11px]">
+                  <i class="fa-solid fa-circle-check text-sky-600 text-[10px]"></i>
+                  <span><strong>Gemini Advanced</strong> (AI Penalaran Riset)</span>
+                </div>
+                <div class="flex items-center gap-2 text-slate-700 font-semibold text-[11px]">
+                  <i class="fa-solid fa-circle-check text-sky-600 text-[10px]"></i>
+                  <span><strong>Scopus</strong> (Database &amp; H-Index Elsevier)</span>
+                </div>
+                <div class="flex items-center gap-2 text-slate-700 font-semibold text-[11px]">
+                  <i class="fa-solid fa-circle-check text-sky-600 text-[10px]"></i>
+                  <span><strong>Web of Science</strong> (WoS Clarivate Analytics)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tombol Konsul Akun -->
+            <div class="mt-4 pt-3 border-t border-sky-100">
+              <button onclick="openTolonginModal(event, 'akun')" class="w-full py-2.5 px-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95 cursor-pointer">
+                <i class="fa-brands fa-whatsapp text-emerald-300 text-sm"></i>
+                <span>Tanya Ketersediaan Akun</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- OPSI 3: KONSUL-IN (KONSULTASI AKADEMIK) -->
+          <div class="p-5 rounded-2xl bg-gradient-to-b from-indigo-50/80 to-white border-2 border-indigo-200 shadow-md flex flex-col justify-between hover:border-indigo-400 transition-all group">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="px-2.5 py-1 rounded-xl bg-indigo-600 text-white font-black text-[10px] tracking-wide shadow-sm flex items-center gap-1">
+                  <i class="fa-solid fa-user-graduate"></i> Opsi #3
+                </span>
+                <span class="px-2 py-0.5 rounded-lg bg-indigo-100 text-indigo-800 text-[10px] font-black border border-indigo-300">
+                  Konsul-IN
+                </span>
+              </div>
+              <h4 class="text-base font-heading font-black text-slate-900 leading-snug">
+                Layanan Bimbingan Konsul-IN
+              </h4>
+              <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+                Pendampingan intensif &amp; konsultasi teknis satu lawan satu bersama mentor akademisi dan peneliti berpengalaman untuk percepatan studi.
+              </p>
+              
+              <!-- Bidang Konsultasi -->
+              <div class="grid grid-cols-2 gap-1.5 mt-3 text-xs">
+                <div class="p-2 rounded-xl bg-white border border-indigo-100 text-[10.5px] font-bold text-indigo-900 flex items-center gap-1.5">
+                  <i class="fa-solid fa-newspaper text-indigo-600"></i> Artikel Jurnal
+                </div>
+                <div class="p-2 rounded-xl bg-white border border-indigo-100 text-[10.5px] font-bold text-indigo-900 flex items-center gap-1.5">
+                  <i class="fa-solid fa-book-bookmark text-indigo-600"></i> Tesis (S2)
+                </div>
+                <div class="p-2 rounded-xl bg-white border border-indigo-100 text-[10.5px] font-bold text-indigo-900 flex items-center gap-1.5">
+                  <i class="fa-solid fa-graduation-cap text-indigo-600"></i> Disertasi (S3)
+                </div>
+                <div class="p-2 rounded-xl bg-white border border-indigo-100 text-[10.5px] font-bold text-indigo-900 flex items-center gap-1.5">
+                  <i class="fa-solid fa-sliders text-indigo-600"></i> Instrumen Riset
+                </div>
+              </div>
+            </div>
+
+            <!-- Tombol Jadwalkan Sesi -->
+            <div class="mt-4 pt-3 border-t border-indigo-100">
+              <button onclick="openTolonginModal(event, 'konsul')" class="w-full py-2.5 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95 cursor-pointer">
+                <i class="fa-brands fa-whatsapp text-emerald-300 text-sm"></i>
+                <span>Jadwalkan Konsul-IN</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Back to Panel Anchor & Next Section -->
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12">
+      <a href="#modul-aplikasi" class="px-6 py-3 rounded-2xl bg-white hover:bg-pink-50 border border-pink-200 text-slate-700 hover:text-rose-600 font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-sm transition-all active:scale-95 cursor-pointer">
+        <i class="fa-solid fa-arrow-up text-rose-500"></i>
+        <span>Kembali ke Panel Fitur di Atas</span>
+      </a>
+      <a href="#alur-solusi" class="px-6 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-md transition-all active:scale-95 cursor-pointer">
+        <span>Lanjut ke Alur Riset &amp; Metodologi</span>
+        <i class="fa-solid fa-arrow-down"></i>
+      </a>
+    </div>
+
+  </section>
+
+  <!-- ========================================================================
+       HALAMAN 2: ALUR SOLUSI RISET TERPADU & PERBANDINGAN (LANGSUNG MUNCUL DI BAWAH)
+       ======================================================================== -->
+  <section id="alur-solusi" class="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-16 border-t border-pink-200/60">
+
+    <!-- ─── MOTIF BACKGROUND SECTION 4 (METODOLOGI & ALUR RISET WATERMARK MENYEBAR SELARAS) ─── -->
+    <div class="hidden md:block absolute inset-0 pointer-events-none overflow-hidden z-0">
+      <div class="motif-bg-item top-[6%] left-[1.5%] -rotate-12 opacity-70">
+        <i class="fa-solid fa-route text-6xl glyph-rose"></i>
+      </div>
+      <div class="motif-bg-item top-[10%] right-[1.5%] rotate-12 opacity-70">
+        <i class="fa-solid fa-diagram-project text-6xl glyph-indigo"></i>
+      </div>
+      <div class="motif-bg-item top-[42%] left-[1%] opacity-80">
+        <div class="motif-hex motif-teal">
+          <i class="fa-solid fa-compass-drafting text-lg text-teal-700"></i>
+        </div>
+      </div>
+      <div class="motif-bg-item top-[42%] right-[1%] opacity-80">
+        <div class="motif-diamond motif-amber">
+          <i class="fa-solid fa-feather-pointed text-lg text-amber-700"></i>
+        </div>
+      </div>
+      <div class="motif-bg-item bottom-[6%] left-[2%] opacity-70">
+        <i class="fa-solid fa-scale-balanced text-5xl glyph-purple"></i>
+      </div>
+      <div class="motif-bg-item bottom-[6%] right-[2%] opacity-70">
+        <i class="fa-solid fa-microchip text-5xl glyph-blue"></i>
+      </div>
+
+      <!-- Simbol Ilmiah Mengambang Halus di Margin Menyebar Selaras -->
+      <div class="motif-bg-item top-[20%] left-[22%] opacity-60">
+        <span class="motif-symbol text-2xl glyph-amber">✦</span>
+      </div>
+      <div class="motif-bg-item top-[20%] right-[22%] opacity-60">
+        <span class="motif-symbol text-2xl glyph-rose">Δ</span>
+      </div>
+      <div class="motif-bg-item top-[66%] left-[24%] opacity-55">
+        <span class="motif-symbol text-xl glyph-emerald">Ω</span>
+      </div>
+      <div class="motif-bg-item top-[66%] right-[24%] opacity-55">
+        <span class="motif-symbol text-xl glyph-indigo">Σ</span>
+      </div>
+      <div class="motif-bg-item bottom-[2%] left-[50%] opacity-55">
+        <span class="motif-symbol text-xl glyph-teal">◇</span>
+      </div>
+    </div>
+
+    <!-- Section Header -->
+    <div class="relative z-10 text-center max-w-3xl mx-auto mb-12">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-pink-100 border border-pink-300 text-[10px] font-black text-rose-700 uppercase tracking-widest mb-3">
+        <i class="fa-solid fa-diagram-project"></i> METODOLOGI TERINTEGRASI
+      </div>
+      <h2 class="text-2xl sm:text-4xl font-heading font-black text-slate-900 tracking-tight">
+        Bagaimana RisetKu Mentransformasi Proses Penelitian Anda?
+      </h2>
+      <p class="text-slate-600 text-xs sm:text-sm mt-3 leading-relaxed">
+        Dari perumusan <em>research gap</em> hingga kalibrasi instrumen, seluruh tahapan dirancang untuk menghilangkan hambatan teknis tanpa mengorbankan ketatnya kaidah metodologis.
+      </p>
+    </div>
+
+    <!-- Perbandingan: Sebelum vs Sesudah RisetKu -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+      <!-- Kolom Sebelum / Konvensional -->
+      <div class="p-6 sm:p-7 rounded-3xl bg-white/90 border border-red-200 shadow-sm">
+        <div class="flex items-center gap-3 mb-5 pb-3 border-b border-red-100 text-red-600">
+          <i class="fa-solid fa-circle-xmark text-xl"></i>
+          <h3 class="font-heading font-black text-lg text-slate-900">Pendekatan Konvensional</h3>
+        </div>
+        <ul class="space-y-3.5 text-xs text-slate-700">
+          <li class="flex items-start gap-2.5">
+            <i class="fa-solid fa-times text-red-500 mt-0.5 shrink-0"></i>
+            <span>Skrining ratusan <em>paper</em> Scopus secara manual yang melelahkan dan rentan inkonsistensi.</span>
+          </li>
+          <li class="flex items-start gap-2.5">
+            <i class="fa-solid fa-times text-red-500 mt-0.5 shrink-0"></i>
+            <span>Penerjemahan dokumen ilmiah via <em>translator</em> umum yang merusak format tabel dan makna istilah pedagogik.</span>
+          </li>
+          <li class="flex items-start gap-2.5">
+            <i class="fa-solid fa-times text-red-500 mt-0.5 shrink-0"></i>
+            <span>Pemeriksaan format naskah tesis/disertasi manual berulang kali terhadap panduan kampus yang tebal.</span>
+          </li>
+          <li class="flex items-start gap-2.5">
+            <i class="fa-solid fa-times text-red-500 mt-0.5 shrink-0"></i>
+            <span>Pengukuran literasi digital berbasis kuesioner persepsi (<em>self-report</em>) yang bias subjektivitas.</span>
+          </li>
+          <li class="flex items-start gap-2.5">
+            <i class="fa-solid fa-times text-red-500 mt-0.5 shrink-0"></i>
+            <span>Ketergantungan pada lisensi perangkat lunak berbayar dan sintaks <em>coding</em> analisis psikometri yang rumit.</span>
+          </li>
+          <li class="flex items-start gap-2.5">
+            <i class="fa-solid fa-times text-red-500 mt-0.5 shrink-0"></i>
+            <span>Wawancara kualitatif kognitif tanpa protokol <em>probing</em> terstandar sehingga sulit membuktikan triangulasi data.</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Kolom Sesudah / RisetKu -->
+      <div class="p-6 sm:p-7 rounded-3xl bg-white/90 border border-emerald-200 shadow-sm">
+        <div class="flex items-center gap-3 mb-5 pb-3 border-b border-emerald-100 text-emerald-600">
+          <i class="fa-solid fa-circle-check text-xl"></i>
+          <h3 class="font-heading font-black text-slate-900">Dengan Ekosistem RisetKu</h3>
+        </div>
+        <ul class="space-y-3.5 text-xs text-slate-700">
+          <li class="flex items-start gap-2.5">
+            <i class="fa-solid fa-check text-emerald-600 mt-0.5 shrink-0 font-bold"></i>
+            <span><strong>SLR-In Aja:</strong> Otomasi seleksi <em>Tier A/B</em> dan diagram alir <em>PRISMA 2020</em> dalam hitungan menit.</span>
+          </li>
+          <li class="flex items-start gap-2.5">
+            <i class="fa-solid fa-check text-emerald-600 mt-0.5 shrink-0 font-bold"></i>
+            <span><strong>Terjemahin_Aja:</strong> Terjemahan dwibahasa berdampingan dengan tata letak dokumen asli terjaga &amp; sitasi APA <em>7th Edition</em>.</span>
+          </li>
+          <li class="flex items-start gap-2.5">
+            <i class="fa-solid fa-check text-emerald-600 mt-0.5 shrink-0 font-bold"></i>
+            <span><strong>Cek-In:</strong> Verifikasi kepatuhan naskah tesis/disertasi (8 jenis riset &amp; koherensi bab) otomatis.</span>
+          </li>
+          <li class="flex items-start gap-2.5">
+            <i class="fa-solid fa-check text-emerald-600 mt-0.5 shrink-0 font-bold"></i>
+            <span><strong>MADEL-5C:</strong> Asesmen kinerja autentik situasional 30 skenario kasus dengan visualisasi <em>Spider Chart</em>.</span>
+          </li>
+          <li class="flex items-start gap-2.5">
+            <i class="fa-solid fa-check text-emerald-600 mt-0.5 shrink-0 font-bold"></i>
+            <span><strong>Analisis-Aja:</strong> Kalibrasi Rasch PCM, <em>Wright Map</em>, dan CFA instan langsung berbasis <em>website</em>.</span>
+          </li>
+          <li class="flex items-start gap-2.5">
+            <i class="fa-solid fa-check text-emerald-600 mt-0.5 shrink-0 font-bold"></i>
+            <span><strong>Think A Loud-In:</strong> Pengodean <em>thematic verbal protocol</em> &amp; matriks keabsahan instrumen riset pascasarjana.</span>
+          </li>
+          <li class="flex items-start gap-2.5">
+            <i class="fa-solid fa-check text-emerald-600 mt-0.5 shrink-0 font-bold"></i>
+            <span><strong>Tolong-IN Aja:</strong> Bantuan unduh paper non-open access (Rp3.000), akun riset tahunan, &amp; bimbingan akademik Konsul-IN.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 7 Tahapan Alur Riset (Roadmap Lengkap 7 Fitur & Layanan) -->
+    <div class="light-panel p-6 sm:p-8">
+      <h3 class="text-xl font-heading font-black text-slate-900 mb-6 flex items-center gap-2">
+        <i class="fa-solid fa-route text-rose-500"></i>
+        Siklus Kerja Ilmiah 7 Fitur &amp; Layanan Berkelanjutan
+      </h3>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 gap-3.5">
+        <div class="pipeline-step">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-6 h-6 rounded-lg bg-amber-100 text-amber-800 font-black text-xs flex items-center justify-center">1</span>
+            <span class="text-xs font-black text-slate-900">Eksplorasi Masalah</span>
+          </div>
+          <p class="text-[11px] text-slate-600 leading-relaxed">
+            Menemukan <em>research gap</em> dan <em>novelty</em> menggunakan <strong>SLR-In Aja</strong> (<em>PRISMA 2020</em>).
+          </p>
+        </div>
+
+        <div class="pipeline-step">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-800 font-black text-xs flex items-center justify-center">2</span>
+            <span class="text-xs font-black text-slate-900">Translasi Literatur</span>
+          </div>
+          <p class="text-[11px] text-slate-600 leading-relaxed">
+            Menerjemahkan referensi Scopus <em>Q1</em> tanpa merusak format tabel via <strong>Terjemahin_Aja</strong>.
+          </p>
+        </div>
+
+        <div class="pipeline-step">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-6 h-6 rounded-lg bg-cyan-100 text-cyan-800 font-black text-xs flex items-center justify-center">3</span>
+            <span class="text-xs font-black text-slate-900">Pemeriksaan Naskah</span>
+          </div>
+          <p class="text-[11px] text-slate-600 leading-relaxed">
+            Memeriksa kepatuhan sistematika, isi, dan koherensi proposal/tesis via <strong>Cek-In</strong>.
+          </p>
+        </div>
+
+        <div class="pipeline-step">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-6 h-6 rounded-lg bg-indigo-100 text-indigo-800 font-black text-xs flex items-center justify-center">4</span>
+            <span class="text-xs font-black text-slate-900">Pengukuran Asesmen</span>
+          </div>
+          <p class="text-[11px] text-slate-600 leading-relaxed">
+            Mengambil data literasi digital calon guru via instrumen skenario situasional <strong>MADEL-5C</strong>.
+          </p>
+        </div>
+
+        <div class="pipeline-step">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-6 h-6 rounded-lg bg-purple-100 text-purple-800 font-black text-xs flex items-center justify-center">5</span>
+            <span class="text-xs font-black text-slate-900">Kalibrasi Psikometri</span>
+          </div>
+          <p class="text-[11px] text-slate-600 leading-relaxed">
+            Membuktikan validitas konstruk (CFA) dan penskalaan Rasch PCM dengan <strong>Analisis-Aja</strong>.
+          </p>
+        </div>
+
+        <div class="pipeline-step">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-6 h-6 rounded-lg bg-rose-100 text-rose-800 font-black text-xs flex items-center justify-center">6</span>
+            <span class="text-xs font-black text-slate-900">Validasi Kognitif</span>
+          </div>
+          <p class="text-[11px] text-slate-600 leading-relaxed">
+            Mendalami alur penalaran responden via protokol <em>Think-Aloud</em> dengan <strong>Think A Loud-In</strong>.
+          </p>
+        </div>
+
+        <div class="pipeline-step">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-6 h-6 rounded-lg bg-blue-100 text-blue-800 font-black text-xs flex items-center justify-center">7</span>
+            <span class="text-xs font-black text-slate-900">Akses &amp; Bimbingan</span>
+          </div>
+          <p class="text-[11px] text-slate-600 leading-relaxed">
+            Bantuan unduh paper (Rp3rb), akun riset tahunan, &amp; bimbingan via <strong>Tolong-IN Aja</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ========================================================================
+       HALAMAN 3: STANDAR ILMIAH, PUSAT DOKUMENTASI & FAQ (LANGSUNG MUNCUL DI BAWAH)
+       ======================================================================== -->
+  <section id="standar-faq" class="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-16 border-t border-pink-200/60">
+
+    <!-- ─── MOTIF BACKGROUND SECTION 5 (STANDAR ILMIAH & DOKUMENTASI WATERMARK MENYEBAR SELARAS) ─── -->
+    <div class="hidden md:block absolute inset-0 pointer-events-none overflow-hidden z-0">
+      <div class="motif-bg-item top-[8%] left-[1.5%] rotate-8 opacity-70">
+        <i class="fa-solid fa-certificate text-6xl glyph-rose"></i>
+      </div>
+      <div class="motif-bg-item top-[10%] right-[1.5%] -rotate-10 opacity-75">
+        <div class="motif-diamond motif-indigo">
+          <i class="fa-solid fa-spell-check text-lg text-indigo-700"></i>
+        </div>
+      </div>
+      <div class="motif-bg-item bottom-[8%] left-[2%] opacity-70">
+        <i class="fa-solid fa-graduation-cap text-5xl glyph-amber"></i>
+      </div>
+      <div class="motif-bg-item bottom-[8%] right-[2%] opacity-75">
+        <div class="motif-hex motif-teal">
+          <i class="fa-solid fa-book-bookmark text-lg text-teal-700"></i>
+        </div>
+      </div>
+
+      <!-- Simbol Ilmiah Mengambang Halus di Margin Menyebar Selaras -->
+      <div class="motif-bg-item top-[18%] left-[20%] opacity-60">
+        <span class="motif-symbol text-2xl glyph-purple">✦</span>
+      </div>
+      <div class="motif-bg-item top-[18%] right-[20%] opacity-60">
+        <span class="motif-symbol text-2xl glyph-teal">Σ</span>
+      </div>
+      <div class="motif-bg-item top-[68%] left-[24%] opacity-55">
+        <span class="motif-symbol text-xl glyph-amber">◇</span>
+      </div>
+      <div class="motif-bg-item top-[68%] right-[24%] opacity-55">
+        <span class="motif-symbol text-xl glyph-rose">Δ</span>
+      </div>
+      <div class="motif-bg-item bottom-[3%] left-[50%] opacity-55">
+        <span class="motif-symbol text-xl glyph-emerald">Ω</span>
+      </div>
+    </div>
+
+    <!-- Section Header -->
+    <div class="relative z-10 text-center max-w-3xl mx-auto mb-12">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-pink-100 border border-pink-300 text-[10px] font-black text-rose-700 uppercase tracking-widest mb-3">
+        <i class="fa-solid fa-certificate"></i> RIGOR ILMIAH &amp; STANDARISASI
+      </div>
+      <h2 class="text-2xl sm:text-4xl font-heading font-black text-slate-900 tracking-tight">
+        Landasan Teori &amp; Tanya Jawab Penggunaan
+      </h2>
+      <p class="text-slate-600 text-xs sm:text-sm mt-3 leading-relaxed">
+        Setiap instrumen dan fitur komputasi dalam ekosistem ini dikembangkan merujuk pada pedoman internasional yang terbukti validitas dan reliabilitasnya.
+      </p>
+    </div>
+
+    <!-- 4 Standar Internasional Yang Diadopsi -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+      <div class="p-5 rounded-2xl bg-white border border-pink-200 shadow-sm">
+        <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-sm mb-3">
+          <i class="fa-solid fa-book-bookmark"></i>
+        </div>
+        <h4 class="font-heading font-bold text-sm text-slate-900"><em>PRISMA 2020 Statement</em></h4>
+        <p class="text-[11px] text-slate-600 mt-1.5 leading-relaxed">
+          Protokol resmi penulisan <em>systematic review</em> dan <em>meta-analysis</em> berstandar jurnal bereputasi tinggi.
+        </p>
+      </div>
+
+      <div class="p-5 rounded-2xl bg-white border border-pink-200 shadow-sm">
+        <div class="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-sm mb-3">
+          <i class="fa-solid fa-chart-line"></i>
+        </div>
+        <h4 class="font-heading font-bold text-sm text-slate-900">Rasch PCM (<em>IRT</em>)</h4>
+        <p class="text-[11px] text-slate-600 mt-1.5 leading-relaxed">
+          Pemodelan pengukuran politomi Teori Respons Butir (<em>Partial Credit Model</em>) untuk kalibrasi instrumen objektif.
+        </p>
+      </div>
+
+      <div class="p-5 rounded-2xl bg-white border border-pink-200 shadow-sm">
+        <div class="w-9 h-9 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-sm mb-3">
+          <i class="fa-solid fa-network-wired"></i>
+        </div>
+        <h4 class="font-heading font-bold text-sm text-slate-900">CFA (<em>Factor Analysis</em>)</h4>
+        <p class="text-[11px] text-slate-600 mt-1.5 leading-relaxed">
+          Uji validitas konstruk berbasis <em>Confirmatory Factor Analysis</em> (CFA <em>Lavaan</em>) dengan evaluasi <em>Goodness-of-Fit</em>.
+        </p>
+      </div>
+
+      <div class="p-5 rounded-2xl bg-white border border-pink-200 shadow-sm">
+        <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm mb-3">
+          <i class="fa-solid fa-shapes"></i>
+        </div>
+        <h4 class="font-heading font-bold text-sm text-slate-900">Pedoman SPs &amp; APA 7</h4>
+        <p class="text-[11px] text-slate-600 mt-1.5 leading-relaxed">
+          Pemeriksaan 8 jenis desain riset dan sitasi baku sesuai Pedoman Penulisan SPs 2025 dan APA <em>7th Edition</em>.
+        </p>
+      </div>
+    </div>
+
+    <!-- FAQ Accordion -->
+    <div class="light-panel p-6 sm:p-8 mb-8">
+      <h3 class="text-xl font-heading font-black text-slate-900 mb-6 flex items-center gap-2">
+        <i class="fa-solid fa-circle-question text-rose-500"></i>
+        Pertanyaan Umum (FAQ)
+      </h3>
+
+      <div class="space-y-3.5 text-xs">
+        <div class="p-4 rounded-2xl bg-pink-50/50 border border-pink-100">
+          <p class="font-bold text-slate-900 mb-1.5 flex items-center gap-2">
+            <i class="fa-solid fa-circle-dot text-rose-500 text-[10px]"></i>
+            Apakah seluruh aplikasi dalam RisetKu memerlukan instalasi <em>software</em> di komputer?
+          </p>
+          <p class="text-slate-600 leading-relaxed pl-4">
+            Tidak. Seluruh aplikasi 100% berbasis web dan dapat diakses langsung melalui peramban (<em>browser</em>) di <em>laptop</em>, tablet, maupun ponsel tanpa perlu menginstal aplikasi tambahan.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-pink-50/50 border border-pink-100">
+          <p class="font-bold text-slate-900 mb-1.5 flex items-center gap-2">
+            <i class="fa-solid fa-circle-dot text-rose-500 text-[10px]"></i>
+            Siapa saja yang dapat memanfaatkan fitur-fitur dalam ekosistem ini?
+          </p>
+          <p class="text-slate-600 leading-relaxed pl-4">
+            Ekosistem ini dirancang untuk mahasiswa (S1/S2/S3), dosen pembimbing, calon guru profesional, serta peneliti di bidang pendidikan dan ilmu sosial yang membutuhkan alat ukur dan instrumen riset terstandar.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-pink-50/50 border border-pink-100">
+          <p class="font-bold text-slate-900 mb-1.5 flex items-center gap-2">
+            <i class="fa-solid fa-circle-dot text-rose-500 text-[10px]"></i>
+            Bagaimana keamanan data dan hasil asesmen responden?
+          </p>
+          <p class="text-slate-600 leading-relaxed pl-4">
+            Data diproses secara aman. Naskah pada Cek-In dan data SLR disimpan di <em>browser</em> pengguna (<em>IndexedDB</em> lokal) dan tidak dikirimkan ke server pihak ketiga tanpa izin.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <div class="flex justify-center mt-6">
+      <a href="#modul-aplikasi" class="px-6 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-white font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-md transition-all active:scale-95 cursor-pointer">
+        <i class="fa-solid fa-arrow-up"></i>
+        <span>Kembali ke Atas (Katalog Fitur)</span>
+      </a>
+    </div>
+
+  </section>
+
+  <!-- ========================================================================
+       FOOTER PROFESIONAL PUBLIK
+       ======================================================================== -->
+  <footer class="relative z-10 border-t border-pink-200/80 bg-white/95 py-6 px-4 mt-auto shadow-sm">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-600">
+      <div class="flex items-center gap-2.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse"></span>
+        <span class="font-bold text-slate-900">RisetKu Ecosystem</span>
+        <span class="text-slate-300">&bull;</span>
+        <span>Platform Solusi Riset &amp; E-Asesmen Akademik Terpadu</span>
+      </div>
+      <div class="flex items-center gap-5 text-slate-500 text-[11px]">
+        <a href="#modul-aplikasi" class="hover:text-rose-600 transition-colors">Fitur Ekosistem</a>
+        <a href="#alur-solusi" class="hover:text-rose-600 transition-colors">Alur Riset</a>
+        <a href="#standar-faq" class="hover:text-rose-600 transition-colors">Standar &amp; FAQ</a>
+        <span class="text-slate-400">&copy; 2026 RisetKu. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       LOGIKA SINKRONISASI GARIS PENGHUBUNG ORBITAL (100% TERKONEKSI KE 6 BULATAN)
+       ======================================================================== -->
+  <script>
+    function drawOrbitalConnectors() {
+      const container = document.getElementById('orbital-container');
+      const hub = document.getElementById('hub-center-core');
+      const svg = document.getElementById('hub-connector-svg');
+      if (!container || !hub || !svg) return;
+
+      const containerRect = container.getBoundingClientRect();
+      const hubRect = hub.getBoundingClientRect();
+      if (containerRect.width === 0 || containerRect.height === 0) return;
+
+      const w = containerRect.width;
+      const h = containerRect.height;
+      svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+      svg.setAttribute('width', w);
+      svg.setAttribute('height', h);
+
+      const hubCenterX = hubRect.left + hubRect.width / 2 - containerRect.left;
+      const hubCenterY = hubRect.top + hubRect.height / 2 - containerRect.top;
+      const hubRadius = (hubRect.width / 2) - 3;
+
+      const orbs = [
+        { id: 'orb-madel', color: '#6366f1', offsetArc: 14 },
+        { id: 'orb-cekin', color: '#06b6d4', offsetArc: 6 },
+        { id: 'orb-slr', color: '#f59e0b', offsetArc: -14 },
+        { id: 'orb-terjemahin', color: '#10b981', offsetArc: 14 },
+        { id: 'orb-analisis', color: '#a855f7', offsetArc: -6 },
+        { id: 'orb-thinkaloud', color: '#e11d48', offsetArc: -14 },
+        { id: 'orb-tolongin', color: '#2563eb', offsetArc: 0 },
+      ];
+
+      let defsContent = '<defs>';
+      let elementsContent = '';
+
+      orbs.forEach(orb => {
+        const el = document.getElementById(orb.id);
+        if (!el) return;
+        const orbRect = el.getBoundingClientRect();
+        const orbCenterX = orbRect.left + orbRect.width / 2 - containerRect.left;
+        const orbCenterY = orbRect.top + orbRect.height / 2 - containerRect.top;
+        const orbRadius = (orbRect.width / 2) - 2;
+
+        const dx = orbCenterX - hubCenterX;
+        const dy = orbCenterY - hubCenterY;
+        const angle = Math.atan2(dy, dx);
+
+        const startX = hubCenterX + Math.cos(angle) * hubRadius;
+        const startY = hubCenterY + Math.sin(angle) * hubRadius;
+        const endX = orbCenterX - Math.cos(angle) * orbRadius;
+        const endY = orbCenterY - Math.sin(angle) * orbRadius;
+
+        // Smooth Bézier curve with subtle arc
+        const midX = (startX + endX) / 2;
+        const midY = (startY + endY) / 2;
+        const ctrlX = midX;
+        const ctrlY = midY + (orb.offsetArc || 0);
+
+        const gradId = `grad_${orb.id}`;
+        defsContent += `
+          <linearGradient id="${gradId}" gradientUnits="userSpaceOnUse" 
+                          x1="${startX.toFixed(1)}" y1="${startY.toFixed(1)}" 
+                          x2="${endX.toFixed(1)}" y2="${endY.toFixed(1)}">
+            <stop offset="0%" stop-color="#f43f5e" stop-opacity="0.95" />
+            <stop offset="100%" stop-color="${orb.color}" stop-opacity="0.95" />
+          </linearGradient>
+        `;
+
+        elementsContent += `
+          <path d="M ${startX.toFixed(1)},${startY.toFixed(1)} Q ${ctrlX.toFixed(1)},${ctrlY.toFixed(1)} ${endX.toFixed(1)},${endY.toFixed(1)}" 
+                fill="none" 
+                stroke="url(#${gradId})" 
+                stroke-width="3" 
+                class="connector-line-flow" />
+          <circle cx="${startX.toFixed(1)}" cy="${startY.toFixed(1)}" r="3.5" fill="#f43f5e" />
+          <circle cx="${endX.toFixed(1)}" cy="${endY.toFixed(1)}" r="4.5" fill="${orb.color}" stroke="#ffffff" stroke-width="2" />
+        `;
+      });
+
+      defsContent += '</defs>';
+
+      // Hub Center Sensor Dot
+      const hubCenterDot = `<circle cx="${hubCenterX.toFixed(1)}" cy="${hubCenterY.toFixed(1)}" r="6" fill="#f43f5e" stroke="#ffffff" stroke-width="2.5" />`;
+
+      svg.innerHTML = defsContent + elementsContent + hubCenterDot;
+    }
+
+    window.addEventListener('resize', drawOrbitalConnectors);
+    window.addEventListener('scroll', drawOrbitalConnectors, { passive: true });
+    document.addEventListener('DOMContentLoaded', () => {
+      drawOrbitalConnectors();
+      setTimeout(drawOrbitalConnectors, 100);
+      setTimeout(drawOrbitalConnectors, 400);
+      setTimeout(drawOrbitalConnectors, 1000);
+    });
+    // Modal Tolong-IN Aja Handlers
+    function openTolonginModal(event, tab = 'download') {
+      if (event) event.preventDefault();
+      const modal = document.getElementById('modal-tolongin');
+      if (!modal) return;
+      modal.classList.remove('hidden');
+      switchTolonginTab(tab);
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeTolonginModal() {
+      const modal = document.getElementById('modal-tolongin');
+      if (!modal) return;
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    function handleModalBackdropClick(event) {
+      if (event.target === document.getElementById('modal-tolongin')) {
+        closeTolonginModal();
+      }
+    }
+
+    function switchTolonginTab(tabName) {
+      const tabs = ['download', 'akun', 'konsul'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`tab-btn-${t}`);
+        const panel = document.getElementById(`tab-panel-${t}`);
+        if (btn && panel) {
+          if (t === tabName) {
+            btn.className = 'tab-btn-tolongin px-3.5 py-2.5 rounded-t-xl border-b-2 border-blue-600 text-blue-700 bg-white font-black flex items-center gap-1.5 transition-colors cursor-pointer shrink-0';
+            panel.classList.remove('hidden');
+          } else {
+            btn.className = 'tab-btn-tolongin px-3.5 py-2.5 rounded-t-xl border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-bold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0';
+            panel.classList.add('hidden');
+          }
+        }
+      });
+    }
+
+    function submitOrderDownload() {
+      const doi = (document.getElementById('input-paper-doi')?.value || '').trim();
+      const notes = (document.getElementById('input-paper-notes')?.value || '').trim();
+      let text = 'Halo Admin RisetKu Tolong-IN, saya ingin memesan jasa bantuan download paper non-open access (Rp3.000/paper).\n';
+      if (doi) text += `\nDOI / Link Paper: ${doi}`;
+      if (notes) text += `\nCatatan: ${notes}`;
+      text += '\n\nMohon informasi nomor rekening/e-wallet untuk pembayaran dan pengiriman file PDF terima kasih.';
+      window.open(`https://api.whatsapp.com/send?phone=6281234567890&text=${encodeURIComponent(text)}`, '_blank');
+    }
+
+    function submitOrderAkun() {
+      const selected = [];
+      if (document.getElementById('akun-gemini')?.checked) selected.push('Gemini Advanced AI');
+      if (document.getElementById('akun-scopus')?.checked) selected.push('Scopus Elsevier');
+      if (document.getElementById('akun-wos')?.checked) selected.push('Web of Science (WoS)');
+      let text = 'Halo Admin RisetKu Tolong-IN, saya tertarik untuk berlangganan akun riset tahunan:\n';
+      text += selected.length ? selected.map(s => `- ${s}`).join('\n') : '- Konsultasi paket akun riset';
+      text += '\n\nMohon info ketersediaan slot, harga pertahun, dan panduan login. Terima kasih.';
+      window.open(`https://api.whatsapp.com/send?phone=6281234567890&text=${encodeURIComponent(text)}`, '_blank');
+    }
+
+    function submitOrderKonsul() {
+      const topik = document.getElementById('select-konsul-topik')?.value || 'Artikel Ilmiah';
+      const kendala = (document.getElementById('input-konsul-kendala')?.value || '').trim();
+      let text = `Halo Tim Konsul-IN RisetKu, saya ingin menjadwalkan konsultasi akademik.\n\nTopik Layanan: ${topik}`;
+      if (kendala) text += `\nKendala/Kebutuhan: ${kendala}`;
+      text += '\n\nMohon informasi ketersediaan jadwal bimbingan dan tarif mentoring. Terima kasih.';
+      window.open(`https://api.whatsapp.com/send?phone=6281234567890&text=${encodeURIComponent(text)}`, '_blank');
+    }
+  </script>
+
+  <!-- ========================================================================
+       MODAL POPUP INTERAKTIF: TOLONG-IN AJA (3 PILIHAN LAYANAN)
+       ======================================================================== -->
+  <div id="modal-tolongin" class="fixed inset-0 z-50 hidden flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-sm transition-all duration-300" onclick="handleModalBackdropClick(event)">
+    <div class="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-pink-200 overflow-hidden flex flex-col max-h-[92vh] animate-in fade-in zoom-in-95 duration-200" onclick="event.stopPropagation()">
+      
+      <!-- Modal Header -->
+      <div class="p-5 sm:p-6 bg-gradient-to-r from-blue-600 via-sky-600 to-indigo-700 text-white flex items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-2xl border border-white/40 shadow-inner">
+            <i class="fa-solid fa-handshake-angle text-sky-200"></i>
+          </div>
+          <div>
+            <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-white/20 border border-white/40 text-sky-100">
+              Layanan Bantuan &amp; Akses Riset
+            </span>
+            <h3 class="text-xl sm:text-2xl font-heading font-black tracking-tight mt-0.5">
+              Tolong-IN Aja
+            </h3>
+            <p class="text-xs text-sky-100/90 font-medium">Pilih salah satu layanan bantuan yang Anda butuhkan di bawah ini:</p>
+          </div>
+        </div>
+        <button onclick="closeTolonginModal()" class="w-9 h-9 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center text-base transition-colors cursor-pointer shrink-0">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Tab Navigation / Filter -->
+      <div class="flex border-b border-slate-200 bg-slate-50/80 px-4 sm:px-6 pt-3 gap-2 overflow-x-auto text-xs font-bold">
+        <button id="tab-btn-download" onclick="switchTolonginTab('download')" class="tab-btn-tolongin px-3.5 py-2.5 rounded-t-xl border-b-2 border-blue-600 text-blue-700 bg-white font-black flex items-center gap-1.5 transition-colors cursor-pointer shrink-0">
+          <i class="fa-solid fa-file-pdf"></i>
+          <span>1. Unduh Paper (Rp3rb)</span>
+        </button>
+        <button id="tab-btn-akun" onclick="switchTolonginTab('akun')" class="tab-btn-tolongin px-3.5 py-2.5 rounded-t-xl border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-bold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0">
+          <i class="fa-solid fa-key"></i>
+          <span>2. Akun Riset Tahunan</span>
+        </button>
+        <button id="tab-btn-konsul" onclick="switchTolonginTab('konsul')" class="tab-btn-tolongin px-3.5 py-2.5 rounded-t-xl border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-bold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0">
+          <i class="fa-solid fa-user-graduate"></i>
+          <span>3. Bimbingan Konsul-IN</span>
+        </button>
+      </div>
+
+      <!-- Modal Body (Tab Content) -->
+      <div class="p-5 sm:p-7 overflow-y-auto space-y-6">
+        
+        <!-- PANEL 1: UNDUH PAPER NON-OPEN ACCESS -->
+        <div id="tab-panel-download" class="tolongin-panel">
+          <div class="p-4 rounded-2xl bg-blue-50/70 border border-blue-200 flex items-start gap-3">
+            <i class="fa-solid fa-circle-info text-blue-600 mt-1 text-base"></i>
+            <div class="text-xs text-slate-700 leading-relaxed">
+              <p class="font-bold text-blue-900 text-sm mb-1">Jasa Download Paper Non-Open Access</p>
+              Bantuan unduh teks lengkap (<em>Full PDF</em>) dari penerbit <strong>Springer</strong>, <strong>Taylor &amp; Francis</strong>, <strong>Wiley</strong>, dan <strong>Elsevier</strong> (ScienceDirect).
+              <div class="mt-2 inline-block px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-black text-xs shadow-sm">
+                Biaya: Rp3.000 / Paper
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-4 mt-5">
+            <div>
+              <label class="block text-xs font-black text-slate-800 uppercase tracking-wider mb-1.5">
+                Link URL atau DOI Paper
+              </label>
+              <input type="text" id="input-paper-doi" placeholder="Contoh: https://doi.org/10.1016/... atau link artikel Springer/Wiley" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div>
+              <label class="block text-xs font-black text-slate-800 uppercase tracking-wider mb-1.5">
+                Catatan Tambahan (Opsional)
+              </label>
+              <input type="text" id="input-paper-notes" placeholder="Judul artikel / tahun terbit / email pengiriman file" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <button onclick="submitOrderDownload()" class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all cursor-pointer">
+              <i class="fa-brands fa-whatsapp text-emerald-300 text-lg"></i>
+              <span>Kirim Permintaan Unduh via WhatsApp</span>
+            </button>
+            <p class="text-[10.5px] text-slate-500 text-center">
+              Admin akan segera mengirimkan file PDF naskah lengkap melalui WhatsApp setelah verifikasi transfer Rp3.000.
+            </p>
+          </div>
+        </div>
+
+        <!-- PANEL 2: LANGGANAN AKUN RISET TAHUNAN -->
+        <div id="tab-panel-akun" class="tolongin-panel hidden">
+          <div class="p-4 rounded-2xl bg-sky-50/70 border border-sky-200 flex items-start gap-3">
+            <i class="fa-solid fa-key text-sky-600 mt-1 text-base"></i>
+            <div class="text-xs text-slate-700 leading-relaxed">
+              <p class="font-bold text-sky-900 text-sm mb-1">Langganan Akun Riset Pertahun</p>
+              Akses akun resmi bergaransi 1 tahun penuh untuk kebutuhan riset intensif dosen, mahasiswa S2/S3, dan peneliti.
+            </div>
+          </div>
+
+          <div class="space-y-3 mt-4">
+            <label class="block text-xs font-black text-slate-800 uppercase tracking-wider">Pilih Jenis Akun yang Diminati:</label>
+            
+            <label class="flex items-start gap-3 p-3.5 rounded-2xl border-2 border-slate-200 hover:border-sky-500 cursor-pointer transition-all">
+              <input type="checkbox" id="akun-gemini" value="Gemini Advanced" class="mt-1 accent-sky-600" checked>
+              <div>
+                <p class="text-xs font-black text-slate-900">Gemini Advanced AI</p>
+                <p class="text-[11px] text-slate-600">Model penalaran 1M+ konteks, analisis dokumen riset besar, dan sintesis literatur otomatis.</p>
+              </div>
+            </label>
+
+            <label class="flex items-start gap-3 p-3.5 rounded-2xl border-2 border-slate-200 hover:border-sky-500 cursor-pointer transition-all">
+              <input type="checkbox" id="akun-scopus" value="Scopus Elsevier" class="mt-1 accent-sky-600" checked>
+              <div>
+                <p class="text-xs font-black text-slate-900">Scopus Database (Elsevier)</p>
+                <p class="text-[11px] text-slate-600">Akses pencarian dokumen global, metric sitasi, H-Index penulis, dan ekspor data bibtex/CSV.</p>
+              </div>
+            </label>
+
+            <label class="flex items-start gap-3 p-3.5 rounded-2xl border-2 border-slate-200 hover:border-sky-500 cursor-pointer transition-all">
+              <input type="checkbox" id="akun-wos" value="Web of Science (WoS)" class="mt-1 accent-sky-600" checked>
+              <div>
+                <p class="text-xs font-black text-slate-900">Web of Science (WoS Clarivate)</p>
+                <p class="text-[11px] text-slate-600">Akses indeks jurnal bereputasi Core Collection, JCR Impact Factor, dan pemetaan referensi ilmiah.</p>
+              </div>
+            </label>
+
+            <button onclick="submitOrderAkun()" class="w-full mt-4 py-3 px-4 rounded-xl bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-700 hover:to-blue-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all cursor-pointer">
+              <i class="fa-brands fa-whatsapp text-emerald-300 text-lg"></i>
+              <span>Tanya Ketersediaan &amp; Biaya Langganan via WhatsApp</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- PANEL 3: KONSUL-IN (KONSULTASI AKADEMIK) -->
+        <div id="tab-panel-konsul" class="tolongin-panel hidden">
+          <div class="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-200 flex items-start gap-3">
+            <i class="fa-solid fa-user-graduate text-indigo-600 mt-1 text-base"></i>
+            <div class="text-xs text-slate-700 leading-relaxed">
+              <p class="font-bold text-indigo-900 text-sm mb-1">Konsul-IN: Jasa Bimbingan &amp; Konsultasi Riset</p>
+              Pendampingan metodologi, review naskah ilmiah, dan validasi instrumen bersama konsultan riset profesional.
+            </div>
+          </div>
+
+          <div class="space-y-4 mt-5">
+            <div>
+              <label class="block text-xs font-black text-slate-800 uppercase tracking-wider mb-1.5">
+                Topik Konsultasi yang Diinginkan:
+              </label>
+              <select id="select-konsul-topik" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 font-semibold">
+                <option value="Artikel Ilmiah (Jurnal Sinta / Scopus)">Artikel Ilmiah (Jurnal Sinta / Scopus Q1-Q4)</option>
+                <option value="Tesis (Program Magister S2)">Tesis (Program Magister S2)</option>
+                <option value="Disertasi (Program Doktoral S3)">Disertasi (Program Doktoral S3)</option>
+                <option value="Instrumen Penelitian (Konstruksi, Rasch & CFA)">Instrumen Penelitian (Konstruksi Skala, Rasch &amp; CFA)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-black text-slate-800 uppercase tracking-wider mb-1.5">
+                Kendala atau Pertanyaan Utama Anda:
+              </label>
+              <textarea id="input-konsul-kendala" rows="3" placeholder="Ceritakan singkat judul atau kendala riset yang dihadapi..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+            </div>
+
+            <button onclick="submitOrderKonsul()" class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all cursor-pointer">
+              <i class="fa-brands fa-whatsapp text-emerald-300 text-lg"></i>
+              <span>Jadwalkan Konsultasi via WhatsApp</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

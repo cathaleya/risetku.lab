@@ -1,0 +1,28 @@
+services:
+  risetku-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: risetku-app
+    restart: unless-stopped
+    ports:
+      # KEAMANAN TINGGI (ANTI-RANSOMWARE & ISOLASI PORT):
+      # Bind port 8000 HANYA ke localhost (127.0.0.1).
+      # Port ini TIDAK dibuka ke publik (0.0.0.0), hanya bisa diakses lewat Nginx Reverse Proxy internal VPS.
+      - "127.0.0.1:8000:8000"
+    environment:
+      - NODE_ENV=production
+      - PORT=8000
+    security_opt:
+      # Mencegah eskalasi hak akses (privilege escalation) jika terjadi eksploitasi
+      - no-new-privileges:true
+    volumes:
+      # Hanya folder penyimpanan dokumen terjemahan sementara yang dipersistensikan
+      - risetku_doc_in:/app/Penerjemah_Dokumen/Masukan
+      - risetku_doc_out:/app/Penerjemah_Dokumen/Hasil_Terjemahan
+
+volumes:
+  risetku_doc_in:
+    driver: local
+  risetku_doc_out:
+    driver: local

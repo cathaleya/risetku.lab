@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Telaah SLR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand" style="display:flex;align-items:center;gap:6px">
+    <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="brand-name">SLR-In<em>Aja</em></span>
+    <small style="font-size:0.65rem;background:#fef3c7;color:#92400e;border:1px solid #fde68a;padding:2px 7px;border-radius:999px;font-weight:700">RisetKu</small>
+  </div>
+  <nav class="tabs" id="tabs" aria-label="Menu utama">
+    <button data-view="project">Proyek &amp; Kriteria</button>
+    <button data-view="import">Impor</button>
+    <button data-view="work">Skrining &amp; Ekstraksi</button>
+    <button data-view="meta" id="tabMeta">Meta-analisis</button>
+    <button data-view="quality">Penilaian kualitas</button>
+    <button data-view="frameworks">Kerangka konseptual</button>
+    <button data-view="biblio">Bibliometrik</button>
+    <button data-view="report">Laporan</button>
+    <button data-view="prisma">PRISMA 2020</button>
+    <button data-view="checklist">Checklist</button>
+    <button data-view="export">Ekspor</button>
+  </nav>
+  <div class="top-right" style="display:flex;align-items:center;gap:6px">
+    <span id="licBadge" style="display:none;align-items:center;gap:4px;padding:3px 10px;background:#fef3c7;border:1px solid #fde68a;color:#92400e;border-radius:999px;font-size:11px;font-weight:700">
+      <span>🛡️</span>
+      <span id="licBadgeText">Lisensi Aktif</span>
+      <button type="button" id="btnDeactLic" style="background:none;border:none;color:#991b1b;cursor:pointer;font-size:10px;text-decoration:underline;margin-left:4px" title="Ganti kunci">(Ganti)</button>
+    </span>
+    <a href="/" style="text-decoration:none;display:inline-flex;align-items:center;gap:4px;padding:3px 10px;background:#f1f5f9;border:1px solid #cbd5e1;color:#334155;border-radius:8px;font-size:11px;font-weight:700">
+      <span>←</span>
+      <span>Portal RisetKu</span>
+    </a>
+    <span class="type-pill" id="typePill">—</span>
+    <label class="as-wrap" title="Mode blind: panel reviewer lain ditutup sampai keduanya memutuskan">
+      <span>Bekerja sebagai</span>
+      <select id="asSelect">
+        <option value="both">Kedua reviewer</option>
+        <option value="r1">Reviewer 1</option>
+        <option value="r2">Reviewer 2</option>
+      </select>
+    </label>
+    <span class="save-state" id="saveState">Memuat…</span>
+  </div>
+</header>
+
+<div class="sample-banner" id="sampleBanner" hidden>
+  <span><b>Data contoh.</b> Rekaman di proyek ini fiktif, untuk memperlihatkan cara kerja aplikasi.</span>
+  <button class="btn sm" data-action="new-empty">Mulai proyek kosong</button>
+</div>
+
+<main id="main">
+  <section class="view" id="view-project"></section>
+  <section class="view" id="view-import"></section>
+  <section class="view view-work" id="view-work"></section>
+  <section class="view" id="view-meta"></section>
+  <section class="view" id="view-quality"></section>
+  <section class="view" id="view-frameworks"></section>
+  <section class="view" id="view-biblio"></section>
+  <section class="view" id="view-report"></section>
+  <section class="view" id="view-prisma"></section>
+  <section class="view" id="view-checklist"></section>
+  <section class="view" id="view-export"></section>
+</main>
+
+<div class="selbar" id="selbar" hidden>
+  <span class="selbar-label sb-ex">Kutip ke:</span>
+  <button class="btn sm r1 sb-ex" data-action="quote" data-rv="r1">Reviewer 1</button>
+  <button class="btn sm r2 sb-ex" data-action="quote" data-rv="r2">Reviewer 2</button>
+  <button class="btn sm sb-ap" data-action="ap-evidence" title="Tempel teks yang diblok sebagai bukti di butir MMAT yang terakhir Anda isi" hidden>Jadikan bukti</button>
+  <span class="selbar-sep"></span>
+  <button class="btn sm ghost" data-action="sel-translate" title="Terjemahkan teks yang diblok ke Bahasa Indonesia">Terjemahkan</button>
+</div>
+<div class="tr-pop" id="trPop" hidden role="dialog" aria-label="Terjemahan"></div>
+<div class="tooltip" id="tooltip" hidden></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<input type="file" id="hiddenFile" hidden>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+  if (window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+</script>
+<script src="js/lib.js"></script>
+<script src="js/store.js"></script>
+<script src="js/criteria.js"></script>
+<script src="js/lang.js"></script>
+<script src="js/sources.js"></script>
+<script src="js/parsers.js"></script>
+<script src="js/core.js"></script>
+<script src="js/prisma.js"></script>
+<script src="js/meta.js"></script>
+<script src="js/views.js"></script>
+<script src="js/work.js"></script>
+<script src="js/board.js"></script>
+<script src="js/suggest.js"></script>
+<script src="js/translate.js"></script>
+<script src="js/settingsio.js"></script>
+<script src="js/decimport.js"></script>
+<script src="js/appraisal.js"></script>
+<script src="js/frameworks.js"></script>
+<!-- Modal Aktivasi Lisensi SLR-In Aja -->
+<div id="licModal" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.85);backdrop-filter:blur(6px);z-index:999999;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#ffffff;border-radius:20px;max-width:440px;width:100%;box-shadow:0 25px 50px -12px rgba(0,0,0,0.35);overflow:hidden;border:1px solid #e2e8f0;font-family:'IBM Plex Sans',sans-serif">
+    <div style="background:linear-gradient(135deg,#b45309,#d97706);color:#ffffff;padding:24px;text-align:center">
+      <div style="width:48px;height:48px;background:rgba(255,255,255,0.2);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 10px auto;border:1px solid rgba(255,255,255,0.4)">
+        📚
+      </div>
+      <h3 style="margin:0;font-size:18px;font-weight:800;letter-spacing:-0.5px">Aktivasi Lisensi SLR-In Aja</h3>
+      <p style="margin:4px 0 0 0;font-size:12px;color:#fef3c7">PRISMA Systematic Review &bull; Ekosistem RisetKu</p>
+    </div>
+
+    <form id="licForm" style="padding:22px 24px">
+      <div style="margin-bottom:12px">
+        <label style="display:block;font-size:12px;font-weight:700;color:#334155;margin-bottom:4px">Nama Lengkap Peneliti:</label>
+        <input type="text" id="licName" placeholder="Nama lengkap Anda..." required style="width:100%;padding:10px 12px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:13px;font-weight:600;box-sizing:border-box">
+      </div>
+
+      <div style="margin-bottom:12px">
+        <label style="display:block;font-size:12px;font-weight:700;color:#334155;margin-bottom:4px">Email Kampus / Peneliti:</label>
+        <input type="email" id="licEmail" placeholder="nama@kampus.ac.id" required style="width:100%;padding:10px 12px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:13px;box-sizing:border-box">
+      </div>
+
+      <div style="margin-bottom:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <label style="font-size:12px;font-weight:700;color:#334155">Kunci Lisensi SLR-In Aja:</label>
+          <span style="color:#d97706;font-size:11px;font-weight:700">Wajib Diisi</span>
+        </div>
+        <input type="text" id="licKey" placeholder="SLR-30D-XXXX-XXXX" required style="width:100%;padding:10px 12px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:14px;font-family:monospace;font-weight:800;letter-spacing:1px;text-transform:uppercase;box-sizing:border-box">
+      </div>
+
+      <p id="licErr" style="color:#dc2626;font-size:12px;margin:0 0 12px 0;display:none;font-weight:600"></p>
+
+      <button type="submit" style="width:100%;padding:12px;font-size:14px;background:linear-gradient(135deg,#d97706,#b45309);font-weight:800;border:none;border-radius:10px;cursor:pointer;color:#ffffff;box-shadow:0 4px 12px rgba(217,119,6,0.3)">
+        🔑 Aktivasi Lisensi &amp; Buka Skrining SLR
+      </button>
+
+      <div style="margin-top:16px;padding-top:14px;border-top:1px dashed #cbd5e1;text-align:center">
+        <p style="font-size:11px;color:#475569;margin:0 0 8px 0;font-weight:600">Belum memiliki Kunci Lisensi SLR-In Aja?</p>
+        <a id="btnRequestLic" href="https://wa.me/6281234567890?text=Halo%20Pemilik%2FAdmin%20RisetKu%2C%20saya%20ingin%20meminta%20Kunci%20Lisensi%20SLR-In%20Aja." target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#10b981;color:#ffffff;text-decoration:none;border-radius:10px;padding:10px;font-size:12px;font-weight:700;box-shadow:0 4px 12px rgba(16,185,129,0.2)">
+          <span>💬 Minta Kunci Lisensi ke Pemilik (WhatsApp)</span>
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="js/biblio.js"></script>
+<script src="js/inclusion.js"></script>
+<script src="js/license.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

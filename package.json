@@ -1,0 +1,25 @@
+{
+  "name": "risetku-unified-ecosystem",
+  "version": "2.0.0",
+  "description": "RisetKu Lab - Ekosistem Terpadu Aplikasi Riset & E-Asesmen Akademik",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "risetku",
+    "madel5c",
+    "cekin",
+    "slr",
+    "prisma2020",
+    "terjemahin",
+    "analisisaja",
+    "psikometri"
+  ],
+  "author": "Dr. Bima RisetKu Lab",
+  "license": "ISC",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
