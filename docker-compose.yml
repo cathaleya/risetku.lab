@@ -6,10 +6,9 @@ services:
     container_name: risetku-app
     restart: unless-stopped
     ports:
-      # KEAMANAN TINGGI (ANTI-RANSOMWARE & ISOLASI PORT):
-      # Bind port 8000 HANYA ke localhost (127.0.0.1).
-      # Port ini TIDAK dibuka ke publik (0.0.0.0), hanya bisa diakses lewat Nginx Reverse Proxy internal VPS.
-      - "127.0.0.1:8000:8000"
+      # KEAMANAN TINGGI & TIDAK BENTROK DENGAN MADEL5C:
+      # Host port memakai 8080 agar MADEL-5C (di port 8000) tetap berjalan normal.
+      - "127.0.0.1:8080:8000"
     environment:
       - NODE_ENV=production
       - PORT=8000
