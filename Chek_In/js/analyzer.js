@@ -656,6 +656,41 @@
       });
     }
 
+    // Evaluasi Proporsionalitas Jumlah Kata Per Bab (Acuan Panduan hal. 2 & Konvensi Pascasarjana)
+    const distList = (R.DISTRIBUSI_BAB && R.DISTRIBUSI_BAB[lengkap ? 'lengkap' : 'proposal']) || [];
+    for (const dist of distList) {
+      const ch = S.chapters.find((c) => c.num === dist.num);
+      const [kMin, kMax] = (dist[jenjangId] || [Math.round(wmin * dist.pct[0] / 100), Math.round(wmax * dist.pct[1] / 100)]);
+      if (ch) {
+        const chPct = bodyWords ? Math.round((ch.words / bodyWords) * 100) : 0;
+        let st = 'ok';
+        let detail = 'Terbaca ' + ch.words.toLocaleString('id-ID') + ' kata (' + chPct + '% dari total isi). Rentang acuan pascasarjana: ' + kMin.toLocaleString('id-ID') + '–' + kMax.toLocaleString('id-ID') + ' kata (' + dist.pct[0] + '%–' + dist.pct[1] + '%).';
+        let saran = '';
+        if (ch.words < kMin * 0.7) {
+          st = 'warn';
+          saran = 'Bab ' + dist.rom + ' cenderung terlalu ringkas (' + ch.words.toLocaleString('id-ID') + ' kata). Disarankan diperdalam hingga mencapai kisaran ' + kMin.toLocaleString('id-ID') + '–' + kMax.toLocaleString('id-ID') + ' kata.';
+        } else if (ch.words > kMax * 1.35) {
+          st = 'info';
+          detail += ' (Bab ini sangat ekstensif/mendalam melampaui rata-rata acuan).';
+        }
+        add('kuantitas', {
+          nama: 'Estimasi kata Bab ' + dist.rom + ' (' + dist.nama + ')',
+          hal: '2',
+          status: st,
+          detail,
+          saran,
+        });
+      } else if (!isSingleBab) {
+        add('kuantitas', {
+          nama: 'Estimasi kata Bab ' + dist.rom + ' (' + dist.nama + ')',
+          hal: '2',
+          status: 'info',
+          detail: 'Acuan rekomendasi: ' + kMin.toLocaleString('id-ID') + '–' + kMax.toLocaleString('id-ID') + ' kata (' + dist.pct[0] + '%–' + dist.pct[1] + '% isi). Bab belum terdeteksi.',
+          saran: '',
+        });
+      }
+    }
+
     // ===== Rujukan & sitasi =====
     const refs = parseReferences(S.refs, parsed.kind);
     const cites = extractCitations(S.body);
@@ -750,7 +785,7 @@
     // ===== Format =====
     formatChecks(parsed, S, add, opts);
 
-    return { S, groups, jenisId, jenjangId, jenjangPasti, tahap, det, judul, bodyWords, babResults, refInfo, koherensi, lanjut, kind: parsed.kind, numPages: parsed.numPages, scanned: parsed.scanned, isSingleBab, singleBabNum, skipAwal: !!opts.skipAwal, skipLampiran: !!opts.skipLampiran };
+    return { S, groups, jenisId, jenjangId, jenjangPasti, tahap, det, judul, bodyWords, babResults, refInfo, koherensi, lanjut, kind: parsed.kind, numPages: parsed.numPages, scanned: parsed.scanned, isSingleBab, singleBabNum, skipAwal: !!opts.skipAwal, skipLampiran: !!opts.skipLampiran, distribusiBab: distList };
   }
 
   // ---------------------------------------------------------- koherensi

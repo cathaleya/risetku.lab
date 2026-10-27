@@ -188,12 +188,20 @@
           <p>Unggah berkas tesis atau disertasi di panel kiri, lalu klik <b>Periksa naskah</b>. Baru pertama kali? Baca <a href="index.html#panduan">Panduan penggunaan</a> dulu. Laporan akan muncul di sini dengan bagian berikut:</p>
           <ul class="what">
             <li><b>Catatan perbaikan</b><span>Semua yang belum ada atau perlu dicek, lengkap dengan halaman panduan.</span></li>
-            <li><b>Per bab</b><span>Temuan dan statistik (kata, subjudul, tabel, gambar, sitasi) dipisah per bab.</span></li>
+            <li><b>Per bab &amp; distribusi kata</b><span>Temuan, statistik, dan evaluasi rentang kata ideal Bab I–V sesuai panduan pascasarjana.</span></li>
             <li><b>Koherensi</b><span>Judul dan rumusan masalah dilacak ke tujuan, Bab II, Bab III, hasil, dan simpulan.</span></li>
             <li><b>Dimensi &amp; paradigma</b><span>Dimensi ke definisi operasional, kisi-kisi, hasil; paradigma ↔ pendekatan ↔ grand theory.</span></li>
             <li><b>Analisis data &amp; tabel</b><span>Teknik Bab III ↔ hasil, nilai statistik ↔ kriteria, angka teks ↔ tabel.</span></li>
             <li><b>Masukan AI</b><span>Telaah substansi per bab dengan Gemini, ChatGPT, atau AI lain milik Anda.</span></li>
           </ul>
+          <div class="guide-box-callout" style="margin-top:16px">
+            <b style="color:var(--navy);font-size:0.86rem">📌 Standar Kuantitas Kata Naskah Pascasarjana UNJ 2025 (hal. 2):</b>
+            <div style="font-size:0.82rem;color:#334155;margin-top:4px;line-height:1.5">
+              • <b>Total Kata Isi:</b> Tesis S2 (30.000–50.000 kata), Disertasi S3 (50.000–80.000 kata), Proposal (15.000–20.000 kata).<br>
+              • <b>Proporsi Pembahasan:</b> Mandat resmi sekitar ±40% dari total isi naskah.<br>
+              • <b>Rekomendasi Proporsi Bab:</b> Bab I (10–15%), Bab II (20–25%), Bab III (10–15%), Bab IV (40–45%), dan Bab V (5–8%).
+            </div>
+          </div>
         </section>
         <div id="filled" class="filled" hidden>
           <section class="summary card-timbul" aria-label="Ringkasan">
@@ -202,6 +210,7 @@
               <h2 id="sumTitle"></h2>
               <dl class="facts" id="facts"></dl>
               <div class="bars" id="bars"></div>
+              <div id="miniBab"></div>
               <div class="dl" id="dl">
                 <button class="btn primary" id="dlDoc"><svg class="ico" style="width:16px;height:16px"><use href="#i-down"/></svg> Laporan revisi (.doc)</button>
                 <button class="btn" id="dlTxt">Catatan (.txt)</button>

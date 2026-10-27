@@ -102,6 +102,7 @@
     if ($('empty')) $('empty').hidden = false;
     if ($('alerts')) $('alerts').innerHTML = '';
     if ($('panel')) $('panel').innerHTML = '';
+    if ($('miniBab')) $('miniBab').innerHTML = '';
     try {
       sessionStorage.removeItem('cekin-last-file');
       sessionStorage.removeItem('cekin-last-result');
@@ -155,9 +156,10 @@
     if (parsed && parsed.multiFiles && parsed.multiFiles.length > 1) {
       facts.unshift(['Berkas digabung', parsed.multiFiles.length + ' file (' + parsed.multiFiles.join(', ') + ')']);
     }
-    $('facts').innerHTML = facts.map(([k, v]) => '<div><dt>' + esc(k) + '</dt><dd>' + esc(v) + '</dd></div>').join('');
+    $('facts').innerHTML = facts.map(([k, v]) => '<div class="fact-item"><dt>' + esc(k) + '</dt><dd>' + esc(v) + '</dd></div>').join('');
     $('bars').innerHTML = Object.keys(GROUP).filter((g) => scores[g] != null).map((g) =>
       '<div class="bar"><div class="lbl"><span>' + GROUP[g] + '</span><b>' + scores[g] + '%</b></div><div class="track"><div class="fill" style="width:' + scores[g] + '%;background:' + tone(scores[g]) + '"></div></div></div>').join('');
+    if ($('miniBab')) $('miniBab').innerHTML = miniBabDistribution();
 
     const al = [];
     if (r.scanned) al.push(['miss', 'PDF ini hasil pindai (gambar) sehingga teksnya tidak terbaca. Unggah .docx atau PDF hasil ekspor dari Word.']);
@@ -249,7 +251,7 @@
     else if (tab === 'ai') { P.innerHTML = aiTab(); bindAi(); }
     else if (tab === 'isi') P.innerHTML = legend() + list(g.isi, null, true);
     else if (tab === 'awal') P.innerHTML = legend() + list(g.awal, 'Bagian awal') + (g.lampiran.length ? list(g.lampiran, 'Lampiran') : '<p class="muted">Lampiran hanya diperiksa pada naskah lengkap.</p>');
-    else if (tab === 'rujukan') P.innerHTML = legend() + list(g.kuantitas, 'Kuantitas kata') + list(g.rujukan, 'Rujukan & sitasi') + refLists();
+    else if (tab === 'rujukan') P.innerHTML = legend() + distribusiBabTable(true) + list(g.kuantitas, 'Kuantitas kata') + list(g.rujukan, 'Rujukan & sitasi') + refLists();
     else if (tab === 'format') P.innerHTML = legend() + list(g.format, 'Format penulisan (hal. 3–4)');
     else P.innerHTML = outline();
   }
@@ -289,6 +291,128 @@
     for (const m of ((it.nama || '') + ' ' + (it.lokasi || '')).matchAll(ROMAN_RE)) hits.add(m[1]);
     return hits.size ? [...hits] : ['umum'];
   }
+  function miniBabDistribution() {
+    const distList = result.distribusiBab || (R.DISTRIBUSI_BAB && R.DISTRIBUSI_BAB[result.tahap === 'proposal' ? 'proposal' : 'lengkap']) || [];
+    if (!distList || !distList.length || !result.S.chapters.length) return '';
+    const bodyWords = Math.max(1, result.bodyWords || 0);
+    const jenjangId = result.jenjangId || 'tesis';
+
+    const segments = distList.map((d) => {
+      const ch = result.S.chapters.find((c) => c.num === d.num);
+      const words = ch ? ch.words : 0;
+      const pct = Math.round((words / bodyWords) * 100);
+      const [kMin, kMax] = d[jenjangId] || [0, 0];
+      const statusClass = !ch ? 'miss' : (words < kMin * 0.75 ? 'warn' : (words <= kMax * 1.25 ? 'ok' : 'info'));
+      return '<div class="mini-bab-seg ' + statusClass + '" style="flex:' + Math.max(pct, 6) + '" title="Bab ' + d.rom + ' (' + esc(d.nama) + '): ' + fmt(words) + ' kata (' + pct + '% isi) · Target: ' + fmt(kMin) + '–' + fmt(kMax) + ' kata">' +
+        '<span>Bab ' + d.rom + '</span><b>' + (words ? pct + '%' : '–') + '</b></div>';
+    }).join('');
+
+    return '<div class="mini-bab-wrap">' +
+      '<div class="mini-bab-header">' +
+        '<small>Distribusi Kata Per Bab vs Acuan</small>' +
+        '<small class="mini-bab-legend"><span class="dot-legend ok"></span>Sesuai <span class="dot-legend warn"></span>Ringkas <span class="dot-legend info"></span>Mendalam <span class="dot-legend miss"></span>Belum Ada</small>' +
+      '</div>' +
+      '<div class="mini-bab-bar">' + segments + '</div>' +
+    '</div>';
+  }
+
+  function distribusiBabTable(showNote) {
+    const distList = result.distribusiBab || (R.DISTRIBUSI_BAB && R.DISTRIBUSI_BAB[result.tahap === 'proposal' ? 'proposal' : 'lengkap']) || [];
+    if (!distList || !distList.length) return '';
+    const jenjangId = result.jenjangId || 'tesis';
+    const bodyWords = result.bodyWords || 0;
+    const chapters = result.S.chapters || [];
+    const isLeng = result.tahap !== 'proposal';
+
+    let rowsHtml = '';
+    distList.forEach((d) => {
+      const ch = chapters.find((c) => c.num === d.num);
+      const [kMin, kMax] = d[jenjangId] || [0, 0];
+      const actualWords = ch ? ch.words : 0;
+      const actualPct = bodyWords ? Math.round((actualWords / bodyWords) * 100) : 0;
+
+      let badgeHtml = '';
+      if (!ch) {
+        badgeHtml = '<span class="prop-badge miss">Belum Terdeteksi</span>';
+      } else if (actualWords < kMin * 0.75) {
+        badgeHtml = '<span class="prop-badge warn">Terlalu Ringkas ⚠️</span>';
+      } else if (actualWords >= kMin * 0.75 && actualWords <= kMax * 1.25) {
+        badgeHtml = '<span class="prop-badge ok">Proporsional ✓</span>';
+      } else {
+        badgeHtml = '<span class="prop-badge info">Mendalam / Ekstensif</span>';
+      }
+
+      const barWidth = Math.min(100, Math.round((actualWords / Math.max(kMax, 1)) * 100));
+      const barColor = actualWords < kMin * 0.75 ? 'var(--warn)' : actualWords <= kMax * 1.25 ? 'var(--ok)' : 'var(--info)';
+
+      rowsHtml += '<tr>' +
+        '<td style="font-weight:900;color:var(--navy);white-space:nowrap;font-size:0.92rem">Bab ' + d.rom + '</td>' +
+        '<td>' +
+          '<div style="font-weight:800;color:var(--ink)">' + esc(d.nama) + '</div>' +
+          '<small style="color:var(--muted);font-size:0.75rem;display:block;margin-top:3px;line-height:1.4">' + esc(d.deskripsi) + '</small>' +
+        '</td>' +
+        '<td style="text-align:center;font-weight:800;color:var(--navy);white-space:nowrap">' +
+          d.pct[0] + '% – ' + d.pct[1] + '%' +
+          '<small style="color:var(--muted);font-weight:400;display:block">ideal: ±' + d.idealPct + '%</small>' +
+        '</td>' +
+        '<td style="text-align:center;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap">' +
+          fmt(kMin) + ' – ' + fmt(kMax) +
+          '<small style="color:var(--muted);font-weight:400;display:block">kata</small>' +
+        '</td>' +
+        '<td style="text-align:center;font-variant-numeric:tabular-nums;min-width:130px">' +
+          (ch ? '<b style="font-size:0.95rem;color:var(--navy)">' + fmt(actualWords) + ' kata</b><br><span style="font-size:0.78rem;font-weight:800;color:var(--accent)">(' + actualPct + '% dari isi)</span>' : '<span style="color:var(--muted)">–</span>') +
+          (ch ? '<div style="height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden;margin-top:5px" title="' + actualPct + '% dari total isi"><div style="height:100%;width:' + barWidth + '%;background:' + barColor + ';border-radius:3px"></div></div>' : '') +
+        '</td>' +
+        '<td style="text-align:center;white-space:nowrap">' + badgeHtml + '</td>' +
+      '</tr>';
+    });
+
+    const noteHtml = showNote ? (
+      '<div class="guide-box-callout">' +
+        '<div style="display:flex;align-items:flex-start;gap:12px">' +
+          '<div style="font-size:1.4rem;line-height:1;background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;width:34px;height:34px;border-radius:8px;display:grid;place-items:center;flex:none">📚</div>' +
+          '<div>' +
+            '<b style="font-size:0.88rem;color:var(--navy)">Ketentuan Resmi Buku Panduan Pascasarjana UNJ 2025 (hal. 2):</b>' +
+            '<div style="margin:6px 0 0;font-size:0.82rem;color:#334155;line-height:1.6">' +
+              '<div>• <b>Ketentuan Total Kata Isi (Bab I–V):</b> ' + (jenjangId === 'tesis' ? 'Tesis S2 (30.000 – 50.000 kata)' : 'Disertasi S3 (50.000 – 80.000 kata)') + ' untuk naskah lengkap, atau 15.000 – 20.000 kata untuk naskah proposal (di luar bagian awal &amp; lampiran).</div>' +
+              '<div>• <b>Proporsi Pembahasan (Bab IV):</b> Panduan mewajibkan porsi pembahasan berkisar <b>±40% dari total isi naskah</b>.</div>' +
+              '<div>• <b>Mengapa per bab berupa rentang rekomendasi?</b> Panduan sengaja tidak mengunci angka kaku per bab agar metodologi (kuantitatif, kualitatif, R&amp;D) tetap leluasa. Namun secara konvensi akademik pascasarjana, naskah tidak boleh timpang sehingga proporsi Bab I (10–15%), Bab II (20–25%), Bab III (10–15%), Bab IV (40–45%), dan Bab V (5–8%) menjadi acuan keseimbangan yang sehat.</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>'
+    ) : '';
+
+    return '<div class="distribusi-card">' +
+      '<div class="distribusi-head">' +
+        '<div>' +
+          '<span class="eyebrow" style="margin-bottom:6px"><i></i> Pedoman Proporsi &amp; Distribusi Kata Per Bab</span>' +
+          '<h3 style="font-size:1.05rem;font-weight:900;color:var(--navy);margin:2px 0 0">Distribusi Estimasi Kata Per Bab (' + (jenjangId === 'tesis' ? 'Tesis S2' : 'Disertasi S3') + ' · ' + (isLeng ? 'Naskah Lengkap' : 'Proposal') + ')</h3>' +
+        '</div>' +
+        '<div style="text-align:right" class="distribusi-target">' +
+          '<span style="font-size:0.74rem;color:var(--muted);text-transform:uppercase;font-weight:700">Target Total Isi Naskah:</span><br>' +
+          '<b style="font-size:0.95rem;color:var(--accent)">' + (isLeng ? (jenjangId === 'tesis' ? '30.000 – 50.000 kata' : '50.000 – 80.000 kata') : '15.000 – 20.000 kata') + '</b>' +
+        '</div>' +
+      '</div>' +
+      '<div class="mx-wrap" style="margin-top:12px">' +
+        '<table class="mx bab-table-dist">' +
+          '<thead>' +
+            '<tr>' +
+              '<th scope="col" style="width:75px">Bab</th>' +
+              '<th scope="col">Fokus &amp; Nama Bab</th>' +
+              '<th scope="col" style="text-align:center;width:125px">Proporsi Acuan</th>' +
+              '<th scope="col" style="text-align:center;width:140px">Target Rekomendasi</th>' +
+              '<th scope="col" style="text-align:center;width:160px">Realisasi Naskah</th>' +
+              '<th scope="col" style="text-align:center;width:145px">Status Proporsi</th>' +
+            '</tr>' +
+          '</thead>' +
+          '<tbody>' + rowsHtml + '</tbody>' +
+        '</table>' +
+      '</div>' +
+      noteHtml +
+    '</div>';
+  }
+
   function perBab() {
     const L = result.lanjut || {};
     const buckets = {};
@@ -296,9 +420,33 @@
     const sections = [['awal', 'Bagian awal', null]];
     for (const pb of L.perBab || []) sections.push([['', 'I', 'II', 'III', 'IV', 'V', 'VI'][pb.num], pb.label + (pb.judul ? ' · ' + pb.judul : ''), pb]);
     sections.push(['pustaka', 'Daftar pustaka', null], ['lampiran', 'Lampiran', null], ['umum', 'Umum (seluruh naskah & format)', null]);
-    const stats = (pb) => '<div class="babstats">' + [['Kata', fmt(pb.words) + ' (' + pb.pct + '%)'], ['Subjudul', pb.headings], ['Tabel', pb.tabel], ['Gambar', pb.gambar], ['Sitasi', pb.sitasi + ' (' + pb.sitasiUnik + ' unik)'], ['Sitasi / 1.000 kata', String(pb.per1000).replace('.', ',')]].map(([k, v]) => '<span><small>' + k + '</small><b>' + v + '</b></span>').join('') + '</div>';
+
+    const distList = result.distribusiBab || (R.DISTRIBUSI_BAB && R.DISTRIBUSI_BAB[result.tahap === 'proposal' ? 'proposal' : 'lengkap']) || [];
+    const stats = (pb) => {
+      const dist = distList.find((d) => d.num === pb.num);
+      const [kMin, kMax] = dist ? (dist[result.jenjangId || 'tesis'] || [0, 0]) : [0, 0];
+      const targetStr = kMin ? (fmt(kMin) + '–' + fmt(kMax) + ' kata (' + dist.pct[0] + '%–' + dist.pct[1] + '%)') : '–';
+      let statusBadge = '';
+      if (kMin) {
+        if (pb.words < kMin * 0.75) statusBadge = '<span class="prop-badge warn" style="margin-left:6px;font-size:0.65rem">Ringkas ⚠️</span>';
+        else if (pb.words <= kMax * 1.25) statusBadge = '<span class="prop-badge ok" style="margin-left:6px;font-size:0.65rem">Proporsional ✓</span>';
+        else statusBadge = '<span class="prop-badge info" style="margin-left:6px;font-size:0.65rem">Mendalam</span>';
+      }
+      return '<div class="babstats">' + [
+        ['Kata Naskah', fmt(pb.words) + ' (' + pb.pct + '%) ' + statusBadge],
+        ['Target Rekomendasi', targetStr],
+        ['Subjudul', pb.headings],
+        ['Tabel', pb.tabel],
+        ['Gambar', pb.gambar],
+        ['Sitasi', pb.sitasi + ' (' + pb.sitasiUnik + ' unik)'],
+        ['Sitasi / 1.000 kata', String(pb.per1000).replace('.', ',')]
+      ].map(([k, v]) => '<span><small>' + k + '</small><b>' + v + '</b></span>').join('') + '</div>';
+    };
+
     babCopy = {};
-    return '<div class="howto"><b>Cara memakai tab ini</b><ol><li>Baca catatan tiap bab; yang <b>Belum ada</b> paling penting.</li><li>Klik <b>Salin catatan bab</b> untuk menempel daftar revisi ke Word/WhatsApp, atau <b>Salin prompt AI</b> lalu tempel (Ctrl+V) di Gemini/ChatGPT untuk telaah isi bab.</li><li>Jawaban AI dapat ditempel di tab <b>Masukan AI</b> agar ikut ke laporan unduhan.</li></ol></div>' + legend() +
+    return '<div class="howto"><b>Cara memakai tab ini</b><ol><li>Baca catatan tiap bab; yang <b>Belum ada</b> paling penting.</li><li>Klik <b>Salin catatan bab</b> untuk menempel daftar revisi ke Word/WhatsApp, atau <b>Salin prompt AI</b> lalu tempel (Ctrl+V) di Gemini/ChatGPT untuk telaah isi bab.</li><li>Jawaban AI dapat ditempel di tab <b>Masukan AI</b> agar ikut ke laporan unduhan.</li></ol></div>' +
+      distribusiBabTable(true) +
+      legend() +
       sections.map(([k, title, pb]) => {
         const items = buckets[k] || [];
         if (!items.length && !pb) return '';

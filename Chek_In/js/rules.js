@@ -545,5 +545,54 @@
     { pola: /blogspot\.com|wordpress\.com|\bblogger\b|medium\.com|kompasiana/i, nama: 'Blog pribadi' },
   ];
 
-  global.RULES = { JENJANG, JENIS, BAGIAN_AWAL, BAGIAN_AKHIR, ISI_LAMPIRAN, KRITERIA_ISI, DETEKSI_JENIS, SUMBER_TERLARANG };
+  // Acuan Distribusi Kata Per Bab berdasarkan Panduan SPs UNJ 2025 (hal. 2)
+  // dan konvensi proporsionalitas baku naskah akademik pascasarjana.
+  const DISTRIBUSI_BAB = {
+    lengkap: [
+      {
+        num: 1, rom: 'I', nama: 'Pendahuluan', pct: [10, 15], idealPct: 12,
+        deskripsi: 'Latar belakang empiris & jurnal mutakhir, identifikasi & batasan masalah, rumusan masalah, tujuan, signifikansi.',
+        tesis: [3000, 6000], disertasi: [5000, 10000]
+      },
+      {
+        num: 2, rom: 'II', nama: 'Kajian Pustaka / Landasan Teori', pct: [20, 25], idealPct: 22,
+        deskripsi: 'Deskripsi konseptual variabel/fokus, grand theory, sintesis riset relevan (state of the art), kerangka berpikir, hipotesis.',
+        tesis: [6000, 12000], disertasi: [12000, 20000]
+      },
+      {
+        num: 3, rom: 'III', nama: 'Metodologi Penelitian', pct: [10, 15], idealPct: 13,
+        deskripsi: 'Desain penelitian, tempat & waktu, populasi & sampel/informan, instrumen mandiri, validitas/reliabilitas, prosedur analisis.',
+        tesis: [3000, 6000], disertasi: [5000, 10000]
+      },
+      {
+        num: 4, rom: 'IV', nama: 'Hasil dan Pembahasan', pct: [40, 45], idealPct: 42,
+        deskripsi: 'Penyajian temuan & pembahasan kritis mendalam (Mandat resmi Panduan hal. 2: pembahasan ±40% dari total isi).',
+        tesis: [12000, 22000], disertasi: [20000, 36000]
+      },
+      {
+        num: 5, rom: 'V', nama: 'Kesimpulan, Implikasi, dan Saran', pct: [5, 8], idealPct: 6,
+        deskripsi: 'Sintesis jawaban rumusan masalah, implikasi teoretik & praktis/kebijakan, rekomendasi operasional terukur.',
+        tesis: [1500, 3500], disertasi: [2500, 6000]
+      }
+    ],
+    proposal: [
+      {
+        num: 1, rom: 'I', nama: 'Pendahuluan', pct: [20, 25], idealPct: 22,
+        deskripsi: 'Latar belakang masalah empirik & teoritis, rumusan masalah, tujuan, dan signifikansi penelitian.',
+        tesis: [3000, 5000], disertasi: [3500, 5500]
+      },
+      {
+        num: 2, rom: 'II', nama: 'Kajian Pustaka / Landasan Teori', pct: [45, 55], idealPct: 50,
+        deskripsi: 'Landasan teoretis mendalam, sintesis studi relevan, kerangka pemikiran, hipotesis penelitian.',
+        tesis: [7000, 11000], disertasi: [7500, 11000]
+      },
+      {
+        num: 3, rom: 'III', nama: 'Metodologi Penelitian', pct: [25, 30], idealPct: 28,
+        deskripsi: 'Rancangan metodologi penelitian, kisi-kisi instrumen, teknik pengumpulan, rencana analisis data.',
+        tesis: [4000, 6000], disertasi: [4000, 6000]
+      }
+    ]
+  };
+
+  global.RULES = { JENJANG, JENIS, BAGIAN_AWAL, BAGIAN_AKHIR, ISI_LAMPIRAN, KRITERIA_ISI, DETEKSI_JENIS, SUMBER_TERLARANG, DISTRIBUSI_BAB };
 })(window);
