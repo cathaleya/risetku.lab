@@ -52,7 +52,10 @@
     if (!pendingFiles || !pendingFiles.length) return;
     await load(pendingFiles);
   });
-  ['jenjang', 'tahap', 'jenis', 'judul'].forEach((id) => $(id).addEventListener('change', () => { if (parsed) analyze(); }));
+  ['jenjang', 'tahap', 'jenis', 'judul', 'skipAwal', 'skipLampiran'].forEach((id) => {
+    const el = $(id);
+    if (el) el.addEventListener('change', () => { if (parsed) analyze(); });
+  });
 
   async function load(files) {
     $('run').disabled = true;
@@ -93,6 +96,8 @@
     if ($('jenis')) $('jenis').value = 'auto';
     if ($('jenjang')) $('jenjang').value = 'auto';
     if ($('tahap')) $('tahap').value = 'auto';
+    if ($('skipAwal')) $('skipAwal').checked = false;
+    if ($('skipLampiran')) $('skipLampiran').checked = false;
     if ($('filled')) $('filled').hidden = true;
     if ($('empty')) $('empty').hidden = false;
     if ($('alerts')) $('alerts').innerHTML = '';
@@ -110,7 +115,14 @@
   if (btnResetReport) btnResetReport.addEventListener('click', resetAll);
 
   function analyze() {
-    result = window.Analyzer.analyze(parsed, { jenjang: $('jenjang').value, tahap: $('tahap').value, jenis: $('jenis').value, judul: $('judul').value });
+    result = window.Analyzer.analyze(parsed, {
+      jenjang: $('jenjang').value,
+      tahap: $('tahap').value,
+      jenis: $('jenis').value,
+      judul: $('judul').value,
+      skipAwal: $('skipAwal') ? $('skipAwal').checked : false,
+      skipLampiran: $('skipLampiran') ? $('skipLampiran').checked : false,
+    });
     scores = window.Analyzer.score(result.groups);
     summary();
     render();
@@ -138,6 +150,8 @@
       ['Kata isi', fmt(r.bodyWords)],
       ['Entri pustaka', r.refInfo.refs.length],
     ];
+    if (r.skipAwal) facts.push(['Bagian awal', 'Dilewati (fokus isi)']);
+    if (r.skipLampiran) facts.push(['Lampiran', 'Dilewati (fokus Bab 1–5 & Pustaka)']);
     if (parsed && parsed.multiFiles && parsed.multiFiles.length > 1) {
       facts.unshift(['Berkas digabung', parsed.multiFiles.length + ' file (' + parsed.multiFiles.join(', ') + ')']);
     }
@@ -152,8 +166,10 @@
       const top = r.det.ranked.slice(0, 3).filter(([, s]) => s > 0).map(([j, s]) => R.JENIS[j].label.split(' (')[0] + ' (' + s + ')');
       al.push(['info', 'Jenis penelitian ditebak dari kata kunci di Bab I–III: ' + (top.join(', ') || 'tidak ada indikator kuat') + '. Bila keliru, ganti di menu Jenis penelitian; laporan langsung diperbarui.']);
     }
-    if (!r.jenjangPasti) al.push(['warn', 'Jenjang ditebak sebagai ' + (r.jenjangId === 'tesis' ? 'tesis' : 'disertasi') + ' karena naskah tidak memuat halaman sampul/judul. Pilih jenjang yang benar di panel kiri, karena batas jumlah kata dan rujukan bergantung padanya.']);
-    if (!r.judul) al.push(['info', 'Judul tidak terbaca dari naskah. Ketik judul di panel kiri agar koherensi judul ikut diperiksa' + (r.jenjangId === 'tesis' ? ' (dan batas 12 kata untuk tesis).' : '.') + '']);
+    if (!r.jenjangPasti && !r.skipAwal) al.push(['warn', 'Jenjang ditebak sebagai ' + (r.jenjangId === 'tesis' ? 'tesis' : 'disertasi') + ' karena naskah tidak memuat halaman sampul/judul. Pilih jenjang yang benar di panel kiri, karena batas jumlah kata dan rujukan bergantung padanya.']);
+    if (!r.judul && !r.skipAwal) al.push(['info', 'Judul tidak terbaca dari naskah. Ketik judul di panel kiri agar koherensi judul ikut diperiksa' + (r.jenjangId === 'tesis' ? ' (dan batas 12 kata untuk tesis).' : '.') + '']);
+    if (r.skipAwal) al.push(['info', '⚡ Mode Fokus Aktif: Bagian awal (sampul, abstrak, pengantar) dilewati sehingga skor berfokus murni pada Bab 1–5 & Daftar Pustaka.']);
+    if (r.skipLampiran) al.push(['info', '⚡ Mode Fokus Aktif: Lampiran dilewati dari penilaian skor.']);
     if (r.kind === 'pdf') al.push(['warn', 'Untuk PDF, pemeriksaan huruf, spasi, dan nomor halaman terbatas. Gunakan .docx untuk hasil format yang lengkap.']);
     $('alerts').innerHTML = al.map(([c, t]) => '<div class="alert ' + c + '">' + esc(t) + '</div>').join('');
     const n = notes().reduce((a, [, l]) => a + l.length, 0);

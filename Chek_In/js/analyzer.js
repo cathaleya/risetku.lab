@@ -358,70 +358,80 @@
     };
 
     // ===== Bagian Awal =====
-    for (const it of R.BAGIAN_AWAL) {
-      if (isSingleBab && singleBabNum !== 1) continue; // Lewati tuntutan bagian awal jika sedang periksa bab 2, 3, 4, 5
-      if (it.lengkapSaja && !lengkap) continue;
-      if (it.cara === 'judul') {
-        const first = S.front.slice(0, 60).map((b) => b.norm).join(' ') || allNorm.slice(0, 3000);
-        const okUnj = has(first, 'universitas negeri jakarta');
-        const okJenis = has(first, 'tesis') || has(first, 'disertasi') || has(first, 'proposal');
-        add('awal', {
-          nama: it.nama, hal: it.hal,
-          status: okUnj && okJenis ? 'ok' : 'warn',
-          detail: okUnj && okJenis ? 'Halaman sampul/judul memuat identitas naskah dan Universitas Negeri Jakarta.' : 'Halaman sampul/judul belum lengkap: ' + [!okJenis && 'kata "Tesis/Disertasi"', !okUnj && '"Universitas Negeri Jakarta"'].filter(Boolean).join(' dan ') + ' tidak ditemukan.',
-          saran: 'Ikuti format halaman sampul dan judul pada Lampiran 1–4 panduan.',
-        });
-        continue;
+    if (opts.skipAwal) {
+      add('awal', {
+        nama: 'Pemeriksaan Bagian Awal Dilewati',
+        hal: '21–25',
+        status: 'na',
+        detail: 'Pengguna memilih untuk melewati evaluasi bagian awal (sampul, abstrak, pengantar, daftar isi).',
+        saran: 'Hilangkan centang lewati bagian awal jika ingin memeriksa kelengkapan bagian awal secara lengkap.',
+      });
+    } else {
+      for (const it of R.BAGIAN_AWAL) {
+        if (isSingleBab && singleBabNum !== 1) continue; // Lewati tuntutan bagian awal jika sedang periksa bab 2, 3, 4, 5
+        if (it.lengkapSaja && !lengkap) continue;
+        if (it.cara === 'judul') {
+          const first = S.front.slice(0, 60).map((b) => b.norm).join(' ') || allNorm.slice(0, 3000);
+          const okUnj = has(first, 'universitas negeri jakarta');
+          const okJenis = has(first, 'tesis') || has(first, 'disertasi') || has(first, 'proposal');
+          add('awal', {
+            nama: it.nama, hal: it.hal,
+            status: okUnj && okJenis ? 'ok' : 'warn',
+            detail: okUnj && okJenis ? 'Halaman sampul/judul memuat identitas naskah dan Universitas Negeri Jakarta.' : 'Halaman sampul/judul belum lengkap: ' + [!okJenis && 'kata "Tesis/Disertasi"', !okUnj && '"Universitas Negeri Jakarta"'].filter(Boolean).join(' dan ') + ' tidak ditemukan.',
+            saran: 'Ikuti format halaman sampul dan judul pada Lampiran 1–4 panduan.',
+          });
+          continue;
+        }
+        const r = frontSection(S.front, it.alt, blocks);
+        const wajib = it.wajib !== false;
+        const st = r.status === 'ok' ? 'ok' : r.status === 'toc' ? 'warn' : r.status === 'elsewhere' ? 'warn' : (wajib ? 'miss' : 'warn');
+        const detail = {
+          ok: 'Ditemukan: "' + r.block?.text.slice(0, 60) + '".',
+          toc: 'Hanya tercantum di Daftar Isi; halamannya tidak ditemukan dalam naskah.',
+          elsewhere: 'Ditemukan di luar bagian awal (posisinya perlu dipindah ke bagian awal).',
+          miss: 'Tidak ditemukan.',
+        }[r.status];
+        add('awal', { nama: it.nama, hal: it.hal, status: st, detail, saran: 'Tambahkan halaman ' + it.nama + ' sesuai format panduan (hal ' + it.hal + ').', wajib });
       }
-      const r = frontSection(S.front, it.alt, blocks);
-      const wajib = it.wajib !== false;
-      const st = r.status === 'ok' ? 'ok' : r.status === 'toc' ? 'warn' : r.status === 'elsewhere' ? 'warn' : (wajib ? 'miss' : 'warn');
-      const detail = {
-        ok: 'Ditemukan: "' + r.block?.text.slice(0, 60) + '".',
-        toc: 'Hanya tercantum di Daftar Isi; halamannya tidak ditemukan dalam naskah.',
-        elsewhere: 'Ditemukan di luar bagian awal (posisinya perlu dipindah ke bagian awal).',
-        miss: 'Tidak ditemukan.',
-      }[r.status];
-      add('awal', { nama: it.nama, hal: it.hal, status: st, detail, saran: 'Tambahkan halaman ' + it.nama + ' sesuai format panduan (hal ' + it.hal + ').', wajib });
-    }
 
-    // Abstrak: jumlah kata, kata kunci, komponen (hanya bila periksa naskah lengkap/proposal atau Bab I)
-    if (!isSingleBab || singleBabNum === 1) {
-      const stopFront = /^(abstrak|abstract|kata pengantar|prakata|daftar isi|daftar tabel|daftar gambar|daftar lampiran|pernyataan|lembar|halaman|riwayat|ringkasan|summary|bab)\b/;
-      for (const [id, label, kwRe, lang] of [['abstrak', 'Abstrak', /\bkata\s*kunci\b/i, 'id'], ['abstract', 'Abstract', /\bkey\s*words?\b/i, 'en']]) {
-        const r = frontSection(S.front, [id], null);
-        if (r.status !== 'ok') continue;
-        const reg = regionAfter(S.front, r.block, 80, stopFront);
-        const w = wordsOf(reg);
-        const regText = reg.map((b) => b.text).join(' ');
-        const regNorm = normalize(regText);
-        add('kuantitas', {
-          nama: 'Jumlah kata ' + label, hal: '2',
-          status: w >= 200 && w <= 400 ? 'ok' : (w >= 170 && w <= 450 ? 'warn' : 'miss'),
-          detail: w + ' kata (ketentuan 200–400 kata). Perhitungan termasuk baris judul/nama/kata kunci di sekitar abstrak, jadi anggap sebagai perkiraan.',
-          saran: 'Sesuaikan panjang ' + label.toLowerCase() + ' menjadi 200–400 kata.',
-        });
-        add('awal', {
-          nama: label + ': kata kunci / keywords', hal: '25',
-          status: kwRe.test(regText) ? 'ok' : 'miss',
-          detail: kwRe.test(regText) ? 'Kata kunci ditemukan.' : 'Kata kunci tidak ditemukan di bawah ' + label.toLowerCase() + '.',
-          saran: 'Tambahkan ' + (lang === 'id' ? '"Kata kunci:" berbahasa Indonesia' : '"Keywords:" berbahasa Inggris') + ' di bagian bawah ' + label.toLowerCase() + '.',
-        });
-        const komp = lang === 'id'
-          ? [['permasalahan/tujuan', ['tujuan', 'bertujuan', 'masalah']], ['metode', ['metode', 'pendekatan', 'desain', 'sampel', 'responden', 'partisipan', 'informan']], ['hasil', ['hasil', 'menunjukkan', 'temuan', 'ditemukan']], ['simpulan', ['simpulan', 'kesimpulan', 'disimpulkan', 'implikasi', 'rekomendasi', 'dengan demikian']]]
-          : [['problem/objective', ['objective', 'aim', 'purpose', 'aims', 'problem']], ['method', ['method', 'approach', 'design', 'sample', 'respondents', 'participants', 'informants']], ['results', ['result', 'results', 'show', 'showed', 'shows', 'findings', 'found', 'indicate', 'indicated']], ['conclusion', ['conclusion', 'conclude', 'concluded', 'implication', 'implications', 'recommend', 'recommended', 'therefore']]];
-        const kurang = komp.filter(([, kws]) => !kws.some((k) => has(regNorm, k))).map(([n]) => n);
-        add('isi', {
-          nama: label + ' memuat permasalahan, tujuan, metode, hasil, dan simpulan', hal: '24',
-          status: kurang.length === 0 ? 'ok' : kurang.length === 1 ? 'warn' : 'miss',
-          detail: kurang.length ? 'Komponen yang belum terdeteksi: ' + kurang.join(', ') + '.' : 'Semua komponen terdeteksi.',
-          saran: 'Lengkapi ' + label.toLowerCase() + ' dengan: ' + kurang.join(', ') + '.',
-        });
-        if (parsed.kind === 'docx') {
-          const sp = reg.map((b) => b.spacing).filter((x) => x != null);
-          if (sp.length) {
-            const single = sp.filter((x) => x <= 1.15).length / sp.length;
-            add('format', { nama: 'Spasi ' + label + ' tunggal (1)', hal: '3, 25', status: single >= 0.7 ? 'ok' : 'warn', detail: Math.round(single * 100) + '% paragraf ' + label.toLowerCase() + ' berspasi tunggal.', saran: 'Ubah spasi ' + label.toLowerCase() + ' menjadi 1 (single).' });
+      // Abstrak: jumlah kata, kata kunci, komponen (hanya bila periksa naskah lengkap/proposal atau Bab I)
+      if (!isSingleBab || singleBabNum === 1) {
+        const stopFront = /^(abstrak|abstract|kata pengantar|prakata|daftar isi|daftar tabel|daftar gambar|daftar lampiran|pernyataan|lembar|halaman|riwayat|ringkasan|summary|bab)\b/;
+        for (const [id, label, kwRe, lang] of [['abstrak', 'Abstrak', /\bkata\s*kunci\b/i, 'id'], ['abstract', 'Abstract', /\bkey\s*words?\b/i, 'en']]) {
+          const r = frontSection(S.front, [id], null);
+          if (r.status !== 'ok') continue;
+          const reg = regionAfter(S.front, r.block, 80, stopFront);
+          const w = wordsOf(reg);
+          const regText = reg.map((b) => b.text).join(' ');
+          const regNorm = normalize(regText);
+          add('kuantitas', {
+            nama: 'Jumlah kata ' + label, hal: '2',
+            status: w >= 200 && w <= 400 ? 'ok' : (w >= 170 && w <= 450 ? 'warn' : 'miss'),
+            detail: w + ' kata (ketentuan 200–400 kata). Perhitungan termasuk baris judul/nama/kata kunci di sekitar abstrak, jadi anggap sebagai perkiraan.',
+            saran: 'Sesuaikan panjang ' + label.toLowerCase() + ' menjadi 200–400 kata.',
+          });
+          add('awal', {
+            nama: label + ': kata kunci / keywords', hal: '25',
+            status: kwRe.test(regText) ? 'ok' : 'miss',
+            detail: kwRe.test(regText) ? 'Kata kunci ditemukan.' : 'Kata kunci tidak ditemukan di bawah ' + label.toLowerCase() + '.',
+            saran: 'Tambahkan ' + (lang === 'id' ? '"Kata kunci:" berbahasa Indonesia' : '"Keywords:" berbahasa Inggris') + ' di bagian bawah ' + label.toLowerCase() + '.',
+          });
+          const komp = lang === 'id'
+            ? [['permasalahan/tujuan', ['tujuan', 'bertujuan', 'masalah']], ['metode', ['metode', 'pendekatan', 'desain', 'sampel', 'responden', 'partisipan', 'informan']], ['hasil', ['hasil', 'menunjukkan', 'temuan', 'ditemukan']], ['simpulan', ['simpulan', 'kesimpulan', 'disimpulkan', 'implikasi', 'rekomendasi', 'dengan demikian']]]
+            : [['problem/objective', ['objective', 'aim', 'purpose', 'aims', 'problem']], ['method', ['method', 'approach', 'design', 'sample', 'respondents', 'participants', 'informants']], ['results', ['result', 'results', 'show', 'showed', 'shows', 'findings', 'found', 'indicate', 'indicated']], ['conclusion', ['conclusion', 'conclude', 'concluded', 'implication', 'implications', 'recommend', 'recommended', 'therefore']]];
+          const kurang = komp.filter(([, kws]) => !kws.some((k) => has(regNorm, k))).map(([n]) => n);
+          add('isi', {
+            nama: label + ' memuat permasalahan, tujuan, metode, hasil, dan simpulan', hal: '24',
+            status: kurang.length === 0 ? 'ok' : kurang.length === 1 ? 'warn' : 'miss',
+            detail: kurang.length ? 'Komponen yang belum terdeteksi: ' + kurang.join(', ') + '.' : 'Semua komponen terdeteksi.',
+            saran: 'Lengkapi ' + label.toLowerCase() + ' dengan: ' + kurang.join(', ') + '.',
+          });
+          if (parsed.kind === 'docx') {
+            const sp = reg.map((b) => b.spacing).filter((x) => x != null);
+            if (sp.length) {
+              const single = sp.filter((x) => x <= 1.15).length / sp.length;
+              add('format', { nama: 'Spasi ' + label + ' tunggal (1)', hal: '3, 25', status: single >= 0.7 ? 'ok' : 'warn', detail: Math.round(single * 100) + '% paragraf ' + label.toLowerCase() + ' berspasi tunggal.', saran: 'Ubah spasi ' + label.toLowerCase() + ' menjadi 1 (single).' });
+            }
           }
         }
       }
@@ -714,7 +724,15 @@
     }
 
     // ===== Lampiran =====
-    if (lengkap) {
+    if (opts.skipLampiran) {
+      add('lampiran', {
+        nama: 'Pemeriksaan Lampiran Dilewati',
+        hal: '10',
+        status: 'na',
+        detail: 'Pengguna memilih untuk melewati evaluasi lampiran (fokus pada evaluasi Bab 1–5 & Daftar Pustaka).',
+        saran: 'Hilangkan centang lewati lampiran jika ingin memeriksa berkas instrumen dan lampiran secara lengkap.',
+      });
+    } else if (lengkap) {
       const lampBlocks = S.lamp.length ? S.lamp : S.front.filter((b) => /lampiran/.test(b.norm));
       for (const it of R.ISI_LAMPIRAN) {
         if (it.id === 'validasi' && jenisId === 'kualitatif') continue;
@@ -730,9 +748,9 @@
     const lanjut = global.Lanjut ? global.Lanjut.run({ S, blocks, chap, jenisId, lengkap, add, H: { normalize, countWords, has, pad, extractCitations, ROMAN_OUT } }) : {};
 
     // ===== Format =====
-    formatChecks(parsed, S, add);
+    formatChecks(parsed, S, add, opts);
 
-    return { S, groups, jenisId, jenjangId, jenjangPasti, tahap, det, judul, bodyWords, babResults, refInfo, koherensi, lanjut, kind: parsed.kind, numPages: parsed.numPages, scanned: parsed.scanned, isSingleBab, singleBabNum };
+    return { S, groups, jenisId, jenjangId, jenjangPasti, tahap, det, judul, bodyWords, babResults, refInfo, koherensi, lanjut, kind: parsed.kind, numPages: parsed.numPages, scanned: parsed.scanned, isSingleBab, singleBabNum, skipAwal: !!opts.skipAwal, skipLampiran: !!opts.skipLampiran };
   }
 
   // ---------------------------------------------------------- koherensi
@@ -950,7 +968,7 @@
     return null;
   }
 
-  function formatChecks(parsed, S, add) {
+  function formatChecks(parsed, S, add, opts) {
     const near = (v, t, tol) => v != null && Math.abs(v - t) <= tol;
     if (parsed.kind === 'docx') {
       const f = parsed.format;
@@ -981,7 +999,9 @@
         const mOk = near(m.top, 3, 0.15) && near(m.right, 3, 0.15) && near(m.bottom, 3, 0.15) && near(m.left + (m.gutter || 0), 4, 0.15);
         add('format', { nama: 'Margin atas 3, kanan 3, bawah 3, kiri 4 cm', hal: '3', status: mOk ? 'ok' : 'miss', detail: 'Margin: atas ' + m.top + ', kanan ' + m.right + ', bawah ' + m.bottom + ', kiri ' + m.left + (m.gutter ? ' (+gutter ' + m.gutter + ')' : '') + ' cm' + (f.mirror ? '; mode mirror margins aktif' : '') + '.', saran: 'Atur margin: atas 3 cm, kanan 3 cm, bawah 3 cm, kiri 4 cm.' });
         const roman = f.sections.some((s) => /roman/i.test(s.numFmt || ''));
-        add('format', { nama: 'Penomoran halaman: romawi kecil (bagian awal) & arab (isi)', hal: '3–4', status: !f.footerHasPage ? 'miss' : roman ? 'ok' : 'warn', detail: !f.footerHasPage ? 'Tidak ditemukan field nomor halaman di footer.' : roman ? 'Ditemukan section bernomor romawi dan nomor halaman di footer.' : 'Nomor halaman ada, tetapi tidak ditemukan section bernomor romawi untuk bagian awal.', saran: 'Gunakan i, ii, iii… untuk bagian awal dan 1, 2, 3… untuk isi (pojok bawah kanan/kiri; tengah pada halaman judul bab).' });
+        const stPage = !f.footerHasPage ? 'miss' : (roman || opts?.skipAwal) ? 'ok' : 'warn';
+        const dtPage = !f.footerHasPage ? 'Tidak ditemukan field nomor halaman di footer.' : roman ? 'Ditemukan section bernomor romawi dan nomor halaman di footer.' : (opts?.skipAwal ? 'Nomor halaman terdeteksi di footer (pemeriksaan romawi bagian awal dilewati).' : 'Nomor halaman ada, tetapi tidak ditemukan section bernomor romawi untuk bagian awal.');
+        add('format', { nama: 'Penomoran halaman: romawi kecil (bagian awal) & arab (isi)', hal: '3–4', status: stPage, detail: dtPage, saran: 'Gunakan i, ii, iii… untuk bagian awal dan 1, 2, 3… untuk isi (pojok bawah kanan/kiri; tengah pada halaman judul bab).' });
       }
       const pustSp = S.refs.filter((b) => b.spacing != null);
       if (pustSp.length) {
