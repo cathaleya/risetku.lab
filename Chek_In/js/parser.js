@@ -385,5 +385,75 @@
     throw new Error('Format berkas tidak didukung. Gunakan .docx atau .pdf.');
   }
 
-  global.Parser = { parseFile, normalize, countWords };
+  // Pengurutan pintar untuk multi-berkas (misal Bab 1, Bab 2, Bab 3, dst.)
+  function extractFileOrder(name) {
+    const n = (name || '').toLowerCase();
+    const romanMap = { i: 1, ii: 2, iii: 3, iv: 4, v: 5, vi: 6, vii: 7, viii: 8, ix: 9, x: 10 };
+    // Pola bab / chapter
+    const mBab = /(?:bab|ch(?:apter)?)\s*[-_]?\s*([ivx]+|\d+)/i.exec(n);
+    if (mBab) {
+      const val = mBab[1].toLowerCase();
+      if (romanMap[val]) return romanMap[val] * 10;
+      const num = parseInt(val, 10);
+      if (!isNaN(num)) return num * 10;
+    }
+    // Pola angka di awal nama (misal 1_Bab1.docx, 01_Pendahuluan.docx)
+    const mNum = /^(\d+)[-_. ]/i.exec(n);
+    if (mNum) return parseInt(mNum[1], 10) * 10;
+    // Berkas depan / cover / sampul
+    if (/cover|sampul|judul|abstrak|abstract|daftar/i.test(n)) return 1;
+    // Berkas pustaka / rujukan
+    if (/pustaka|referensi|reference|dafpus/i.test(n)) return 900;
+    // Berkas lampiran
+    if (/lampiran|appendix/i.test(n)) return 950;
+    return 500;
+  }
+
+  async function parseFiles(files, onProgress) {
+    if (!files || !files.length) throw new Error('Tidak ada berkas yang dipilih.');
+    if (files.length === 1) return parseFile(files[0], onProgress);
+
+    // Urutkan berkas berdasarkan nama bab / urutan logis
+    const sortedFiles = [...files].sort((a, b) => {
+      const orderA = extractFileOrder(a.name);
+      const orderB = extractFileOrder(b.name);
+      if (orderA !== orderB) return orderA - orderB;
+      return a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' });
+    });
+
+    const allBlocks = [];
+    let combinedKind = 'docx';
+    let combinedFormat = null;
+    let totalNumPages = 0;
+    let hasScanned = false;
+
+    for (let fIdx = 0; fIdx < sortedFiles.length; fIdx++) {
+      const f = sortedFiles[fIdx];
+      if (onProgress) onProgress(fIdx + 1, sortedFiles.length, f.name);
+      const parsed = await parseFile(f);
+      if (parsed.kind === 'pdf') combinedKind = 'pdf';
+      if (!combinedFormat && parsed.format) combinedFormat = parsed.format;
+      if (parsed.numPages) totalNumPages += parsed.numPages;
+      if (parsed.scanned) hasScanned = true;
+
+      // Berikan penanda sumber berkas pada setiap blok
+      if (parsed.blocks && parsed.blocks.length) {
+        parsed.blocks.forEach((b) => {
+          b.sourceFileName = f.name;
+        });
+        allBlocks.push(...parsed.blocks);
+      }
+    }
+
+    return {
+      kind: combinedKind,
+      blocks: allBlocks,
+      numPages: totalNumPages || undefined,
+      scanned: hasScanned,
+      format: combinedFormat || {},
+      multiFiles: sortedFiles.map((f) => f.name),
+    };
+  }
+
+  global.Parser = { parseFile, parseFiles, normalize, countWords };
 })(window);

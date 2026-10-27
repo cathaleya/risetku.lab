@@ -22,46 +22,63 @@
   const fmt = (n) => Number(n).toLocaleString('id-ID');
 
   // ------------------------------------------------------------ unggah
-  let pending = null;
+  let pendingFiles = [];
   const drop = $('drop');
-  $('file').addEventListener('change', (e) => pick(e.target.files[0]));
+  $('file').addEventListener('change', (e) => pick(Array.from(e.target.files)));
   ['dragenter', 'dragover'].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.add('over'); }));
   ['dragleave', 'drop'].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.remove('over'); }));
-  drop.addEventListener('drop', (e) => { if (e.dataTransfer.files[0]) pick(e.dataTransfer.files[0]); });
+  drop.addEventListener('drop', (e) => {
+    if (e.dataTransfer.files && e.dataTransfer.files.length) {
+      pick(Array.from(e.dataTransfer.files));
+    }
+  });
 
-  function pick(f) {
-    if (!f) return;
-    pending = f;
-    $('filename').textContent = f.name + ' · ' + (f.size / 1048576).toFixed(1) + ' MB';
+  function pick(files) {
+    if (!files || !files.length) return;
+    pendingFiles = files;
+    if (files.length === 1) {
+      const f = files[0];
+      $('filename').textContent = f.name + ' · ' + (f.size / 1048576).toFixed(1) + ' MB';
+    } else {
+      const totalSize = files.reduce((sum, f) => sum + f.size, 0);
+      $('filename').innerHTML = '<b>' + files.length + ' berkas bab terpilih:</b><br><small style="color:var(--text-dim)">' +
+        files.map((f) => esc(f.name)).join(', ') + ' (' + (totalSize / 1048576).toFixed(1) + ' MB total)</small>';
+    }
     $('run').disabled = false;
     $('progress').textContent = '';
   }
 
   $('run').addEventListener('click', async () => {
-    if (!pending) return;
-    await load(pending, pending.name);
+    if (!pendingFiles || !pendingFiles.length) return;
+    await load(pendingFiles);
   });
   ['jenjang', 'tahap', 'jenis', 'judul'].forEach((id) => $(id).addEventListener('change', () => { if (parsed) analyze(); }));
 
-  async function load(file, name) {
+  async function load(files) {
     $('run').disabled = true;
-    $('progress').textContent = 'Membaca berkas…';
+    $('progress').textContent = 'Membaca ' + files.length + ' berkas naskah…';
     try {
-      parsed = await window.Parser.parseFile(file, (p, n) => { $('progress').textContent = 'Halaman ' + p + ' dari ' + n + '…'; });
-      fileName = name;
-      $('progress').textContent = 'Selesai.';
+      parsed = await window.Parser.parseFiles(files, (curr, total, name) => {
+        $('progress').textContent = 'Membaca berkas ' + curr + ' dari ' + total + ' (' + name + ')…';
+      });
+      if (files.length === 1) {
+        fileName = files[0].name;
+      } else {
+        fileName = files.length + ' Berkas Gabungan (' + files.map((f) => f.name).join(', ') + ')';
+      }
+      $('progress').textContent = 'Selesai membaca.';
       analyze();
       if (window.matchMedia('(max-width: 900px)').matches) $('report').scrollIntoView({ behavior: 'smooth' });
     } catch (e) {
       console.error(e);
       $('progress').textContent = 'Berkas tidak dapat dibaca: ' + e.message;
     } finally {
-      $('run').disabled = !pending;
+      $('run').disabled = !pendingFiles || !pendingFiles.length;
     }
   }
 
   function resetAll() {
-    pending = null;
+    pendingFiles = [];
     parsed = null;
     result = null;
     scores = null;
@@ -121,6 +138,9 @@
       ['Kata isi', fmt(r.bodyWords)],
       ['Entri pustaka', r.refInfo.refs.length],
     ];
+    if (parsed && parsed.multiFiles && parsed.multiFiles.length > 1) {
+      facts.unshift(['Berkas digabung', parsed.multiFiles.length + ' file (' + parsed.multiFiles.join(', ') + ')']);
+    }
     $('facts').innerHTML = facts.map(([k, v]) => '<div><dt>' + esc(k) + '</dt><dd>' + esc(v) + '</dd></div>').join('');
     $('bars').innerHTML = Object.keys(GROUP).filter((g) => scores[g] != null).map((g) =>
       '<div class="bar"><div class="lbl"><span>' + GROUP[g] + '</span><b>' + scores[g] + '%</b></div><div class="track"><div class="fill" style="width:' + scores[g] + '%;background:' + tone(scores[g]) + '"></div></div></div>').join('');
