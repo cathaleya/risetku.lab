@@ -3,15 +3,41 @@
 
 const RENDER = { project: renderProject, import: renderImport, work: renderWork, meta: renderMeta, quality: renderQuality, frameworks: renderFrameworks, biblio: renderBiblio, report: renderReport, prisma: renderPrisma, checklist: renderChecklist, export: renderExport };
 
+function updateWorkflowBar(view) {
+  const map = {
+    project: 'project',
+    import: 'import',
+    work: 'work',
+    quality: 'quality',
+    meta: 'meta',
+    frameworks: 'meta',
+    biblio: 'meta',
+    report: 'prisma',
+    prisma: 'prisma',
+    checklist: 'prisma',
+    export: 'prisma',
+  };
+  const targetWf = map[view] || 'project';
+  const steps = document.querySelectorAll('.slr-wf-step');
+  if (steps.length) {
+    steps.forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.wf === targetWf);
+    });
+  }
+}
+
 function show(view) {
   UI.view = view;
   $$('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.view === view));
   $$('.view').forEach(v => v.classList.toggle('on', v.id === 'view-' + view));
   document.body.classList.toggle('is-work', view === 'work');
   syncAs();
+  updateWorkflowBar(view);
   RENDER[view]();
   try { localStorage.setItem('telaah-view', view); } catch (e) { /* abaikan */ }
 }
+window.show = show;
+window.updateWorkflowBar = updateWorkflowBar;
 
 function refreshChrome() {
   $('#typePill').textContent = TYPE_LABEL[S.project.type];

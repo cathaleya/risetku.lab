@@ -223,6 +223,25 @@
             </p>
           </div>
         </div>
+
+        <!-- Formula Cohen's Kappa Inter-Rater Breakdown -->
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs">
+          <div class="space-y-1">
+            <span class="font-bold text-slate-800 flex items-center gap-1.5">
+              <i class="fa-solid fa-calculator text-amber-600"></i>
+              <span>Formula Reliabilitas Inter-Rater (Cohen's Kappa &bull; Landis &amp; Koch 1977):</span>
+            </span>
+            <p class="text-[11px] text-slate-500 font-mono">
+              &kappa; = (P<sub>o</sub> &minus; P<sub>e</sub>) / (1 &minus; P<sub>e</sub>) = (0.945 &minus; 0.528) / (1 &minus; 0.528) = <strong>0.884</strong>
+            </p>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="px-3 py-1.5 rounded-xl bg-emerald-100 text-emerald-800 font-black text-[11px] flex items-center gap-1.5 border border-emerald-300">
+              <i class="fa-solid fa-shield-check"></i>
+              <span>Almost Perfect Agreement (&gt; 0.80)</span>
+            </span>
+          </div>
+        </div>
       </div>
 
       <!-- 4 KARTU FITUR UTAMA SLR -->
@@ -304,6 +323,95 @@
         </div>
       </div>
 
+      <!-- 6 TAHAP WORKFLOW SLR PIPELINE -->
+      <div id="alur-slr" class="space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+          <div>
+            <h2 class="text-xl sm:text-2xl font-heading font-black text-slate-900 tracking-tight flex items-center gap-2.5">
+              <span class="w-8 h-8 rounded-xl bg-amber-600 text-white flex items-center justify-center text-sm font-black shadow-md shadow-amber-600/30">
+                <i class="fa-solid fa-route"></i>
+              </span>
+              <span>Peta Alur Kerja 6 Tahap SLR (PRISMA 2020 Pipeline)</span>
+            </h2>
+            <p class="text-xs text-slate-500 font-medium mt-0.5">Panduan praktis langkah demi langkah mulai dari perumusan PICO hingga ekspor naskah final</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Step 1 -->
+          <div class="p-5 rounded-2xl bg-white border-2 border-slate-200 hover:border-amber-300 shadow-sm transition-all space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="w-7 h-7 rounded-lg bg-amber-100 text-amber-900 font-black text-xs flex items-center justify-center border border-amber-300">1</span>
+              <span class="text-[10px] font-bold text-amber-700 uppercase tracking-wider bg-amber-50 px-2 py-0.5 rounded">Protokol</span>
+            </div>
+            <h4 class="font-heading font-bold text-sm text-slate-900">Perumusan Pertanyaan &amp; Kriteria Inklusi</h4>
+            <p class="text-[11px] text-slate-600 leading-relaxed font-normal">
+              Susun kerangka <strong>PICO / PICOS / PCC</strong>, tetapkan kata kunci boolean pencarian, serta buat daftar kriteria eksklusi sebelum pencarian dimulai.
+            </p>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="p-5 rounded-2xl bg-white border-2 border-slate-200 hover:border-amber-300 shadow-sm transition-all space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="w-7 h-7 rounded-lg bg-slate-100 text-slate-900 font-black text-xs flex items-center justify-center border border-slate-300">2</span>
+              <span class="text-[10px] font-bold text-slate-700 uppercase tracking-wider bg-slate-50 px-2 py-0.5 rounded">Database</span>
+            </div>
+            <h4 class="font-heading font-bold text-sm text-slate-900">Impor Basis Data &amp; Deduplikasi</h4>
+            <p class="text-[11px] text-slate-600 leading-relaxed font-normal">
+              Unggah file RIS/CSV dari <strong>Scopus, Web of Science, PubMed, IEEE, ERIC</strong>. Algoritma otomatis menyaring duplikat judul dan DOI.
+            </p>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="p-5 rounded-2xl bg-white border-2 border-slate-200 hover:border-amber-300 shadow-sm transition-all space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="w-7 h-7 rounded-lg bg-indigo-100 text-indigo-900 font-black text-xs flex items-center justify-center border border-indigo-300">3</span>
+              <span class="text-[10px] font-bold text-indigo-700 uppercase tracking-wider bg-indigo-50 px-2 py-0.5 rounded">Dual Screening</span>
+            </div>
+            <h4 class="font-heading font-bold text-sm text-slate-900">Skrining Dual-Reviewer &amp; Kappa</h4>
+            <p class="text-[11px] text-slate-600 leading-relaxed font-normal">
+              Reviewer 1 &amp; 2 menyaring Judul/Abstrak dan Teks Lengkap secara blind. Sistem otomatis menghitung <strong>Cohen's Kappa</strong> dan membuka sesi konsensus.
+            </p>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="p-5 rounded-2xl bg-white border-2 border-slate-200 hover:border-amber-300 shadow-sm transition-all space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-900 font-black text-xs flex items-center justify-center border border-emerald-300">4</span>
+              <span class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider bg-emerald-50 px-2 py-0.5 rounded">Appraisal</span>
+            </div>
+            <h4 class="font-heading font-bold text-sm text-slate-900">Penilaian Kualitas Metodologi (MMAT)</h4>
+            <p class="text-[11px] text-slate-600 leading-relaxed font-normal">
+              Evaluasi validitas internal naskah inklusi dengan rubrik <strong>MMAT 2018</strong>. Cukup sorot kalimat di teks PDF untuk dijadikan bukti kutipan langsung.
+            </p>
+          </div>
+
+          <!-- Step 5 -->
+          <div class="p-5 rounded-2xl bg-white border-2 border-slate-200 hover:border-amber-300 shadow-sm transition-all space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="w-7 h-7 rounded-lg bg-rose-100 text-rose-900 font-black text-xs flex items-center justify-center border border-rose-300">5</span>
+              <span class="text-[10px] font-bold text-rose-700 uppercase tracking-wider bg-rose-50 px-2 py-0.5 rounded">Synthesis</span>
+            </div>
+            <h4 class="font-heading font-bold text-sm text-slate-900">Ekstraksi Variabel &amp; Meta-Analisis</h4>
+            <p class="text-[11px] text-slate-600 leading-relaxed font-normal">
+              Ekstraksi karakteristik sampel, intervensi, instrumen, dan ukuran efek. Visualisasi jejaring bibliometrik dan tren publikasi tematik.
+            </p>
+          </div>
+
+          <!-- Step 6 -->
+          <div class="p-5 rounded-2xl bg-white border-2 border-slate-200 hover:border-amber-300 shadow-sm transition-all space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="w-7 h-7 rounded-lg bg-amber-100 text-amber-900 font-black text-xs flex items-center justify-center border border-amber-300">6</span>
+              <span class="text-[10px] font-bold text-amber-700 uppercase tracking-wider bg-amber-50 px-2 py-0.5 rounded">Reporting</span>
+            </div>
+            <h4 class="font-heading font-bold text-sm text-slate-900">Diagram PRISMA 2020 &amp; Ekspor Naskah</h4>
+            <p class="text-[11px] text-slate-600 leading-relaxed font-normal">
+              Unduh diagram alir PRISMA 2020 vektor (SVG/PNG), checklist 27 butir panduan, serta ekspor data ke format Word, Excel, dan RIS.
+            </p>
+          </div>
+        </div>
+      </div>
+
       <!-- Banner Ajakan -->
       <div class="card-timbul p-8 sm:p-10 bg-gradient-to-r from-slate-900 via-amber-950 to-slate-900 text-white text-center space-y-4 border-2 border-amber-500/40 shadow-2xl">
         <h3 class="text-2xl sm:text-3xl font-heading font-black tracking-tight">Siap Memulai Kajian Sistematik Anda?</h3>
@@ -328,36 +436,36 @@
   <div id="slrWorkspace" style="display:none">
 
 <header class="topbar">
-  <div class="brand" style="display:flex;align-items:center;gap:6px">
+  <div class="brand" style="display:flex;align-items:center;gap:8px">
     <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
     <span class="brand-name">SLR-In<em>Aja</em></span>
-    <small style="font-size:0.65rem;background:#fef3c7;color:#92400e;border:1px solid #fde68a;padding:2px 7px;border-radius:999px;font-weight:700">RisetKu</small>
+    <small style="font-size:0.65rem;background:#fef3c7;color:#92400e;border:1px solid #fde68a;padding:2px 7px;border-radius:999px;font-weight:800">RisetKu</small>
   </div>
   <nav class="tabs" id="tabs" aria-label="Menu utama">
-    <button data-view="project">Proyek &amp; Kriteria</button>
-    <button data-view="import">Impor</button>
-    <button data-view="work">Skrining &amp; Ekstraksi</button>
-    <button data-view="meta" id="tabMeta">Meta-analisis</button>
-    <button data-view="quality">Penilaian kualitas</button>
-    <button data-view="frameworks">Kerangka konseptual</button>
-    <button data-view="biblio">Bibliometrik</button>
-    <button data-view="report">Laporan</button>
-    <button data-view="prisma">PRISMA 2020</button>
-    <button data-view="checklist">Checklist</button>
-    <button data-view="export">Ekspor</button>
+    <button data-view="project" title="Langkah 1: Tetapkan pertanyaan penelitian, PICO/PECO, dan kriteria inklusi/eksklusi"><i class="fa-solid fa-sliders"></i><span>1. Proyek &amp; Kriteria</span></button>
+    <button data-view="import" title="Langkah 2: Impor berkas RIS/CSV dari Scopus/WoS/PubMed dan jalankan deduplikasi otomatis"><i class="fa-solid fa-cloud-arrow-up"></i><span>2. Impor</span></button>
+    <button data-view="work" title="Langkah 3: Skrining judul/abstrak dan teks lengkap oleh Reviewer 1 &amp; 2"><i class="fa-solid fa-filter"></i><span>3. Skrining &amp; Ekstraksi</span></button>
+    <button data-view="quality" title="Langkah 4: Telaah kritis validitas metodologis studi inklusi dengan instrumen baku MMAT 2018"><i class="fa-solid fa-clipboard-check"></i><span>4. Kualitas MMAT</span></button>
+    <button data-view="meta" id="tabMeta" title="Langkah 5: Ekstraksi variabel, sintesis temuan kualitatif/kuantitatif, dan meta-analisis ukuran efek"><i class="fa-solid fa-chart-line"></i><span>5. Meta-analisis</span></button>
+    <button data-view="frameworks" title="Kerangka konseptual &amp; sintesis peta teori"><i class="fa-solid fa-diagram-project"></i><span>6. Kerangka Teori</span></button>
+    <button data-view="biblio" title="Analisis bibliometrik tren tahunan, kata kunci, dan jejaring kolaborasi"><i class="fa-solid fa-circle-nodes"></i><span>7. Bibliometrik</span></button>
+    <button data-view="prisma" title="Langkah 6: Diagram alir PRISMA 2020 interaktif berbasis data riil"><i class="fa-solid fa-sitemap"></i><span>8. PRISMA 2020</span></button>
+    <button data-view="report" title="Laporan naskah dan ringkasan temuan sintesis"><i class="fa-solid fa-file-lines"></i><span>9. Laporan</span></button>
+    <button data-view="checklist" title="27-Item Checklist PRISMA 2020 untuk kelayakan naskah publikasi"><i class="fa-solid fa-list-check"></i><span>10. Checklist</span></button>
+    <button data-view="export" title="Ekspor data ke CSV, Excel, RIS (Mendeley/Zotero), dan APA 7"><i class="fa-solid fa-file-export"></i><span>11. Ekspor</span></button>
   </nav>
-  <div class="top-right" style="display:flex;align-items:center;gap:6px">
-    <button type="button" onclick="showLanding()" style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:#fef3c7;border:1px solid #fde68a;color:#92400e;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer" title="Kembali ke Landing Page Penjelasan Modul">
+  <div class="top-right" style="display:flex;align-items:center;gap:8px">
+    <button type="button" onclick="showLanding()" style="display:inline-flex;align-items:center;gap:6px;padding:6px 13px;background:#fef3c7;border:1.5px solid #fde68a;color:#92400e;border-radius:9px;font-size:11.5px;font-weight:700;cursor:pointer;transition:all 0.15s ease" title="Kembali ke Landing Page Penjelasan Modul">
       <i class="fa-solid fa-book-open"></i>
       <span>Panduan &amp; Teori</span>
     </button>
-    <span id="licBadge" style="display:none;align-items:center;gap:4px;padding:3px 10px;background:#fef3c7;border:1px solid #fde68a;color:#92400e;border-radius:999px;font-size:11px;font-weight:700">
+    <span id="licBadge" style="display:none;align-items:center;gap:5px;padding:4px 12px;background:#ecfdf5;border:1.5px solid #a7f3d0;color:#065f46;border-radius:999px;font-size:11px;font-weight:800">
       <span>🛡️</span>
       <span id="licBadgeText">Lisensi Aktif</span>
       <button type="button" id="btnDeactLic" style="background:none;border:none;color:#991b1b;cursor:pointer;font-size:10px;text-decoration:underline;margin-left:4px" title="Ganti kunci">(Ganti)</button>
     </span>
-    <a href="/" style="text-decoration:none;display:inline-flex;align-items:center;gap:4px;padding:3px 10px;background:#f1f5f9;border:1px solid #cbd5e1;color:#334155;border-radius:8px;font-size:11px;font-weight:700">
-      <span>←</span>
+    <a href="/" style="text-decoration:none;display:inline-flex;align-items:center;gap:5px;padding:5px 12px;background:#f1f5f9;border:1.5px solid #cbd5e1;color:#334155;border-radius:9px;font-size:11.5px;font-weight:700">
+      <i class="fa-solid fa-arrow-left text-[10px]"></i>
       <span>Portal RisetKu</span>
     </a>
     <span class="type-pill" id="typePill">—</span>
@@ -369,9 +477,55 @@
         <option value="r2">Reviewer 2</option>
       </select>
     </label>
-    <span class="save-state" id="saveState">Memuat…</span>
+    <span class="save-state" id="saveState">Tersimpan otomatis</span>
   </div>
 </header>
+
+<!-- SLR Workflow Roadmap Bar (6 Tahapan Utama) -->
+<div class="slr-workflow-bar" id="slrWorkflowBar">
+  <div class="slr-workflow-inner">
+    <div class="slr-workflow-title">
+      <i class="fa-solid fa-route" style="color:#d97706"></i>
+      <span>Tahapan SLR:</span>
+    </div>
+    <div class="slr-workflow-steps">
+      <button type="button" class="slr-wf-step active" data-wf="project" onclick="show('project')" title="Langkah 1: Tetapkan pertanyaan penelitian, PICO/PECO, dan kriteria inklusi/eksklusi">
+        <span class="wf-num">1</span>
+        <span class="wf-text">Protokol &amp; PICO</span>
+      </button>
+      <i class="fa-solid fa-chevron-right wf-arr"></i>
+
+      <button type="button" class="slr-wf-step" data-wf="import" onclick="show('import')" title="Langkah 2: Impor hasil pencarian database (Scopus, WoS, PubMed) dan jalankan deduplikasi otomatis">
+        <span class="wf-num">2</span>
+        <span class="wf-text">Impor &amp; Deduplikasi</span>
+      </button>
+      <i class="fa-solid fa-chevron-right wf-arr"></i>
+
+      <button type="button" class="slr-wf-step" data-wf="work" onclick="show('work')" title="Langkah 3: Skrining judul/abstrak dan teks lengkap oleh Reviewer 1 &amp; Reviewer 2 secara blind">
+        <span class="wf-num">3</span>
+        <span class="wf-text">Skrining Dual-Reviewer</span>
+      </button>
+      <i class="fa-solid fa-chevron-right wf-arr"></i>
+
+      <button type="button" class="slr-wf-step" data-wf="quality" onclick="show('quality')" title="Langkah 4: Telaah kritis validitas metodologis studi inklusi dengan instrumen baku MMAT 2018">
+        <span class="wf-num">4</span>
+        <span class="wf-text">Penilaian Kualitas (MMAT)</span>
+      </button>
+      <i class="fa-solid fa-chevron-right wf-arr"></i>
+
+      <button type="button" class="slr-wf-step" data-wf="meta" onclick="show('meta')" title="Langkah 5: Ekstraksi variabel, sintesis temuan kualitatif/kuantitatif, dan meta-analisis ukuran efek">
+        <span class="wf-num">5</span>
+        <span class="wf-text">Sintesis &amp; Meta-Analisis</span>
+      </button>
+      <i class="fa-solid fa-chevron-right wf-arr"></i>
+
+      <button type="button" class="slr-wf-step" data-wf="prisma" onclick="show('prisma')" title="Langkah 6: Hasilkan diagram alir PRISMA 2020 vektor, checklist 27 butir, dan ekspor laporan naskah">
+        <span class="wf-num">6</span>
+        <span class="wf-text">PRISMA 2020 &amp; Ekspor</span>
+      </button>
+    </div>
+  </div>
+</div>
 
 <div class="sample-banner" id="sampleBanner" hidden>
   <span><b>Data contoh.</b> Rekaman di proyek ini fiktif, untuk memperlihatkan cara kerja aplikasi.</span>
