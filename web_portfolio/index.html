@@ -240,7 +240,7 @@
         <!-- TOMBOL PINTASAN SCROLL KE PANEL FITUR -->
         <div class="mt-6 sm:mt-7">
           <a href="#modul-aplikasi" class="inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-gradient-to-r from-rose-500 via-pink-500 to-amber-500 text-white font-black text-xs uppercase tracking-wider shadow-lg hover:shadow-xl hover:scale-105 transition-all">
-            <span>Jelajahi 6 Fitur Ekosistem</span>
+            <span>Jelajahi 7 Fitur Ekosistem</span>
             <i class="fa-solid fa-arrow-down animate-bounce text-[10px]"></i>
           </a>
         </div>
@@ -251,7 +251,7 @@
   </section>
 
   <!-- ========================================================================
-       HALAMAN 2: 6 PANEL FITUR TACTILE 3D (ORBITAL ECOSYSTEM CONSTELLATION)
+       HALAMAN 2: 7 PANEL FITUR TACTILE 3D (ORBITAL ECOSYSTEM CONSTELLATION)
        ======================================================================== -->
   <section id="modul-aplikasi" class="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-4 pb-6 sm:pt-6 sm:pb-8 flex flex-col items-center border-t border-pink-200/50 scroll-mt-16 sm:scroll-mt-20">
 
@@ -502,7 +502,7 @@
   </section>
 
   <!-- ========================================================================
-       HALAMAN 2: RINCIAN FUNGSI 6 APLIKASI & TOMBOL "COBA-IN SEKARANG" (3D EMBOS TIMBUL)
+       HALAMAN 2: RINCIAN FUNGSI 7 APLIKASI & LAYANAN & TOMBOL "COBA-IN SEKARANG" (3D EMBOS TIMBUL)
        ======================================================================== -->
   <section id="penjelasan-aplikasi" class="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-16 border-t border-pink-200/60">
 
@@ -979,8 +979,8 @@
           </div>
         </div>
 
-        <!-- 3 PILIHAN LAYANAN INTERAKTIF DI DALAM KARTU -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+        <!-- 4 PILIHAN LAYANAN INTERAKTIF DI DALAM KARTU -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-6">
           
           <!-- OPSI 1: BANTUAN UNDUH PAPER NON-OPEN ACCESS -->
           <div class="p-5 rounded-2xl bg-gradient-to-b from-blue-50/80 to-white border-2 border-blue-200 shadow-md flex flex-col justify-between hover:border-blue-400 transition-all group">
@@ -1018,12 +1018,56 @@
             </div>
           </div>
 
-          <!-- OPSI 2: LANGGANAN AKUN RISET TAHUNAN -->
+          <!-- OPSI 2: TELAAH ARTIKEL RISET EMPIRIS & SLR (FITUR BARU) -->
+          <div class="p-5 rounded-2xl bg-gradient-to-b from-purple-50/80 to-white border-2 border-purple-200 shadow-md flex flex-col justify-between hover:border-purple-400 transition-all group">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="px-2.5 py-1 rounded-xl bg-purple-600 text-white font-black text-[10px] tracking-wide shadow-sm flex items-center gap-1">
+                  <i class="fa-solid fa-magnifying-glass-chart"></i> Opsi #2
+                </span>
+                <span class="px-2 py-0.5 rounded-lg bg-purple-100 text-purple-900 text-[10px] font-black border border-purple-300">
+                  Telaah Kritis
+                </span>
+              </div>
+              <h4 class="text-base font-heading font-black text-slate-900 leading-snug">
+                Telaah Artikel Riset Empiris &amp; SLR
+              </h4>
+              <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+                Bedah komprehensif metodologi, <em>risk of bias</em>, koherensi temuan, dan ekstraksi data matriks sintesis untuk naskah riset empiris maupun <em>Systematic Literature Review</em> (PRISMA).
+              </p>
+              
+              <!-- Cakupan Telaah -->
+              <div class="space-y-1.5 mt-3 text-xs">
+                <div class="flex items-center gap-2 text-slate-700 font-semibold text-[11px]">
+                  <i class="fa-solid fa-circle-check text-purple-600 text-[10px]"></i>
+                  <span><strong>Riset Empiris:</strong> Desain, sampel &amp; statistik</span>
+                </div>
+                <div class="flex items-center gap-2 text-slate-700 font-semibold text-[11px]">
+                  <i class="fa-solid fa-circle-check text-purple-600 text-[10px]"></i>
+                  <span><strong>SLR PRISMA:</strong> Protokol, seleksi &amp; sintesis</span>
+                </div>
+                <div class="flex items-center gap-2 text-slate-700 font-semibold text-[11px]">
+                  <i class="fa-solid fa-circle-check text-purple-600 text-[10px]"></i>
+                  <span><strong>Audit Naskah:</strong> Deteksi celah telaah sejawat</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tombol Pesan Telaah -->
+            <div class="mt-4 pt-3 border-t border-purple-100">
+              <button onclick="openTolonginModal(event, 'telaah')" class="w-full py-2.5 px-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95 cursor-pointer">
+                <i class="fa-brands fa-whatsapp text-emerald-300 text-sm"></i>
+                <span>Ajukan Telaah Artikel</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- OPSI 3: LANGGANAN AKUN RISET TAHUNAN -->
           <div class="p-5 rounded-2xl bg-gradient-to-b from-sky-50/80 to-white border-2 border-sky-200 shadow-md flex flex-col justify-between hover:border-sky-400 transition-all group">
             <div>
               <div class="flex items-center justify-between gap-2 mb-3">
                 <span class="px-2.5 py-1 rounded-xl bg-sky-600 text-white font-black text-[10px] tracking-wide shadow-sm flex items-center gap-1">
-                  <i class="fa-solid fa-key"></i> Opsi #2
+                  <i class="fa-solid fa-key"></i> Opsi #3
                 </span>
                 <span class="px-2 py-0.5 rounded-lg bg-sky-100 text-sky-800 text-[10px] font-black border border-sky-300">
                   Akses 1 Tahun
@@ -1062,12 +1106,12 @@
             </div>
           </div>
 
-          <!-- OPSI 3: KONSUL-IN (KONSULTASI AKADEMIK) -->
+          <!-- OPSI 4: KONSUL-IN (KONSULTASI AKADEMIK) -->
           <div class="p-5 rounded-2xl bg-gradient-to-b from-indigo-50/80 to-white border-2 border-indigo-200 shadow-md flex flex-col justify-between hover:border-indigo-400 transition-all group">
             <div>
               <div class="flex items-center justify-between gap-2 mb-3">
                 <span class="px-2.5 py-1 rounded-xl bg-indigo-600 text-white font-black text-[10px] tracking-wide shadow-sm flex items-center gap-1">
-                  <i class="fa-solid fa-user-graduate"></i> Opsi #3
+                  <i class="fa-solid fa-user-graduate"></i> Opsi #4
                 </span>
                 <span class="px-2 py-0.5 rounded-lg bg-indigo-100 text-indigo-800 text-[10px] font-black border border-indigo-300">
                   Konsul-IN
@@ -1632,7 +1676,7 @@
     }
 
     function switchTolonginTab(tabName) {
-      const tabs = ['download', 'akun', 'konsul'];
+      const tabs = ['download', 'telaah', 'akun', 'konsul'];
       tabs.forEach(t => {
         const btn = document.getElementById(`tab-btn-${t}`);
         const panel = document.getElementById(`tab-panel-${t}`);
@@ -1658,6 +1702,17 @@
       window.open(`https://api.whatsapp.com/send?phone=6281234567890&text=${encodeURIComponent(text)}`, '_blank');
     }
 
+    function submitOrderTelaah() {
+      const jenis = document.getElementById('select-telaah-jenis')?.value || 'Artikel Riset Empiris';
+      const judul = (document.getElementById('input-telaah-judul')?.value || '').trim();
+      const fokus = (document.getElementById('input-telaah-fokus')?.value || '').trim();
+      let text = `Halo Tim Ahli RisetKu Tolong-IN, saya ingin mengajukan Jasa Telaah Kritis Naskah Ilmiah.\n\nJenis Telaah: ${jenis}`;
+      if (judul) text += `\nJudul / Topik Artikel: ${judul}`;
+      if (fokus) text += `\nFokus Kebutuhan Telaah: ${fokus}`;
+      text += '\n\nMohon estimasi waktu pengerjaan dan ketentuan pengiriman draf artikel (DOCX/PDF). Terima kasih.';
+      window.open(`https://api.whatsapp.com/send?phone=6281234567890&text=${encodeURIComponent(text)}`, '_blank');
+    }
+
     function submitOrderAkun() {
       const selected = [];
       if (document.getElementById('akun-gemini')?.checked) selected.push('Gemini Advanced AI');
@@ -1680,7 +1735,7 @@
   </script>
 
   <!-- ========================================================================
-       MODAL POPUP INTERAKTIF: TOLONG-IN AJA (3 PILIHAN LAYANAN)
+       MODAL POPUP INTERAKTIF: TOLONG-IN AJA (4 PILIHAN LAYANAN)
        ======================================================================== -->
   <div id="modal-tolongin" class="fixed inset-0 z-50 hidden flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-sm transition-all duration-300" onclick="handleModalBackdropClick(event)">
     <div class="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-pink-200 overflow-hidden flex flex-col max-h-[92vh] animate-in fade-in zoom-in-95 duration-200" onclick="event.stopPropagation()">
@@ -1710,15 +1765,19 @@
       <div class="flex border-b border-slate-200 bg-slate-50/80 px-4 sm:px-6 pt-3 gap-2 overflow-x-auto text-xs font-bold">
         <button id="tab-btn-download" onclick="switchTolonginTab('download')" class="tab-btn-tolongin px-3.5 py-2.5 rounded-t-xl border-b-2 border-blue-600 text-blue-700 bg-white font-black flex items-center gap-1.5 transition-colors cursor-pointer shrink-0">
           <i class="fa-solid fa-file-pdf"></i>
-          <span>1. Unduh Paper (Rp3rb)</span>
+          <span>1. Unduh Paper</span>
+        </button>
+        <button id="tab-btn-telaah" onclick="switchTolonginTab('telaah')" class="tab-btn-tolongin px-3.5 py-2.5 rounded-t-xl border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-bold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0">
+          <i class="fa-solid fa-magnifying-glass-chart"></i>
+          <span>2. Telaah Riset Empiris &amp; SLR</span>
         </button>
         <button id="tab-btn-akun" onclick="switchTolonginTab('akun')" class="tab-btn-tolongin px-3.5 py-2.5 rounded-t-xl border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-bold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0">
           <i class="fa-solid fa-key"></i>
-          <span>2. Akun Riset Tahunan</span>
+          <span>3. Akun Riset Tahunan</span>
         </button>
         <button id="tab-btn-konsul" onclick="switchTolonginTab('konsul')" class="tab-btn-tolongin px-3.5 py-2.5 rounded-t-xl border-b-2 border-transparent text-slate-500 hover:text-slate-800 font-bold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0">
           <i class="fa-solid fa-user-graduate"></i>
-          <span>3. Bimbingan Konsul-IN</span>
+          <span>4. Bimbingan Konsul-IN</span>
         </button>
       </div>
 
@@ -1763,7 +1822,55 @@
           </div>
         </div>
 
-        <!-- PANEL 2: LANGGANAN AKUN RISET TAHUNAN -->
+        <!-- PANEL 2: TELAAH ARTIKEL RISET EMPIRIS & SLR (FITUR BARU) -->
+        <div id="tab-panel-telaah" class="tolongin-panel hidden">
+          <div class="p-4 rounded-2xl bg-purple-50/70 border border-purple-200 flex items-start gap-3">
+            <i class="fa-solid fa-magnifying-glass-chart text-purple-600 mt-1 text-base"></i>
+            <div class="text-xs text-slate-700 leading-relaxed">
+              <p class="font-bold text-purple-900 text-sm mb-1">Telaah Kritis Artikel Riset Empiris &amp; Systematic Literature Review (SLR)</p>
+              Bedah naskah mendalam oleh akademisi dan reviewer berpengalaman untuk membedah metodologi, kekuatan pembuktian, sintesis literatur, kepatuhan PRISMA 2020, serta potensi kritik reviewer sebelum submit ke jurnal target (Sinta / Scopus / WoS).
+            </div>
+          </div>
+
+          <div class="space-y-4 mt-5">
+            <div>
+              <label class="block text-xs font-black text-slate-800 uppercase tracking-wider mb-1.5">
+                Kategori Artikel yang Ingin Ditelaah:
+              </label>
+              <select id="select-telaah-jenis" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-purple-500 font-semibold">
+                <option value="Artikel Riset Empiris (Kuantitatif / Eksperimen / Korelasional)">Artikel Riset Empiris (Kuantitatif / Eksperimen / SEM / Rasch)</option>
+                <option value="Artikel Riset Empiris (Kualitatif / Fenomenologi / Studi Kasus)">Artikel Riset Empiris (Kualitatif / Fenomenologi / Studi Kasus)</option>
+                <option value="Systematic Literature Review (SLR) & Meta-Analisis (PRISMA 2020)">Systematic Literature Review (SLR) &amp; Meta-Analisis (PRISMA 2020)</option>
+                <option value="Artikel Riset Pengembangan (R&D / ADDIE / Borg & Gall)">Artikel Riset Pengembangan (R&amp;D / ADDIE / 4D / Borg &amp; Gall)</option>
+                <option value="Audit Celah Kritis / Rebuttal Letter Reviewer">Audit Celah Kritis / Pendampingan Revisi Reviewer (Rebuttal)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-black text-slate-800 uppercase tracking-wider mb-1.5">
+                Judul atau Topik Artikel:
+              </label>
+              <input type="text" id="input-telaah-judul" placeholder="Contoh: Pengaruh Model Problem-Based Learning... atau SLR Tren Riset..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-purple-500">
+            </div>
+
+            <div>
+              <label class="block text-xs font-black text-slate-800 uppercase tracking-wider mb-1.5">
+                Fokus Pemeriksaan &amp; Kendala Khusus:
+              </label>
+              <textarea id="input-telaah-fokus" rows="3" placeholder="Sebutkan hal yang ingin diperiksa secara intensif (misal: uji hipotesis, keabsahan instrumen, alur PRISMA, matriks sintesis, atau target jurnal)..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-purple-500"></textarea>
+            </div>
+
+            <button onclick="submitOrderTelaah()" class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all cursor-pointer">
+              <i class="fa-brands fa-whatsapp text-emerald-300 text-lg"></i>
+              <span>Konsultasikan Pengajuan Telaah via WhatsApp</span>
+            </button>
+            <p class="text-[10.5px] text-slate-500 text-center">
+              Draf artikel Anda dijamin 100% kerahasiaannya. Hasil telaah berupa dokumen anotasi baris-per-baris &amp; matriks rekomendasi perbaikan.
+            </p>
+          </div>
+        </div>
+
+        <!-- PANEL 3: LANGGANAN AKUN RISET TAHUNAN -->
         <div id="tab-panel-akun" class="tolongin-panel hidden">
           <div class="p-4 rounded-2xl bg-sky-50/70 border border-sky-200 flex items-start gap-3">
             <i class="fa-solid fa-key text-sky-600 mt-1 text-base"></i>
