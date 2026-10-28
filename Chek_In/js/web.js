@@ -195,12 +195,43 @@
 
   function list(items, title, loc) {
     if (!items.length) return '';
-    return (title ? '<h3>' + esc(title) + '</h3>' : '') + '<ul class="items">' + items.map((it) =>
-      '<li class="' + (it.sub ? 'sub' : '') + '">' + badge(it.status) + '<span class="nm">' + esc(it.nama) + '</span><span class="hal">' + (it.hal ? 'hal. ' + esc(it.hal) : '') + '</span>' +
-      '<span class="dt">' + (loc && it.lokasi ? 'Diperiksa di ' + esc(it.lokasi) + '. ' : '') + esc(it.detail) + '</span>' +
-      ((it.status === 'miss' || it.status === 'warn') && it.saran ? '<span class="sv">→ ' + esc(it.saran) + '</span>' : '') +
-      (it.bukti ? '<span class="ev">' + esc(it.bukti) + '</span>' : '') + '</li>').join('') + '</ul>';
+    return (title ? '<h3>' + esc(title) + '</h3>' : '') + '<ul class="items">' + items.map((it) => {
+      let lokBadge = '';
+      if (it.lokasi) {
+        const lokLower = it.lokasi.toLowerCase();
+        const isB3 = lokLower.includes('bab iii');
+        const isB4 = lokLower.includes('bab iv');
+        const cls = isB3 && isB4 ? 'b3 b4' : isB4 ? 'b4' : isB3 ? 'b3' : '';
+        lokBadge = '<span class="tag-lokasi ' + cls + '" title="Lokasi bab naskah">📍 ' + esc(it.lokasi) + '</span>';
+      }
+      return '<li class="' + (it.sub ? 'sub' : '') + '">' + badge(it.status) +
+        '<div style="min-width:0;width:100%">' +
+          '<div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex-wrap:wrap">' +
+            '<div><span class="nm">' + esc(it.nama) + '</span>' + lokBadge + '</div>' +
+            (it.hal ? '<span class="hal">hal. ' + esc(it.hal) + '</span>' : '') +
+          '</div>' +
+          '<div class="dt">' + esc(it.detail) + '</div>' +
+          ((it.status === 'miss' || it.status === 'warn') && it.saran ? '<div class="sv">→ <b>Saran:</b> ' + esc(it.saran) + '</div>' : '') +
+          (it.bukti ? '<div class="ev">' + esc(it.bukti) + '</div>' : '') +
+        '</div>' +
+      '</li>';
+    }).join('') + '</ul>';
   }
+
+  const BAB_ORDER = ['I', 'II', 'III', 'IV', 'V', 'awal', 'pustaka', 'lampiran', 'umum'];
+  const BAB_META = {
+    'I': { num: 'I', label: 'Bab I — Pendahuluan', icon: '1', desc: 'Latar belakang, identifikasi & pembatasan masalah, rumusan masalah, tujuan, dan manfaat penelitian.' },
+    'II': { num: 'II', label: 'Bab II — Kajian Teori & Kerangka Berpikir', icon: '2', desc: 'Deskripsi konseptual variabel, grand theory, sintesis teori, kerangka berpikir, dan hipotesis.' },
+    'III': { num: 'III', label: 'Bab III — Metodologi Penelitian', icon: '3', desc: 'Desain penelitian, populasi/sampel, instrumen & uji psikometri, serta rencana teknik analisis data.' },
+    'IV': { num: 'IV', label: 'Bab IV — Hasil Penelitian & Pembahasan', icon: '4', desc: 'Deskripsi data, pengujian hipotesis/statistik (CFI, RMSEA, Alpha, dll.), dan pembahasan mendalam.' },
+    'V': { num: 'V', label: 'Bab V — Kesimpulan, Implikasi & Saran', icon: '5', desc: 'Simpulan jawaban rumusan masalah, implikasi teoretis/praktis, keterbatasan, dan saran riset.' },
+    'awal': { num: 'Awal', label: 'Bagian Awal Naskah', icon: 'A', desc: 'Sampul, persetujuan, orisinalitas, abstrak (bilingual), kata pengantar, dan daftar isi/tabel/gambar.' },
+    'pustaka': { num: 'Pustaka', label: 'Daftar Pustaka', icon: 'D', desc: 'Format APA 7th, proporsi jurnal bereputasi 80%, rujukan 10 tahun terakhir, dan kelengkapan DOI.' },
+    'lampiran': { num: 'Lampiran', label: 'Lampiran & Instrumen', icon: 'L', desc: 'Kisi-kisi instrumen, kuesioner, output komputasi software, surat izin, dan dokumen riwayat.' },
+    'umum': { num: 'Umum', label: 'Umum & Format Naskah', icon: 'U', desc: 'Tata letak naskah, batas margin (4-4-3-3), jenis font, spasi 1.5, dan aturan format umum.' }
+  };
+
+  let activeBabFilter = 'all';
 
   function notes() {
     const out = [];
@@ -221,17 +252,116 @@
     return out;
   }
 
+  function notesByBab() {
+    const rawNotes = notes();
+    const buckets = {};
+    BAB_ORDER.forEach((k) => { buckets[k] = []; });
+
+    for (const [g, items] of rawNotes) {
+      for (const it of items) {
+        const babs = babOf(it, g);
+        for (const b of babs) {
+          if (!buckets[b]) buckets[b] = [];
+          if (!buckets[b].some((x) => x.nama === it.nama)) {
+            buckets[b].push(it);
+          }
+        }
+      }
+    }
+
+    const res = [];
+    for (const k of BAB_ORDER) {
+      const list = buckets[k] || [];
+      if (list.length > 0) {
+        res.push({
+          key: k,
+          meta: BAB_META[k] || { label: 'Bab ' + k, icon: k, desc: '' },
+          items: list
+        });
+      }
+    }
+    return res;
+  }
+
   function render() {
     const P = $('panel'), g = result.groups;
     if (tab === 'catatan') {
-      const n = notes();
-      const total = n.reduce((a, [, l]) => a + l.length, 0);
-      const miss = n.reduce((a, [, l]) => a + l.filter((x) => x.status === 'miss').length, 0);
-      P.innerHTML = total
-        ? '<div class="notes-head"><span class="count">' + total + ' catatan: <b class="m">' + miss + ' belum ada</b>, <b class="w">' + (total - miss) + ' perlu dicek</b></span><button class="btn" id="copy">Salin catatan</button></div>' +
-          n.map(([grp, l]) => list(l, GROUP[grp])).join('')
-        : '<p>Tidak ada catatan. Semua kriteria yang dapat diperiksa otomatis sudah terpenuhi.</p>';
+      const babGroups = notesByBab();
+      const totalNotes = babGroups.reduce((acc, bg) => acc + bg.items.length, 0);
+      const totalMiss = babGroups.reduce((acc, bg) => acc + bg.items.filter((x) => x.status === 'miss').length, 0);
+
+      if (!babGroups.length) {
+        P.innerHTML = '<p>Tidak ada catatan. Semua kriteria yang dapat diperiksa otomatis sudah terpenuhi.</p>';
+        return;
+      }
+
+      // Filter chips
+      let filterBtnsHtml = '<button class="bab-filter-btn ' + (activeBabFilter === 'all' ? 'active' : '') + '" data-filter-bab="all">' +
+        '<span>Semua Bab</span><span class="badge-pill">' + totalNotes + '</span></button>';
+
+      babGroups.forEach((bg) => {
+        const count = bg.items.length;
+        const missCount = bg.items.filter((x) => x.status === 'miss').length;
+        const isActive = activeBabFilter === bg.key;
+        const labelShort = bg.key === 'awal' ? 'Bagian Awal' : bg.key === 'pustaka' ? 'Daftar Pustaka' : bg.key === 'lampiran' ? 'Lampiran' : bg.key === 'umum' ? 'Format' : 'Bab ' + bg.key;
+        filterBtnsHtml += '<button class="bab-filter-btn ' + (isActive ? 'active' : '') + '" data-filter-bab="' + bg.key + '">' +
+          '<span>' + labelShort + '</span>' +
+          (missCount > 0 ? '<span class="badge-pill m" title="' + missCount + ' belum ada">' + missCount + '</span>' : '') +
+          '<span class="badge-pill">' + count + '</span></button>';
+      });
+
+      const filterBarHtml = '<div class="bab-filter-container">' +
+        '<div style="font-size:0.75rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em">Saring Catatan Berdasarkan Bab:</div>' +
+        '<div class="bab-filter-bar">' + filterBtnsHtml + '</div>' +
+      '</div>';
+
+      // Render cards
+      let cardsHtml = '<div class="bab-notes-list">';
+      babGroups.forEach((bg) => {
+        if (activeBabFilter !== 'all' && activeBabFilter !== bg.key) return;
+
+        const missInBab = bg.items.filter((x) => x.status === 'miss').length;
+        const warnInBab = bg.items.length - missInBab;
+        const isB3 = bg.key === 'III';
+        const isB4 = bg.key === 'IV';
+        const cardHl = isB3 ? 'b-highlight-3' : isB4 ? 'b-highlight-4' : activeBabFilter === bg.key ? 'b-highlight-all' : '';
+        const iconCls = isB3 ? 'b3' : isB4 ? 'b4' : '';
+
+        cardsHtml += '<div class="bab-note-card ' + cardHl + '">' +
+          '<div class="bab-note-card-header">' +
+            '<div class="bab-note-card-title">' +
+              '<div class="bab-icon-circle ' + iconCls + '">' + bg.meta.icon + '</div>' +
+              '<div>' +
+                '<h3>' + esc(bg.meta.label) + '</h3>' +
+              '</div>' +
+            '</div>' +
+            '<div class="bab-note-counts">' +
+              (missInBab ? '<span class="prop-badge miss">' + missInBab + ' belum ada</span>' : '') +
+              (warnInBab ? '<span class="prop-badge warn">' + warnInBab + ' perlu dicek</span>' : '') +
+            '</div>' +
+          '</div>' +
+          (bg.meta.desc ? '<div class="bab-subdesc">' + esc(bg.meta.desc) + '</div>' : '') +
+          list(bg.items, null) +
+        '</div>';
+      });
+      cardsHtml += '</div>';
+
+      P.innerHTML = '<div class="notes-head">' +
+        '<span class="count">' + totalNotes + ' catatan perbaikan: <b class="m">' + totalMiss + ' belum ada</b>, <b class="w">' + (totalNotes - totalMiss) + ' perlu dicek</b></span>' +
+        '<button class="btn" id="copy">Salin catatan lengkap</button>' +
+      '</div>' +
+      filterBarHtml +
+      cardsHtml;
+
       const c = $('copy'); if (c) c.addEventListener('click', copyNotes);
+
+      // Bind filter buttons
+      P.querySelectorAll('[data-filter-bab]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          activeBabFilter = btn.dataset.filterBab;
+          render();
+        });
+      });
     } else if (tab === 'sistematika') {
       const singleBanner = result.isSingleBab
         ? '<div style="margin-bottom:14px;padding:12px 16px;background:rgba(6,182,212,0.12);border:1px solid #06b6d4;border-radius:10px;font-size:.88rem;color:#0e7490;display:flex;align-items:center;gap:8px;">' +
@@ -280,15 +410,29 @@
   }
 
   // ------------------------------------------------------- per bab
-  const ROMAN_RE = /\bBab (VI|IV|V|I{1,3})\b/g;
+  const ROMAN_RE = /\bBab (VI|IV|V|I{1,3})\b/gi;
   function babOf(it, g) {
     if (g === 'awal') return ['awal'];
     if (g === 'rujukan') return ['pustaka'];
     if (g === 'lampiran') return ['lampiran'];
     if (g === 'format') return ['umum'];
     if (g === 'kuantitas' && /judul|abstra/i.test(it.nama)) return ['awal'];
+    if (g === 'statistik') {
+      const txt = ((it.nama || '') + ' ' + (it.lokasi || '')).toLowerCase();
+      if (txt.includes('bab iii') && txt.includes('bab iv')) return ['III', 'IV'];
+      if (txt.includes('bab iii')) return ['III'];
+      return ['IV'];
+    }
+    if (g === 'tabel') {
+      const txt = ((it.nama || '') + ' ' + (it.lokasi || '')).toLowerCase();
+      if (/awal|lampiran/i.test(txt)) return ['awal'];
+      return ['IV'];
+    }
     const hits = new Set();
-    for (const m of ((it.nama || '') + ' ' + (it.lokasi || '')).matchAll(ROMAN_RE)) hits.add(m[1]);
+    const haystack = (it.nama || '') + ' ' + (it.lokasi || '') + ' ' + (it.detail || '');
+    for (const m of haystack.matchAll(ROMAN_RE)) {
+      hits.add(m[1].toUpperCase());
+    }
     return hits.size ? [...hits] : ['umum'];
   }
   function miniBabDistribution() {
@@ -530,12 +674,25 @@
   // --------------------------------------------------------- salin
   function notesText() {
     const r = result;
-    let t = 'CATATAN PEMERIKSAAN TESIS/DISERTASI\nPanduan Penulisan SPs UNJ 2025\n\n';
-    if (user) t += 'Nama: ' + user.nama + '\nEmail: ' + user.email + '\n';
+    let t = '==================================================\n' +
+      'CATATAN PERBAIKAN PER BAB (TESIS/DISERTASI)\n' +
+      'Panduan Penulisan SPs UNJ 2025\n' +
+      '==================================================\n\n';
+    if (user) t += 'Penulis: ' + user.nama + ' (' + user.email + ')\n';
     t += 'Berkas: ' + fileName + '\nJenis: ' + R.JENIS[r.jenisId].label + '\nJenjang: ' + R.JENJANG[r.jenjangId].label + '\nTahap: ' + (r.tahap === 'proposal' ? 'Proposal' : 'Naskah lengkap') + '\nSkor kesesuaian: ' + scores.total + '%\n';
-    for (const [g, l] of notes()) {
-      t += '\n' + GROUP[g].toUpperCase() + '\n';
-      l.forEach((it, i) => { t += (i + 1) + '. [' + LABEL[it.status] + '] ' + it.nama + (it.saran ? ' — ' + it.saran : '') + '\n   ' + it.detail + (it.hal ? ' (panduan hal. ' + it.hal + ')' : '') + '\n'; });
+
+    const bGroups = notesByBab();
+    for (const bg of bGroups) {
+      t += '\n--------------------------------------------------\n';
+      t += '📌 ' + bg.meta.label.toUpperCase() + '\n';
+      t += '--------------------------------------------------\n';
+      bg.items.forEach((it, i) => {
+        const lok = it.lokasi ? ' [Lokasi: ' + it.lokasi + ']' : '';
+        t += (i + 1) + '. [' + LABEL[it.status] + ']' + lok + ' ' + it.nama + '\n' +
+             '   Temuan : ' + it.detail + (it.hal ? ' (Panduan hal. ' + it.hal + ')' : '') + '\n' +
+             (it.saran ? '   Saran  : ' + it.saran + '\n' : '') +
+             '   [ ] Sudah diperbaiki / direvisi\n\n';
+      });
     }
     return t;
   }

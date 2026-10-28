@@ -376,6 +376,38 @@ kbd { font-family: var(--f-mono); font-size: .74rem; font-weight: 700; color: va
 .loginpage .login h2 { font-size: 1.2rem !important; font-weight: 900; letter-spacing: .02em; text-transform: uppercase; color: var(--navy); }
 .loginpage .login .btn { padding-block: 14px; }
 #tool { background: var(--bg); }
+
+/* ---------- bab note card & filter bar (tab catatan) ---------- */
+.tag-lokasi { display: inline-flex; align-items: center; gap: 4px; font-size: .7rem; font-weight: 800; padding: 2px 8px; border-radius: 6px; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; margin-left: 8px; vertical-align: middle; letter-spacing: .02em; }
+.tag-lokasi.b3 { background: #fef3c7; color: #b45309; border-color: #fde68a; }
+.tag-lokasi.b4 { background: #dcfce7; color: #15803d; border-color: #bbf7d0; }
+.tag-lokasi.b3.b4, .tag-lokasi.b3b4 { background: #fae8ff; color: #86198f; border-color: #f5d0fe; }
+
+.bab-filter-container { margin-bottom: 18px; display: grid; gap: 10px; }
+.bab-filter-bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.bab-filter-btn { font: inherit; font-size: .74rem; font-weight: 800; border-radius: 10px; padding: 6px 12px; border: 1.5px solid #e2e8f0; background: #fff; color: #475569; cursor: pointer; transition: all .15s ease; display: inline-flex; align-items: center; gap: 6px; }
+.bab-filter-btn:hover { border-color: var(--accent); color: var(--navy); transform: translateY(-1px); }
+.bab-filter-btn.active { background: var(--navy); color: #fff; border-color: var(--navy); box-shadow: 0 4px 10px -2px rgba(15,23,42,0.25); }
+.bab-filter-btn .badge-pill { font-size: .65rem; padding: 1px 6px; border-radius: 999px; background: #f1f5f9; color: var(--navy); font-weight: 800; }
+.bab-filter-btn.active .badge-pill { background: rgba(255,255,255,0.2); color: #fff; }
+.bab-filter-btn .badge-pill.m { background: #fee2e2; color: #b91c1c; }
+.bab-filter-btn.active .badge-pill.m { background: #ef4444; color: #fff; }
+
+.bab-notes-list { display: grid; gap: 16px; margin-top: 10px; }
+.bab-note-card { background: #fff; border: 1.5px solid #e2e8f0; border-bottom: 4px solid #cbd5e1; border-radius: 16px; padding: 18px; box-shadow: 0 4px 16px -4px rgba(15,23,42,0.05); transition: border-color .15s; }
+.bab-note-card:hover { border-color: #cbd5e1; }
+.bab-note-card.b-highlight-3 { border-left: 5px solid #f59e0b; }
+.bab-note-card.b-highlight-4 { border-left: 5px solid #10b981; }
+.bab-note-card.b-highlight-all { border-left: 5px solid var(--accent); }
+.bab-note-card-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #f1f5f9; }
+.bab-note-card-title { display: flex; align-items: center; gap: 10px; }
+.bab-note-card-title h3 { margin: 0; font-size: 1rem; font-weight: 900; color: var(--navy); }
+.bab-icon-circle { width: 32px; height: 32px; border-radius: 10px; display: grid; place-items: center; font-size: 1rem; font-weight: 900; background: #eff6ff; color: var(--accent); }
+.bab-icon-circle.b3 { background: #fef3c7; color: #b45309; }
+.bab-icon-circle.b4 { background: #dcfce7; color: #15803d; }
+.bab-note-counts { display: flex; gap: 8px; align-items: center; font-size: .78rem; font-weight: 700; }
+.bab-subdesc { font-size: .8rem; color: var(--muted); margin: -4px 0 12px; line-height: 1.4; }
+
 @media (max-width: 900px) {
   .lp { grid-template-columns: minmax(0, 1fr); gap: 28px; padding-block: 36px; }
   .loginpage { min-height: 0; }

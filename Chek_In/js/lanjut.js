@@ -372,8 +372,8 @@
       out.teknik = rows;
       const planned = rows.filter((r) => r.b3 && !r.b4).map((r) => r.nama);
       const unplanned = rows.filter((r) => !r.b3 && r.b4).map((r) => r.nama);
-      add('statistik', { nama: 'Teknik analisis di Bab III dilaksanakan di Bab IV', hal: '30', status: planned.length === 0 ? 'ok' : planned.length <= 1 ? 'warn' : 'miss', lokasi: 'Bab III/IV', detail: planned.length ? 'Direncanakan di Bab III tetapi tidak tampak di hasil: ' + planned.join(', ') + '.' : rows.filter((r) => r.b3).length + ' teknik di Bab III semuanya tampak di hasil.', saran: 'Laporkan hasil setiap teknik analisis yang direncanakan, atau hapus dari Bab III.' });
-      add('statistik', { nama: 'Teknik di Bab IV sudah dijelaskan di Bab III', hal: '30', status: unplanned.length === 0 ? 'ok' : unplanned.length <= 1 ? 'warn' : 'miss', lokasi: 'Bab III/IV', detail: unplanned.length ? 'Dipakai di hasil tetapi tidak dijelaskan di Bab III: ' + unplanned.join(', ') + '.' : 'Semua teknik di hasil sudah dijelaskan di Bab III.', saran: 'Uraikan teknik tersebut di Teknik Analisis Data Bab III beserta kriterianya.' });
+      add('statistik', { nama: 'Sinkronisasi Teknik Analisis: Bab III (Rencana) ↔ Bab IV (Pelaksanaan)', hal: '30', status: planned.length === 0 ? 'ok' : planned.length <= 1 ? 'warn' : 'miss', lokasi: 'Bab III & Bab IV', detail: planned.length ? 'Direncanakan di Bab III tetapi belum tampak pelaporannya di Bab IV: ' + planned.join(', ') + '.' : rows.filter((r) => r.b3).length + ' teknik di Bab III semuanya tampak di hasil.', saran: 'Laporkan hasil setiap teknik analisis yang direncanakan di Bab IV, atau sederhanakan rencana analisis di Bab III.' });
+      add('statistik', { nama: 'Validasi Teknik Analisis: Teknik Bab IV Tercantum di Bab III', hal: '30', status: unplanned.length === 0 ? 'ok' : unplanned.length <= 1 ? 'warn' : 'miss', lokasi: 'Bab III & Bab IV', detail: unplanned.length ? 'Dipakai di hasil Bab IV tetapi belum dijelaskan di Bab III: ' + unplanned.join(', ') + '.' : 'Semua teknik di hasil sudah dijelaskan di Bab III.', saran: 'Uraikan teknik tersebut di bagian Teknik Analisis Data Bab III beserta kriteria rujukannya.' });
     }
 
     // ------------------------------------------ nilai statistik ↔ kriteria
@@ -452,14 +452,23 @@
         const nOk = judged.length - low.length, nWarn = judged.filter((x) => x.st === 'warn').length, nMiss = judged.filter((x) => x.st === 'miss').length;
         const rincian = s.arah === 'range' || s.arah === 'absmax' ? nOk + ' memenuhi, ' + (nWarn + nMiss) + ' di luar rentang.' : nOk + ' baik, ' + nWarn + ' dapat diterima, ' + nMiss + ' di bawah batas.';
         add('statistik', {
-          nama: s.nama + ' — ' + s.kriteria, hal: 'buku acuan', lokasi: lengkap ? 'Bab IV' : 'Bab III',
+          nama: s.nama + ' — ' + s.kriteria, hal: 'buku acuan', lokasi: lengkap ? 'Bab IV (Hasil Penelitian)' : 'Bab III (Rencana Analisis)',
           status: worst === 'miss' ? 'warn' : worst,
           detail: judged.length + ' nilai berbeda dilaporkan: ' + judged.slice(0, 8).map((x) => fmt(x.v)).join('; ') + (judged.length > 8 ? '; …' : '') + '. ' + rincian + ' Sumber: ' + s.sumber + '.',
           saran: low.length ? 'Bahas nilai ' + s.nama + ' yang di luar kriteria (' + s.kriteria + '): beri justifikasi atau tindak lanjut (revisi butir, modifikasi model, atau kriteria alternatif yang dirujuk).' : '',
         });
       }
       out.stat = statRows;
-      if (!statRows.length && ['instrumen', 'asosiatif', 'eksperimen', 'rnd'].includes(jenisId)) add('statistik', { nama: 'Nilai statistik terbaca di hasil', hal: 'buku acuan', status: 'info', lokasi: 'Bab IV', detail: 'Tidak ada nilai indeks (CFI, RMSEA, KMO, alpha, AVE, VIF, dll.) yang terbaca dengan pola "NAMA = nilai".', saran: '' });
+      if (!statRows.length && ['instrumen', 'asosiatif', 'eksperimen', 'rnd'].includes(jenisId)) {
+        add('statistik', {
+          nama: 'Pelaporan Nilai Statistik Pengujian (Bab IV: Hasil Penelitian)',
+          hal: 'buku acuan',
+          status: 'info',
+          lokasi: 'Bab IV (Hasil Penelitian)',
+          detail: 'Nilai indeks statistik pengujian (seperti CFI, RMSEA, KMO, Cronbach\'s alpha, AVE, VIF, dll.) belum terdeteksi di Bab IV.',
+          saran: 'Pada Bab IV (Hasil Penelitian dan Pembahasan), cantumkan tabel dan narasi hasil estimasi statistik pengujian instrumen/model beserta nilai numeriknya (misal: "CFI = 0.96", "RMSEA = 0.04", "Alpha = 0.88") dan bandingkan dengan kriteria buku acuan psikometri (Hair et al., 2010; Wiley Handbook; Downing & Haladyna). Untuk rancangan teknik pengujiannya tetap dijelaskan di Bab III.'
+        });
+      }
     }
 
     // ------------------------------------------------------- ringkasan bab
