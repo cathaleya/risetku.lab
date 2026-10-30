@@ -48,18 +48,31 @@ function renderProject() {
         <p class="lede">Tetapkan jenis review, pertanyaan penelitian, dan kata kunci kriteria. Kata kunci dipakai untuk menandai rekaman secara otomatis dan menyorot teks di panel ekstraksi.</p>
       </div>
       <div class="btn-row">
-        <button class="btn" data-action="preset-import" title="Baca pengaturan dari templat Excel (.xlsx), Word (.docx), atau JSON. Rekaman tidak terhapus.">Impor pengaturan (Excel/Word)</button>
-        <button class="btn ghost" data-action="tpl-xlsx" title="Templat Excel berisi pengaturan proyek saat ini">Unduh templat Excel</button>
-        <button class="btn ghost" data-action="tpl-docx" title="Templat Word berisi pengaturan proyek saat ini">Unduh templat Word</button>
+        <button class="btn" data-action="preset-import" title="Baca kriteria & pengaturan dari templat Excel (.xlsx), Word (.docx), CSV, atau JSON. Rekaman tidak terhapus."><i class="fa-solid fa-file-import"></i> Impor Templat (Excel / Word / CSV)</button>
+        <button class="btn ghost" data-action="tpl-xlsx" title="Templat Excel dinamis berisi pengaturan proyek saat ini"><i class="fa-solid fa-file-excel text-emerald-600"></i> Unduh Templat Excel</button>
+        <button class="btn ghost" data-action="tpl-docx" title="Templat Word dinamis berisi pengaturan proyek saat ini"><i class="fa-solid fa-file-word text-blue-600"></i> Unduh Templat Word</button>
+        <a href="templates/Templat-Pengaturan-Telaah-SLR.xlsx" download class="btn ghost" style="text-decoration:none" title="Unduh berkas templat Excel standar baku bawaan"><i class="fa-solid fa-download"></i> Templat Baku (.xlsx)</a>
         <button class="btn ghost" data-action="preset-export" title="Unduh pengaturan proyek tanpa rekaman (JSON)">Ekspor JSON</button>
       </div>
     </div>
 
-    ${UI.settingsDraft ? `<section class="card settings-draft">
-      <h2>Periksa sebelum diterapkan: ${esc(UI.settingsDraft.name)}</h2>
-      <p class="hint">Bagian berikut terbaca dari file. Hanya bagian yang tercantum yang akan diganti; bagian lain dan semua rekaman tetap.</p>
-      <dl class="sd-list">${UI.settingsDraft.sum.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
-      <div class="btn-row"><button class="btn" data-action="settings-apply">Terapkan</button><button class="btn ghost" data-action="settings-cancel">Batal</button></div>
+    ${UI.settingsDraft ? `<section class="card settings-draft" style="border: 2px solid #10b981; background: #f0fdf4;">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px">
+        <div>
+          <h2 style="color:#065f46;margin:0;font-size:1.15rem;display:flex;align-items:center;gap:8px">
+            <i class="fa-solid fa-circle-check text-emerald-600"></i>
+            <span>Templat Siap Diterapkan: <b>${esc(UI.settingsDraft.name)}</b></span>
+          </h2>
+          <p class="hint" style="color:#047857;margin:4px 0 0 0">
+            Berikut ringkasan kriteria &amp; pengaturan yang berhasil dibaca dari berkas Anda. Klik <b>"Terapkan Sekarang"</b> agar kriteria langsung masuk ke formulir dan evaluasi skrining.
+          </p>
+        </div>
+        <div class="btn-row" style="margin:0">
+          <button class="btn" data-action="settings-apply" style="background:#059669;color:#fff;font-weight:bold;padding:9px 18px;box-shadow:0 4px 12px rgba(5,150,105,0.3)"><i class="fa-solid fa-check"></i> Terapkan Sekarang</button>
+          <button class="btn ghost" data-action="settings-cancel" style="color:#64748b">Batal</button>
+        </div>
+      </div>
+      <dl class="sd-list" style="background:#ffffff;border-radius:10px;padding:12px 16px;border:1px solid #d1fae5">${UI.settingsDraft.sum.map(([k, v]) => `<dt style="font-weight:700;color:#1e293b">${esc(k)}</dt><dd style="color:#334155">${esc(v)}</dd>`).join('')}</dl>
     </section>` : ''}
 
     <div class="grid-2">
@@ -111,6 +124,22 @@ function renderProject() {
           <h3 class="exc-h">Kata kunci eksklusi</h3>
           <div class="crit-list">${crit.exclude.map((c, i) => critRow(c, 'exclude', i)).join('') || '<p class="empty">Belum ada kata kunci eksklusi.</p>'}</div>
           <button class="btn ghost" data-action="crit-add" data-kind="exclude">+ Tambah kata kunci eksklusi</button>
+        </div>
+      </div>
+
+      <div class="crit-bar-actions" style="margin-top:16px;padding:12px 16px;background:#f8fafc;border:1.5px dashed #cbd5e1;border-radius:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+        <div>
+          <b style="font-size:12.5px;color:#0f172a;display:flex;align-items:center;gap:6px">
+            <i class="fa-solid fa-file-excel text-emerald-600"></i>
+            <span>Ingin memasukkan kriteria dari berkas templat?</span>
+          </b>
+          <span class="muted small" style="font-size:11.5px;display:block;margin-top:2px">
+            Unggah templat Excel (.xlsx), Word (.docx), atau CSV untuk memasukkan seluruh kriteria dan kata kunci sekaligus secara otomatis.
+          </span>
+        </div>
+        <div class="btn-row" style="margin:0">
+          <button class="btn sm" data-action="preset-import" title="Unggah file templat kriteria"><i class="fa-solid fa-upload"></i> Unggah / Impor Templat</button>
+          <a href="templates/Templat-Pengaturan-Telaah-SLR.xlsx" download class="btn sm ghost" style="text-decoration:none" title="Unduh format templat Excel"><i class="fa-solid fa-download"></i> Unduh Format Templat (.xlsx)</a>
         </div>
       </div>
       ${(() => {
@@ -216,10 +245,10 @@ function renderImport() {
           <label class="check"><input type="checkbox" id="ftAuto" ${S.project.ftAuto !== false ? 'checked' : ''}> <span><b>Saring teks lengkap otomatis.</b> PDF untuk studi di tahap Teks lengkap dibaca seluruhnya. Kalau kriteria wajib (${esc((typeof keyCrit === 'function' ? keyCrit() : []).join(', '))}) disebut kurang dari <input type="number" id="ftMin" class="ft-min" min="1" max="50" value="${typeof ftMin === 'function' ? ftMin() : 5}" aria-label="Batas sebutan"> kali di isi teks (daftar pustaka tidak dihitung), studi langsung di-Exclude dengan alasannya dan PDF-nya dibuang dari penyimpanan. Tetap tercatat di Laporan dan PRISMA.</span></label>
         </div>
         <label class="drop" id="dropZone" for="fileInput">
-          <input type="file" id="fileInput" multiple accept=".csv,.tsv,.txt,.ris,.nbib,.medline,.bib,.pdf" hidden>
+          <input type="file" id="fileInput" multiple accept=".csv,.tsv,.txt,.ris,.nbib,.medline,.bib,.pdf,.xlsx,.xls,.docx,.json" hidden>
           <span class="drop-icon" aria-hidden="true">⇪</span>
           <b>Seret file ke sini atau klik untuk memilih</b>
-          <span class="muted">CSV/TSV (Scopus, WoS, PubMed, Rayyan), RIS, NBIB/MEDLINE (PubMed, ERIC), BibTeX, PDF · bisa banyak file sekaligus</span>
+          <span class="muted">CSV/TSV (Scopus, WoS, PubMed, Rayyan), RIS, NBIB/MEDLINE, BibTeX, PDF · berkas templat (.xlsx/.docx) otomatis dialihkan ke Proyek &amp; Kriteria</span>
           <span class="drop-progress" id="dropProgress"></span>
         </label>
         <label class="btn sm ghost folder-btn"><input type="file" id="folderInput" webkitdirectory multiple hidden>📁 Pilih folder PDF…</label>

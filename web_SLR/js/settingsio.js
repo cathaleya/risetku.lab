@@ -3,7 +3,13 @@
 'use strict';
 
 const SettingsIO = {
+  // Pustaka lokal vendor sebagai prioritas utama (offline-ready), CDN sebagai cadangan
   LIBS: {
+    XLSX: 'vendor/xlsx.full.min.js',
+    mammoth: 'vendor/mammoth.browser.min.js',
+    JSZip: 'vendor/jszip.min.js'
+  },
+  CDN_LIBS: {
     XLSX: 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
     mammoth: 'https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js',
     JSZip: 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js'
@@ -12,12 +18,23 @@ const SettingsIO = {
   FIELD_TYPES: { text: 'Teks singkat', textarea: 'Paragraf', number: 'Angka', select: 'Pilihan', multi: 'Pilihan (banyak)' },
 
   loadLib(name) {
-    if (window[name]) return Promise.resolve(window[name]);
+    if (typeof window !== 'undefined' && window[name]) return Promise.resolve(window[name]);
+    if (typeof window === 'undefined') {
+      try { return Promise.resolve(require(this.LIBS[name])); } catch (e) { return Promise.reject(e); }
+    }
     return new Promise((res, rej) => {
+      // 1. Coba muat pustaka lokal dari vendor lebih dulu
       const s = document.createElement('script');
       s.src = this.LIBS[name];
-      s.onload = () => window[name] ? res(window[name]) : rej(new Error(name + ' tidak termuat'));
-      s.onerror = () => rej(new Error('Gagal memuat ' + name + '. Periksa koneksi internet.'));
+      s.onload = () => window[name] ? res(window[name]) : rej(new Error(name + ' tidak termuat dari lokal vendor'));
+      s.onerror = () => {
+        // 2. Jika gagal dari vendor, coba muat dari CDN publik
+        const sCdn = document.createElement('script');
+        sCdn.src = this.CDN_LIBS[name];
+        sCdn.onload = () => window[name] ? res(window[name]) : rej(new Error(name + ' tidak termuat dari CDN'));
+        sCdn.onerror = () => rej(new Error('Gagal memuat pustaka ' + name + ' (periksa koneksi internet atau keberadaan berkas di web_SLR/vendor/).'));
+        document.head.appendChild(sCdn);
+      };
       document.head.appendChild(s);
     });
   },
@@ -114,11 +131,16 @@ const SettingsIO = {
   /* ---------- Membaca file -> tabel ---------- */
   async tablesFromFile(file) {
     const name = (file.name || '').toLowerCase();
+    // 1. Format Spreadsheet Excel / OpenDocument
     if (/\.(xlsx|xlsm|xls|ods)$/.test(name)) {
       const XLSX = await this.loadLib('XLSX');
       const wb = XLSX.read(await file.arrayBuffer(), { type: 'array' });
-      return wb.SheetNames.map(n => ({ name: n, rows: XLSX.utils.sheet_to_json(wb.Sheets[n], { header: 1, defval: '', raw: false }) }));
+      return wb.SheetNames.map(n => ({
+        name: n,
+        rows: XLSX.utils.sheet_to_json(wb.Sheets[n], { header: 1, defval: '', raw: false })
+      }));
     }
+    // 2. Format Dokumen Word (.docx)
     if (/\.docx$/.test(name)) {
       const mammoth = await this.loadLib('mammoth');
       const { value } = await mammoth.convertToHtml({ arrayBuffer: await file.arrayBuffer() });
@@ -131,8 +153,21 @@ const SettingsIO = {
         }))
       }));
     }
+    // 3. Format CSV, TSV, atau TXT
+    if (/\.(csv|tsv|txt)$/.test(name)) {
+      const text = await file.text();
+      if (typeof Papa !== 'undefined') {
+        const parsed = Papa.parse(text, { skipEmptyLines: true });
+        return [{ name: file.name.replace(/\.[^/.]+$/, ''), rows: parsed.data || [] }];
+      } else {
+        const lines = text.split(/\r?\n/).filter(Boolean);
+        const delim = name.endsWith('.tsv') ? '\t' : (text.includes(';') && !text.includes(',') ? ';' : ',');
+        const rows = lines.map(l => l.split(delim).map(c => c.trim().replace(/^"(.*)"$/, '$1')));
+        return [{ name: file.name.replace(/\.[^/.]+$/, ''), rows }];
+      }
+    }
     if (/\.doc$/.test(name)) throw new Error('Format .doc lama belum didukung. Simpan ulang sebagai .docx di Word (File → Save As → Word Document).');
-    throw new Error('Format file tidak dikenal.');
+    throw new Error('Format file tidak dikenal. Silakan gunakan .xlsx, .docx, .csv, atau .json.');
   },
 
   /* ---------- Tabel -> pengaturan ---------- */
@@ -140,26 +175,61 @@ const SettingsIO = {
     const out = {};
     const norm = s => String(s || '').trim().toLowerCase();
     const col = (head, re, not) => head.findIndex(h => re.test(h) && !(not && not.test(h)));
+
     tables.forEach(({ name, rows }) => {
       rows = rows.filter(r => r.some(c => String(c).trim()));
       if (!rows.length) return;
-      const head = rows[0].map(norm);
-      const body = rows.slice(1);
+
+      // Pemindaian baris header cerdas (toleran terhadap baris judul atau catatan di baris 0)
+      let headIdx = -1;
+      for (let i = 0; i < Math.min(rows.length, 10); i++) {
+        const rowNorm = rows[i].map(norm);
+        if (rowNorm.some(h => /kata kunci|keyword|terms?|query|istilah|frasa|pencarian|indikator/i.test(h)) ||
+            (rowNorm.some(h => /^alasan|reason/.test(h)) && !rowNorm.some(h => /^tipe$|^type$/.test(h))) ||
+            (rowNorm.some(h => /label|kolom|nama kolom/.test(h)) && rowNorm.some(h => /tipe|type/.test(h))) ||
+            (rowNorm.length >= 2 && (rowNorm.some(h => /isian|bagian|item|field|komponen/.test(h)) || /proyek|project/.test(norm(name))))) {
+          headIdx = i;
+          break;
+        }
+      }
+      if (headIdx === -1) headIdx = 0;
+
+      const head = rows[headIdx].map(norm);
+      const body = rows.slice(headIdx + 1);
       const sheet = norm(name);
-      if (head.some(h => /kata kunci|keyword/.test(h))) {
-        const cj = col(head, /jenis|tipe|kategori|type/), ck = col(head, /^kode|code/), cn = col(head, /nama|kriteria|label|criteri/, /kata kunci|keyword|jenis/), ct = col(head, /kata kunci|keyword/);
+
+      // A. Tabel Kriteria (Inklusi / Eksklusi)
+      if (head.some(h => /kata kunci|keyword|terms?|query|istilah|frasa|pencarian|indikator/i.test(h))) {
+        const cj = col(head, /jenis|tipe|kategori|type/);
+        const ck = col(head, /^kode|^code|^id$|^no$/);
+        const cn = col(head, /nama|kriteria|label|criteri|dimensi|konstruk|variabel/, /kata kunci|keyword|terms?|jenis/);
+        const ct = col(head, /kata kunci|keyword|terms?|query|istilah|frasa|pencarian|indikator/);
         const crit = { include: [], exclude: [] };
+
         body.forEach(r => {
-          const code = ck >= 0 ? String(r[ck]).trim() : '', nm = cn >= 0 ? String(r[cn]).trim() : '', terms = String(r[ct] || '').trim();
+          const code = ck >= 0 ? String(r[ck] || '').trim() : '';
+          const nm = cn >= 0 ? String(r[cn] || '').trim() : '';
+          const terms = ct >= 0 ? String(r[ct] || '').trim() : '';
           if (!terms && !nm) return;
-          const kind = cj >= 0 && /eks|exc/i.test(r[cj]) ? 'exclude' : cj < 0 && /^e\d/i.test(code) ? 'exclude' : 'include';
-          crit[kind].push({ label: code && nm ? `${code} – ${nm}` : code || nm, terms: terms.replace(/[“”]/g, '"') });
+          const kind = (cj >= 0 && /eks|exc/i.test(r[cj])) || (cj < 0 && /^e\d/i.test(code)) ? 'exclude' : 'include';
+          crit[kind].push({
+            label: code && nm ? `${code} – ${nm}` : code || nm,
+            terms: terms.replace(/[“”]/g, '"')
+          });
         });
         out.criteria = Object.assign(out.criteria || {}, crit);
-      } else if (head.some(h => /^alasan|reason/.test(h)) && !head.some(h => /^tipe$|^type$/.test(h))) {
-        const ck = col(head, /^kode|code/), ca = col(head, /alasan|reason/);
-        out.reasons = body.map(r => { const c = ck >= 0 ? String(r[ck]).trim() : '', a = String(r[ca] || '').trim(); return !a ? '' : c && !a.startsWith(c) ? `${c} – ${a}` : a; }).filter(Boolean);
-      } else if (head.some(h => /label|kolom|nama kolom/.test(h)) && head.some(h => /tipe|type/.test(h))) {
+      }
+      // B. Tabel Alasan Eksklusi
+      else if (head.some(h => /^alasan|reason/.test(h)) && !head.some(h => /^tipe$|^type$/.test(h))) {
+        const ck = col(head, /^kode|^code|^id$|^no$/), ca = col(head, /alasan|reason/);
+        out.reasons = body.map(r => {
+          const c = ck >= 0 ? String(r[ck] || '').trim() : '';
+          const a = String(r[ca] || '').trim();
+          return !a ? '' : c && !a.startsWith(c) ? `${c} – ${a}` : a;
+        }).filter(Boolean);
+      }
+      // C. Tabel Formulir Ekstraksi
+      else if (head.some(h => /label|kolom|nama kolom/.test(h)) && head.some(h => /tipe|type/.test(h))) {
         const cl = col(head, /label|kolom/), ct = col(head, /tipe|type/), co = col(head, /opsi|pilihan|option/, /tipe/), cg = col(head, /grup|group|bagian/);
         const ids = new Set();
         out.fields = body.filter(r => String(r[cl] || '').trim()).map(r => {
@@ -172,7 +242,9 @@ const SettingsIO = {
           if (type === 'select' || type === 'multi') f.options = String(r[co] || '').split(/[,;\n]/).map(s => s.trim()).filter(Boolean);
           return f;
         });
-      } else if (head.length >= 2 && (head.some(h => /isian|bagian|item|field|komponen/.test(h)) || /proyek|project/.test(sheet))) {
+      }
+      // D. Tabel Metadata Proyek & PICO
+      else if (head.length >= 2 && (head.some(h => /isian|bagian|item|field|komponen/.test(h)) || /proyek|project/.test(sheet))) {
         const P = { framework: {} };
         const kv = /isian|bagian|item|field|komponen/.test(head[0]) ? body : rows;
         kv.forEach(r => {
@@ -207,6 +279,7 @@ const SettingsIO = {
         if (Object.keys(P).length) out.project = Object.assign(out.project || {}, P);
       }
     });
+
     if (out.mode) { out.criteria = out.criteria || {}; out.criteria.mode = out.mode; delete out.mode; }
     if (out.lang) { out.criteria = out.criteria || {}; out.criteria.lang = out.lang; delete out.lang; }
     return out;
@@ -219,19 +292,23 @@ const SettingsIO = {
       if (P.title) s.push(['Judul proyek', P.title]);
       if (P.type) s.push(['Jenis review', this.TYPE_NAMES[P.type]]);
       if (P.question) s.push(['Pertanyaan review', P.question.split('\n').filter(Boolean).length + ' baris']);
-      if (P.framework) s.push(['Kerangka', Object.keys(P.framework).join(', ')]);
+      if (P.framework) s.push(['Kerangka (PICO/PCC)', Object.keys(P.framework).join(', ')]);
       if (P.reviewers) s.push(['Reviewer', P.reviewers.join(', ')]);
       if (P.databases) s.push(['Basis data', P.databases.map(d => d.name).join(', ')]);
       if (P.single !== undefined) s.push(['Jumlah reviewer', P.single ? '1 (Reviewer 2 disembunyikan)' : '2']);
     }
     if (p.criteria) {
-      if (p.criteria.include) s.push(['Kriteria inklusi', p.criteria.include.map(c => c.label).join(' · ') || '—']);
-      if (p.criteria.exclude) s.push(['Kata kunci eksklusi', p.criteria.exclude.map(c => c.label).join(' · ') || '—']);
-      if (p.criteria.mode) s.push(['Aturan', p.criteria.mode === 'any' ? 'OR' : 'AND']);
-      if (p.criteria.lang) s.push(['Kriteria bahasa', (p.criteria.lang.allowed || []).join(', ') + (p.criteria.lang.label ? ' · ' + p.criteria.lang.label : '')]);
+      if (p.criteria.include && p.criteria.include.length) {
+        s.push(['Kriteria inklusi', p.criteria.include.length + ' butir: ' + p.criteria.include.map(c => c.label).slice(0, 3).join(' · ') + (p.criteria.include.length > 3 ? '…' : '')]);
+      }
+      if (p.criteria.exclude && p.criteria.exclude.length) {
+        s.push(['Kata kunci eksklusi', p.criteria.exclude.length + ' butir: ' + p.criteria.exclude.map(c => c.label).slice(0, 3).join(' · ') + (p.criteria.exclude.length > 3 ? '…' : '')]);
+      }
+      if (p.criteria.mode) s.push(['Aturan kriteria', p.criteria.mode === 'any' ? 'OR (minimal satu cocok)' : 'AND (semua harus cocok)']);
+      if (p.criteria.lang && p.criteria.lang.on) s.push(['Kriteria bahasa', (p.criteria.lang.allowed || []).join(', ') + (p.criteria.lang.label ? ' · ' + p.criteria.lang.label : '')]);
     }
-    if (p.reasons) s.push(['Alasan eksklusi', p.reasons.length + ' alasan']);
-    if (p.fields) s.push(['Formulir ekstraksi', p.fields.length + ' kolom' + (p.fields.length ? ' (' + [...new Set(p.fields.map(f => f.group || 'Umum'))].join(', ') + ')' : '')]);
+    if (p.reasons && p.reasons.length) s.push(['Alasan eksklusi', p.reasons.length + ' alasan']);
+    if (p.fields && p.fields.length) s.push(['Formulir ekstraksi', p.fields.length + ' kolom' + (p.fields.length ? ' (' + [...new Set(p.fields.map(f => f.group || 'Umum'))].join(', ') + ')' : '')]);
     return s;
   }
 };

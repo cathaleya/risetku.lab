@@ -72,6 +72,14 @@ async function loadState(st) {
 
 /* ---------- Impor file ---------- */
 async function handleFiles(files) {
+  // Cek apakah berkas yang diunggah merupakan templat kriteria / pengaturan proyek
+  const templateFile = files.find(f => /\.(xlsx|xlsm|xls|docx)$/i.test(f.name) || /templat|kriteria|preset/i.test(f.name));
+  if (templateFile && !files.some(f => /\.(ris|nbib|medline|bib|pdf)$/i.test(f.name))) {
+    toast('Berkas "' + templateFile.name + '" terdeteksi sebagai Templat Kriteria/Pengaturan. Mengalihkan ke menu Proyek & Kriteria…', 'ok');
+    show('project');
+    presetImport(templateFile);
+    return;
+  }
   const source = (UI.importSource || '').trim() || 'Tidak diketahui';
   const cat = UI.importCat || 'database';
   const auto = UI.importAuto !== false;
@@ -314,15 +322,19 @@ async function presetImport(file) {
       p = JSON.parse(await file.text());
       if (!p || p.app !== 'telaah-slr-preset') throw new Error('File ini bukan pengaturan Telaah SLR.');
     } else {
-      toast('Membaca ' + file.name + '…');
+      toast('Membaca berkas ' + file.name + '…');
       p = SettingsIO.parseTables(await SettingsIO.tablesFromFile(file));
     }
     const sum = SettingsIO.summary(p);
-    if (!sum.length) throw new Error('Tidak ada bagian yang dikenali. Pakai templat dari tombol "Unduh templat" agar judul kolomnya sesuai.');
+    if (!sum.length) throw new Error('Tidak ada bagian yang dikenali dari ' + file.name + '. Pastikan berkas memiliki tabel Kriteria atau gunakan format templat bawaan.');
     UI.settingsDraft = { p, sum, name: file.name };
     renderProject();
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  } catch (e) { toast('Gagal membaca pengaturan: ' + e.message, 'bad'); }
+    toast('Berkas ' + file.name + ' siap! Klik tombol hijau "Terapkan Sekarang" di atas untuk memasukkan kriteria.', 'ok');
+  } catch (e) {
+    console.error('presetImport error:', e);
+    toast('Gagal membaca templat/pengaturan: ' + e.message, 'bad');
+  }
 }
 
 async function templateDownload(kind) {
@@ -339,7 +351,17 @@ async function templateDownload(kind) {
       downloadBlob(await zip.generateAsync({ type: 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' }), base + '.docx');
     }
     toast('Templat diunduh, sudah berisi pengaturan proyek saat ini sebagai contoh.', 'ok');
-  } catch (e) { toast('Gagal membuat templat: ' + e.message, 'bad'); }
+  } catch (e) {
+    console.warn('Gagal membuat templat dinamis, mengunduh berkas baku cadangan:', e);
+    const fallbackPath = kind === 'xlsx' ? 'templates/Templat-Pengaturan-Telaah-SLR.xlsx' : 'templates/Templat-Pengaturan-Telaah-SLR.docx';
+    const a = document.createElement('a');
+    a.href = fallbackPath;
+    a.download = kind === 'xlsx' ? 'Templat-Pengaturan-Telaah-SLR.xlsx' : 'Templat-Pengaturan-Telaah-SLR.docx';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    toast('Mengunduh berkas templat standar bawaan...', 'ok');
+  }
 }
 
 async function readBackup(file) {
@@ -593,10 +615,10 @@ document.addEventListener('click', async e => {
       UI.filter = 'all'; UI.q = ''; UI.sel = x.id; UI.docMode = x.hasText ? 'txt' : 'abs';
       show('work'); break;
     }
-    case 'preset-import': pickFile('.xlsx,.xls,.docx,.json', presetImport); break;
+    case 'preset-import': pickFile('.xlsx,.xls,.docx,.json,.csv,.tsv,.txt', presetImport); break;
     case 'tpl-xlsx': templateDownload('xlsx'); break;
     case 'tpl-docx': templateDownload('docx'); break;
-    case 'settings-apply': if (UI.settingsDraft) { const sd = UI.settingsDraft; UI.settingsDraft = null; applySettings(sd.p); renderProject(); toast('Pengaturan dari ' + sd.name + ' diterapkan.', 'ok'); } break;
+    case 'settings-apply': if (UI.settingsDraft) { const sd = UI.settingsDraft; UI.settingsDraft = null; applySettings(sd.p); renderProject(); toast('Pengaturan & kriteria dari ' + sd.name + ' berhasil diterapkan!', 'ok'); } break;
     case 'settings-cancel': UI.settingsDraft = null; renderProject(); break;
     case 'exp-ris': exportRIS(); break;
     case 'backup': backup(); break;
