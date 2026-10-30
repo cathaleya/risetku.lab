@@ -76,6 +76,7 @@ function renderWork() {
     </div>
   </div>
   ${typeof ftResetBanner === 'function' ? ftResetBanner() : ''}
+  ${typeof stageTransitionBanner === 'function' ? stageTransitionBanner() : ''}
   ${UI.stage === 'ex' ? newWorkBanner(pr) : ''}
   <div class="mobile-switch seg" role="tablist">
     ${[['list', 'Daftar'], ['a', 'Ekstraksi'], ['r1', 'R1'], ['r2', 'R2']].filter(([k]) => !(single && k === 'r2')).map(([k, l]) => `<button class="${UI.mobilePanel === k ? 'on' : ''}" data-action="mpanel" data-p="${k}">${l}</button>`).join('')}
@@ -88,6 +89,114 @@ function renderWork() {
   </div>`;
   renderList(list);
   renderPanels();
+}
+
+/* Banner transisi alur kerja: Judul & Abstrak -> Teks Lengkap -> Ekstraksi Data */
+function stageTransitionBanner() {
+  const counts = { ta: stageRecords('ta').length, ft: stageRecords('ft').length, ex: stageRecords('ex').length };
+  const single = isSingle();
+
+  // 1. Jika di tahap Judul & Abstrak (ta)
+  if (UI.stage === 'ta') {
+    const pr = stageProgress('ta');
+    if (pr.total > 0 && pr.done === pr.total) {
+      if (counts.ft > 0) {
+        return `<div class="cbanner ok" style="background:#ecfdf5;border:1.5px solid #a7f3d0;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-radius:10px">
+          <div>
+            <h4 style="margin:0 0 4px 0;color:#065f46;font-size:14px;display:flex;align-items:center;gap:6px"><i class="fa-solid fa-circle-check"></i> Skrining Judul &amp; Abstrak Selesai!</h4>
+            <span style="font-size:12.5px;color:#047857">Sebanyak <b>${counts.ft} studi</b> lolos seleksi awal. Sesuai alur PRISMA 2020, langkah berikutnya adalah <b>membaca teks lengkap (PDF)</b> untuk menilai kelayakan akhir sebelum mengekstraksi data.</span>
+          </div>
+          <div class="cb-actions" style="margin:0">
+            <button class="btn sm" data-action="stage" data-stage="ft" style="background:#059669;color:#fff;font-weight:700;padding:8px 16px;border-radius:8px;white-space:nowrap;box-shadow:0 2px 6px rgba(5,150,105,0.25)">
+              Lanjut ke Tahap 2: Teks Lengkap (${counts.ft} studi) <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>`;
+      } else {
+        if (!single && S.records.some(r => r.screen.ta && r.screen.ta.r1 && r.screen.ta.r1.d === 'include')) {
+          return `<div class="cbanner conf" style="background:#fffbeb;border:1.5px solid #fde68a;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-radius:10px">
+            <div>
+              <h4 style="margin:0 0 4px 0;color:#92400e;font-size:14px;display:flex;align-items:center;gap:6px"><i class="fa-solid fa-user-group"></i> Menunggu Keputusan Reviewer 2</h4>
+              <span style="font-size:12.5px;color:#78350f">Studi di-Include oleh Reviewer 1 namun belum diputuskan oleh Reviewer 2. Dalam mode 2 reviewer, studi baru lolos bila disepakati kedua reviewer. Bekerja sendiri? Klik tombol di samping untuk beralih ke <b>Mode 1 Reviewer</b>.</span>
+            </div>
+            <div class="cb-actions" style="margin:0">
+              <button class="btn sm" data-action="go-single" style="background:#b45309;color:#fff;font-weight:700;padding:8px 16px;border-radius:8px;white-space:nowrap">
+                Aktifkan Mode 1 Reviewer
+              </button>
+            </div>
+          </div>`;
+        }
+      }
+    }
+    return '';
+  }
+
+  // 2. Jika di tahap Teks Lengkap (ft)
+  if (UI.stage === 'ft') {
+    const pr = stageProgress('ft');
+    if (counts.ft === 0) {
+      return `<div class="cbanner warn" style="background:#fffbeb;border:1.5px solid #fde68a;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-radius:10px">
+        <div>
+          <h4 style="margin:0 0 4px 0;color:#92400e;font-size:14px;display:flex;align-items:center;gap:6px"><i class="fa-solid fa-triangle-exclamation"></i> Belum Ada Studi di Tahap Teks Lengkap</h4>
+          <span style="font-size:12.5px;color:#78350f">Studi akan masuk ke tahap ini setelah diputuskan <b>Include</b> pada skrining <b>Judul &amp; Abstrak</b>.</span>
+        </div>
+        <div class="cb-actions" style="margin:0">
+          <button class="btn sm" data-action="stage" data-stage="ta" style="background:#b45309;color:#fff;font-weight:700;padding:8px 16px;border-radius:8px;white-space:nowrap">
+            <i class="fa-solid fa-filter"></i> Buka Skrining Judul &amp; Abstrak
+          </button>
+        </div>
+      </div>`;
+    }
+    if (pr.total > 0 && pr.done === pr.total && counts.ex > 0) {
+      return `<div class="cbanner ok" style="background:#ecfdf5;border:1.5px solid #a7f3d0;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-radius:10px">
+        <div>
+          <h4 style="margin:0 0 4px 0;color:#065f46;font-size:14px;display:flex;align-items:center;gap:6px"><i class="fa-solid fa-circle-check"></i> Telaah Teks Lengkap Selesai!</h4>
+          <span style="font-size:12.5px;color:#047857">Sebanyak <b>${counts.ex} studi</b> resmi disepakati sebagai <b>Studi Inklusi Final</b> dan siap untuk diisi formulir ekstraksi datanya.</span>
+        </div>
+        <div class="cb-actions" style="margin:0">
+          <button class="btn sm" data-action="stage" data-stage="ex" style="background:#059669;color:#fff;font-weight:700;padding:8px 16px;border-radius:8px;white-space:nowrap;box-shadow:0 2px 6px rgba(5,150,105,0.25)">
+            Lanjut ke Tahap 3: Ekstraksi Data (${counts.ex} studi) <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>`;
+    }
+    return `<div class="cbanner" style="background:#eff6ff;border:1.5px solid #bfdbfe;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-radius:10px">
+      <div>
+        <h4 style="margin:0 0 4px 0;color:#1e40af;font-size:14px;display:flex;align-items:center;gap:6px"><i class="fa-solid fa-book-open"></i> Tahap 2: Telaah Teks Lengkap (${counts.ft} studi)</h4>
+        <span style="font-size:12.5px;color:#1e3a8a">Baca teks lengkap atau lampirkan PDF di panel tengah. Putuskan <b>Include</b> untuk meloloskan studi ke tahap <b>Ekstraksi Data</b>, atau <b>Exclude</b> (pilih alasan eksklusi untuk PRISMA).</span>
+      </div>
+      ${counts.ex > 0 ? `
+      <div class="cb-actions" style="margin:0">
+        <button class="btn sm ghost" data-action="stage" data-stage="ex" style="color:#2563eb;border-color:#93c5fd;font-weight:600;padding:6px 14px;white-space:nowrap">
+          Lihat Ekstraksi (${counts.ex} studi) →
+        </button>
+      </div>` : ''}
+    </div>`;
+  }
+
+  // 3. Jika di tahap Ekstraksi Data (ex)
+  if (UI.stage === 'ex' && counts.ex === 0) {
+    return `<div class="cbanner warn" style="background:#fffbeb;border:1.5px solid #fde68a;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-radius:10px">
+      <div>
+        <h4 style="margin:0 0 6px 0;color:#92400e;font-size:14px;display:flex;align-items:center;gap:6px"><i class="fa-solid fa-circle-info"></i> Formulir Ekstraksi Menunggu Studi Inklusi Final</h4>
+        <p style="margin:0;font-size:12.5px;color:#78350f;line-height:1.5">
+          Sesuai alur PRISMA 2020, <b>formulir ekstraksi data</b> hanya diisi untuk studi yang telah disetujui <b>"Include" pada tahap Teks Lengkap</b>.<br>
+          ${counts.ft > 0 ? `Saat ini ada <b>${counts.ft} studi</b> yang lolos seleksi awal dan sedang menunggu telaah teks lengkap.` : `Saat ini belum ada studi yang lolos dari seleksi awal judul &amp; abstrak.`}
+        </p>
+      </div>
+      <div class="cb-actions" style="margin:0">
+        ${counts.ft > 0 ? `
+        <button class="btn sm" data-action="stage" data-stage="ft" style="background:#b45309;color:#fff;font-weight:700;padding:9px 18px;border-radius:8px;white-space:nowrap;box-shadow:0 2px 6px rgba(180,83,9,0.25)">
+          <i class="fa-solid fa-book-open"></i> Buka Tahap Teks Lengkap (${counts.ft} studi)
+        </button>` : `
+        <button class="btn sm" data-action="stage" data-stage="ta" style="background:#b45309;color:#fff;font-weight:700;padding:9px 18px;border-radius:8px;white-space:nowrap">
+          <i class="fa-solid fa-filter"></i> Buka Skrining Judul &amp; Abstrak
+        </button>`}
+      </div>
+    </div>`;
+  }
+
+  return '';
 }
 
 /* Reset untuk kerja baru: muncul di akhir Ekstraksi data. Tidak menghapus apa pun sebelum cadangan diunduh dan dikonfirmasi. */
@@ -147,7 +256,16 @@ function advanceAfterDecision(r) {
   if (UI.autoNext === false || recGroup(r) === 'todo') return;
   const n = nextTodo(r.id);
   if (n) { UI.sel = n.id; UI.reveal = { r1: false, r2: false }; UI.findIdx = 0; autoDocMode(n); }
-  else toast('Semua rekaman di tahap ini sudah diputuskan.', 'ok');
+  else {
+    const counts = { ta: stageRecords('ta').length, ft: stageRecords('ft').length, ex: stageRecords('ex').length };
+    if (UI.stage === 'ta' && counts.ft > 0) {
+      toast(`Semua rekaman Judul & Abstrak selesai! ${counts.ft} studi lolos ke tahap Teks Lengkap.`, 'ok');
+    } else if (UI.stage === 'ft' && counts.ex > 0) {
+      toast(`Semua rekaman Teks Lengkap selesai! ${counts.ex} studi lolos ke tahap Ekstraksi Data.`, 'ok');
+    } else {
+      toast('Semua rekaman di tahap ini sudah diputuskan.', 'ok');
+    }
+  }
 }
 
 function renderList(list = filteredRecords()) {
@@ -197,8 +315,8 @@ function renderList(list = filteredRecords()) {
 
 function emptyListText() {
   if (!S.records.length) return 'Belum ada rekaman. Impor file di tab Impor.';
-  if (UI.stage === 'ft') return 'Belum ada rekaman yang lolos skrining judul/abstrak.';
-  if (UI.stage === 'ex') return 'Belum ada studi yang lolos skrining teks lengkap.';
+  if (UI.stage === 'ft') return 'Belum ada rekaman yang lolos skrining judul/abstrak. Pastikan studi disetujui (Include).';
+  if (UI.stage === 'ex') return 'Belum ada studi yang lolos skrining teks lengkap. Putuskan "Include" pada tahap Teks lengkap terlebih dahulu.';
   return 'Tidak ada rekaman yang cocok dengan filter.';
 }
 
@@ -214,6 +332,23 @@ async function renderPanelA() {
   if (!el) return;
   const r = rec(UI.sel);
   if (!r) {
+    const counts = { ta: stageRecords('ta').length, ft: stageRecords('ft').length, ex: stageRecords('ex').length };
+    if (UI.stage === 'ex' && counts.ex === 0) {
+      el.innerHTML = `<div class="panel-empty" style="padding:48px 24px;text-align:center">
+        <div style="font-size:42px;margin-bottom:12px">📋</div>
+        <h3 style="margin-bottom:8px;color:#1e293b">Formulir Ekstraksi Menunggu Studi Inklusi Final</h3>
+        <p style="max-width:520px;margin:0 auto 16px auto;color:#64748b;font-size:13px;line-height:1.6">
+          Sesuai standar alur PRISMA 2020: <b>1. Skrining Judul &amp; Abstrak</b> → <b>2. Telaah Teks Lengkap (PDF)</b> → <b>3. Ekstraksi Data</b>.<br>
+          Studi akan muncul di formulir ekstraksi setelah Anda memutuskan <b>Include</b> pada tahap <b>Teks lengkap</b>.
+        </p>
+        ${counts.ft > 0 ? `<button class="btn" data-action="stage" data-stage="ft" style="background:#2563eb;color:#fff;font-weight:700;padding:9px 20px;border-radius:8px">
+          <i class="fa-solid fa-book-open"></i> Buka Tahap Teks Lengkap (${counts.ft} studi)
+        </button>` : `<button class="btn" data-action="stage" data-stage="ta" style="background:#059669;color:#fff;font-weight:700;padding:9px 20px;border-radius:8px">
+          <i class="fa-solid fa-filter"></i> Buka Skrining Judul &amp; Abstrak
+        </button>`}
+      </div>`;
+      return;
+    }
     el.innerHTML = `<div class="panel-empty"><h3>Belum ada rekaman dipilih</h3><p>${emptyListText()}</p><button class="btn" data-action="goto" data-view="import">Buka Impor</button></div>`;
     return;
   }
@@ -456,7 +591,18 @@ function renderReviewer(rv) {
   const head = `<div class="rv-head ${rv}">
     <span class="rv-dot"></span><div class="rv-name"><b>${esc(revName(rv))}</b><span>Reviewer ${rv === 'r1' ? 1 : 2}${editable ? '' : ' · hanya baca'}</span></div>
     ${r ? rvStatus(r, rv) : ''}</div>`;
-  if (!r) { el.innerHTML = head + '<div class="panel-empty small"><p>Pilih rekaman di daftar.</p></div>'; return; }
+  if (!r) {
+    if (UI.stage === 'ex' && stageRecords('ex').length === 0) {
+      const cFt = stageRecords('ft').length;
+      el.innerHTML = head + `<div class="panel-empty small" style="padding:24px 16px;text-align:center">
+        <p style="color:#64748b;margin-bottom:10px">Formulir ekstraksi (${esc(revName(rv))}) akan otomatis aktif untuk setiap studi yang lolos tahap Teks Lengkap.</p>
+        ${cFt > 0 ? `<button class="btn sm ghost" data-action="stage" data-stage="ft"><i class="fa-solid fa-book-open"></i> Buka Teks Lengkap (${cFt})</button>` : ''}
+      </div>`;
+      return;
+    }
+    el.innerHTML = head + '<div class="panel-empty small"><p>Pilih rekaman di daftar.</p></div>';
+    return;
+  }
   if (isMasked(rv, r)) {
     el.innerHTML = head + `<div class="masked"><div class="mask-icon" aria-hidden="true"></div><b>Disembunyikan (mode blind)</b>
       <p>Keputusan ${esc(revName(rv))} terbuka setelah kedua reviewer selesai pada rekaman ini.</p>
@@ -546,6 +692,7 @@ function decide(rv, d) {
     if (now === 'include') toast(UI.stage === 'ta' ? 'Include: rekaman masuk tahap Teks lengkap.' : 'Include: studi masuk tahap Ekstraksi data dan dihitung sebagai studi inklusi.', 'ok');
     else if (now === 'exclude') toast(UI.stage === 'ft' && !s[rv].reason && !(s.final && s.final.reason) ? 'Exclude tercatat. Pilih alasan eksklusi agar muncul di Laporan dan PRISMA.' : 'Exclude tercatat di Laporan dan PRISMA.', UI.stage === 'ft' ? 'warn' : 'ok');
     else if (now === 'conflict') toast('Keputusan kedua reviewer berbeda: selesaikan konflik.', 'warn');
+    else if (now === 'partial') toast(`${revName(rv)}: ${DEC[d].id}. Menunggu keputusan ${revName(rv === 'r1' ? 'r2' : 'r1')} (mode 2 reviewer).`, 'ok');
   }
   const needReason = UI.stage === 'ft' && s[rv] && s[rv].d === 'exclude' && !s[rv].reason;
   if (s[rv] && s[rv].d === d && !needReason) advanceAfterDecision(r);

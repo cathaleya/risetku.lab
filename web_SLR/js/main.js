@@ -537,6 +537,15 @@ document.addEventListener('click', async e => {
       break;
     }
     case 'apply-template': S.fields = templateFields(S.project.type); S.reasons = DEFAULT_REASONS[S.project.type].slice(); touch(); renderProject(); toast('Templat formulir & alasan eksklusi diterapkan.', 'ok'); break;
+    case 'go-single': {
+      S.project.single = true;
+      UI.as = 'r1';
+      touch();
+      refreshChrome();
+      renderWork();
+      toast('Mode 1 reviewer aktif: keputusan Reviewer 1 langsung menjadi keputusan akhir.', 'ok');
+      break;
+    }
     case 'crit-add': S.criteria[a.dataset.kind].push({ id: uid('c'), label: '', terms: '' }); touch(); renderProject(); break;
     case 'crit-del': S.criteria[a.dataset.kind] = S.criteria[a.dataset.kind].filter(c => c.id !== a.dataset.cid); touch(); renderProject(); break;
     case 'field-add': S.fields.push({ id: uid('f'), label: 'Kolom baru', type: 'text' }); touch(); renderProject(); break;
