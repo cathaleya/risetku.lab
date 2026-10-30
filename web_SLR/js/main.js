@@ -72,9 +72,9 @@ async function loadState(st) {
 
 /* ---------- Impor file ---------- */
 async function handleFiles(files) {
-  // Cek apakah berkas yang diunggah merupakan templat kriteria / pengaturan proyek
+  // 1. Cek apakah pengguna mengunggah templat kriteria / pengaturan proyek secara tersendiri
   const templateFile = files.find(f => /\.(xlsx|xlsm|xls|docx)$/i.test(f.name) || /templat|kriteria|preset/i.test(f.name));
-  if (templateFile && !files.some(f => /\.(ris|nbib|medline|bib|pdf)$/i.test(f.name))) {
+  if (templateFile && files.length === 1 && !files.some(f => /\.(ris|nbib|medline|bib|pdf)$/i.test(f.name))) {
     toast('Berkas "' + templateFile.name + '" terdeteksi sebagai Templat Kriteria/Pengaturan. Mengalihkan ke menu Proyek & Kriteria…', 'ok');
     show('project');
     presetImport(templateFile);
@@ -112,27 +112,92 @@ async function handleFiles(files) {
       } catch (e) { /* bukan daftar berkas */ }
     }
   }
+
+  const unmappedFiles = [];
+  let filesImported = 0;
+
   for (const f of files) {
     const ext = f.name.split('.').pop().toLowerCase();
     try {
       if (ext === 'pdf') { pdfs.push(f); continue; }
       if (manFiles.has(f)) continue;
-      const text = await f.text();
-      if (ext === 'ris' || (ext === 'txt' && /^TY  - /m.test(text))) { const s = pick(f.name, text, []); addBatch(s.source, s.cat, f.name, Parsers.parseRIS(text), s.auto); }
-      else if (ext === 'nbib' || ext === 'medline' || (ext === 'txt' && /^(PMID|OWN)\s*- /m.test(text))) { const s = pick(f.name, text, []); addBatch(s.source, s.cat, f.name, Parsers.parseMedline(text), s.auto); }
-      else if (ext === 'bib') { const s = pick(f.name, text, []); addBatch(s.source, s.cat, f.name, Parsers.parseBib(text), s.auto); }
-      else {
-        const { headers, rows } = Parsers.parseCSV(text);
-        if (!headers.length) { toast(f.name + ': kolom tidak terbaca.', 'bad'); continue; }
-        const s = pick(f.name, text, headers);
-        UI.importDraft = { file: f.name, headers, rows, map: Parsers.guessMapping(headers), source: s.source, cat: s.cat, auto: s.auto };
-        renderImport();
-        return; // satu CSV dipetakan dulu
+
+      if (ext === 'ris' || (ext === 'txt' && /^TY  - /m.test(await f.slice(0, 100).text().catch(() => '')))) {
+        const text = await f.text();
+        const s = pick(f.name, text, []);
+        addBatch(s.source, s.cat, f.name, Parsers.parseRIS(text), s.auto);
+        filesImported++;
+      } else if (ext === 'nbib' || ext === 'medline') {
+        const text = await f.text();
+        const s = pick(f.name, text, []);
+        addBatch(s.source, s.cat, f.name, Parsers.parseMedline(text), s.auto);
+        filesImported++;
+      } else if (ext === 'bib') {
+        const text = await f.text();
+        const s = pick(f.name, text, []);
+        addBatch(s.source, s.cat, f.name, Parsers.parseBib(text), s.auto);
+        filesImported++;
+      } else if (ext === 'xlsx' || ext === 'xls') {
+        // Ekspor data pustaka dalam format Excel (Scopus, WoS, Dimensions, dll)
+        if (typeof XLSX !== 'undefined') {
+          const wb = XLSX.read(await f.arrayBuffer(), { type: 'array' });
+          const firstSheet = wb.SheetNames[0];
+          const rawRows = XLSX.utils.sheet_to_json(wb.Sheets[firstSheet], { header: 1, defval: '', raw: false });
+          if (rawRows.length > 1) {
+            const headers = rawRows[0].map(h => String(h || '').trim());
+            const rows = rawRows.slice(1).map(r => {
+              const obj = {};
+              headers.forEach((h, i) => { obj[h] = r[i] || ''; });
+              return obj;
+            });
+            const map = Parsers.guessMapping(headers);
+            const s = pick(f.name, '', headers);
+            if (map.title) {
+              const recs = Parsers.rowsToRecords(rows, map);
+              addBatch(s.source, s.cat, f.name, recs, s.auto);
+              filesImported++;
+            } else {
+              unmappedFiles.push({ file: f.name, headers, rows, map, source: s.source, cat: s.cat, auto: s.auto });
+            }
+          }
+        }
+      } else {
+        const text = await f.text();
+        if (/^TY  - /m.test(text)) {
+          const s = pick(f.name, text, []);
+          addBatch(s.source, s.cat, f.name, Parsers.parseRIS(text), s.auto);
+          filesImported++;
+        } else if (/^(PMID|OWN)\s*- /m.test(text)) {
+          const s = pick(f.name, text, []);
+          addBatch(s.source, s.cat, f.name, Parsers.parseMedline(text), s.auto);
+          filesImported++;
+        } else {
+          const { headers, rows } = Parsers.parseCSV(text);
+          if (!headers.length) { toast(f.name + ': kolom tidak terbaca.', 'bad'); continue; }
+          const map = Parsers.guessMapping(headers);
+          const s = pick(f.name, text, headers);
+          if (map.title) {
+            // Kolom judul terdeteksi otomatis, langsung impor rekaman secara instan!
+            const recs = Parsers.rowsToRecords(rows, map);
+            addBatch(s.source, s.cat, f.name, recs, s.auto);
+            filesImported++;
+          } else {
+            // Kolom ambigu / tidak ada judul baku, masukkan ke antrean konfirmasi manual
+            unmappedFiles.push({ file: f.name, headers, rows, map, source: s.source, cat: s.cat, auto: s.auto });
+          }
+        }
       }
     } catch (e) {
       console.error(e);
       toast(f.name + ': ' + e.message, 'bad');
     }
+  }
+
+  // Jika ada berkas CSV yang kolomnya ambigu, buka konfirmasi pemetaan untuk berkas tersebut
+  if (unmappedFiles.length) {
+    UI.importDraft = unmappedFiles[0];
+    UI.pendingDrafts = unmappedFiles.slice(1);
+    toast('Berkas ' + UI.importDraft.file + ' memerlukan konfirmasi pemetaan kolom.', 'warn');
   }
   if (pdfs.length) {
     const recs = [];
@@ -294,11 +359,22 @@ function presetExport() {
   downloadText(JSON.stringify({ app: 'telaah-slr-preset', project, reasons, criteria, fields }, null, 2), slug(project.title) + '-pengaturan.json', 'application/json');
 }
 
-/* Terapkan pengaturan (sebagian boleh): hanya bagian yang ada di file yang diganti */
-function applySettings(p) {
+/* Terapkan pengaturan: bisa menerapkan secara bersih (reset rekaman lama) atau parsial */
+function applySettings(p, clearRecords = false) {
+  if (clearRecords || S.isSample) {
+    S.records = [];
+    S.batches = [];
+    S.skipped = [];
+    delete S.ftUndo;
+    UI.lastPdf = [];
+    if (typeof DB !== 'undefined') {
+      DB.clear('texts').catch(() => {});
+      DB.clear('pdfs').catch(() => {});
+    }
+  }
   if (p.project) {
     const { framework, ...rest } = p.project;
-    Object.assign(S.project, rest, { created: S.project.created });
+    Object.assign(S.project, rest, { created: S.project.created || today() });
     if (framework) S.project.framework = Object.assign({}, S.project.framework, framework);
   }
   if (Array.isArray(p.reasons) && p.reasons.length) S.reasons = p.reasons.slice();
@@ -432,6 +508,18 @@ document.addEventListener('click', async e => {
   switch (act) {
     case 'goto': show(a.dataset.view); break;
     case 'new-empty': await DB.clear('texts'); await DB.clear('pdfs'); await loadState(defaultState(S.project.type)); show('project'); toast('Proyek kosong siap. Mulai dari kriteria dan impor.', 'ok'); break;
+    case 'new-empty-ask': {
+      if (confirm('Mulai proyek baru yang bersih? Semua rekaman, riwayat impor, dan berkas lampiran akan dikosongkan agar siap untuk data riset baru.')) {
+        await DB.clear('texts');
+        await DB.clear('pdfs');
+        await loadState(defaultState(S.project.type));
+        S.isSample = false;
+        touch();
+        show('project');
+        toast('Proyek baru bersih siap digunakan!', 'ok');
+      }
+      break;
+    }
     case 'load-sample': await DB.clear('texts'); await DB.clear('pdfs'); await loadState(sampleState()); show('work'); break;
     case 'reset-ask': UI.confirmReset = true; renderExport(); break;
     case 'reset-no': UI.confirmReset = false; renderExport(); break;
@@ -487,9 +575,35 @@ document.addEventListener('click', async e => {
       $$('[data-map]').forEach(s => { d.map[s.dataset.map] = s.value; });
       UI.importDraft = null;
       addBatch(d.source, d.cat, d.file, Parsers.rowsToRecords(d.rows, d.map), d.auto);
+      if (UI.pendingDrafts && UI.pendingDrafts.length) {
+        UI.importDraft = UI.pendingDrafts.shift();
+        toast('Lanjut memetakan berkas berikutnya: ' + UI.importDraft.file, 'warn');
+      }
       renderImport(); break;
     }
-    case 'map-cancel': UI.importDraft = null; renderImport(); break;
+    case 'map-cancel': {
+      UI.importDraft = null;
+      if (UI.pendingDrafts && UI.pendingDrafts.length) {
+        UI.importDraft = UI.pendingDrafts.shift();
+      }
+      renderImport(); break;
+    }
+    case 'clear-all-records-ask': {
+      if (confirm('Kosongkan semua rekaman (' + S.records.length + ' rekaman), berkas PDF, dan riwayat impor? Kriteria & pengaturan proyek tetap dipertahankan.')) {
+        await DB.clear('texts');
+        await DB.clear('pdfs');
+        S.records = [];
+        S.batches = [];
+        S.skipped = [];
+        delete S.ftUndo;
+        UI.lastPdf = [];
+        S.isSample = false;
+        touch();
+        renderImport();
+        toast('Semua rekaman data lama berhasil dibersihkan.', 'ok');
+      }
+      break;
+    }
     case 'batch-ask': UI.confirmBatch = a.dataset.id; renderImport(); break;
     case 'batch-cancel': UI.confirmBatch = null; renderImport(); break;
     case 'batch-del': {
@@ -618,7 +732,8 @@ document.addEventListener('click', async e => {
     case 'preset-import': pickFile('.xlsx,.xls,.docx,.json,.csv,.tsv,.txt', presetImport); break;
     case 'tpl-xlsx': templateDownload('xlsx'); break;
     case 'tpl-docx': templateDownload('docx'); break;
-    case 'settings-apply': if (UI.settingsDraft) { const sd = UI.settingsDraft; UI.settingsDraft = null; applySettings(sd.p); renderProject(); toast('Pengaturan & kriteria dari ' + sd.name + ' berhasil diterapkan!', 'ok'); } break;
+    case 'settings-apply': if (UI.settingsDraft) { const sd = UI.settingsDraft; UI.settingsDraft = null; applySettings(sd.p, false); renderProject(); toast('Pengaturan & kriteria dari ' + sd.name + ' berhasil diterapkan!', 'ok'); } break;
+    case 'settings-apply-clean': if (UI.settingsDraft) { const sd = UI.settingsDraft; UI.settingsDraft = null; applySettings(sd.p, true); renderProject(); toast('Pengaturan diterapkan & data lama dibersihkan untuk proyek baru!', 'ok'); } break;
     case 'settings-cancel': UI.settingsDraft = null; renderProject(); break;
     case 'exp-ris': exportRIS(); break;
     case 'backup': backup(); break;
@@ -785,7 +900,12 @@ document.addEventListener('change', e => {
   if (t.id === 'autoNext') { UI.autoNext = t.checked; try { localStorage.setItem('telaah-autonext', t.checked ? '1' : '0'); } catch (x) { /* abaikan */ } return; }
   if (t.id === 'wfilter') { UI.filter = t.value; renderWork(); return; }
   if (t.id === 'wsort') { UI.sort = t.value; renderWork(); return; }
-  if (t.id === 'fileInput') { handleFiles(Array.from(t.files)); return; }
+  if (t.id === 'fileInput') {
+    const files = Array.from(t.files);
+    t.value = '';
+    handleFiles(files);
+    return;
+  }
   if (t.id === 'impMatch') { UI.importMatch = t.checked; return; }
   if (t.id === 'csvDelim') { UI.delim = t.value; return; }
   if (t.id === 'exDual') {

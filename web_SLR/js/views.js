@@ -67,8 +67,9 @@ function renderProject() {
             Berikut ringkasan kriteria &amp; pengaturan yang berhasil dibaca dari berkas Anda. Klik <b>"Terapkan Sekarang"</b> agar kriteria langsung masuk ke formulir dan evaluasi skrining.
           </p>
         </div>
-        <div class="btn-row" style="margin:0">
-          <button class="btn" data-action="settings-apply" style="background:#059669;color:#fff;font-weight:bold;padding:9px 18px;box-shadow:0 4px 12px rgba(5,150,105,0.3)"><i class="fa-solid fa-check"></i> Terapkan Sekarang</button>
+        <div class="btn-row" style="margin:0;gap:8px">
+          <button class="btn" data-action="settings-apply-clean" style="background:#059669;color:#fff;font-weight:bold;padding:9px 18px;box-shadow:0 4px 12px rgba(5,150,105,0.3)"><i class="fa-solid fa-sparkles"></i> Terapkan ke Proyek Baru (Bersihkan Data Lama)</button>
+          <button class="btn ghost" data-action="settings-apply" style="color:#047857"><i class="fa-solid fa-check"></i> Terapkan (Pertahankan Rekaman)</button>
           <button class="btn ghost" data-action="settings-cancel" style="color:#64748b">Batal</button>
         </div>
       </div>
@@ -218,11 +219,22 @@ function renderImport() {
   const ic = UI.importCat || 'database';
   $('#view-import').innerHTML = `
   <div class="page">
-    <div class="page-head"><div>
-      <p class="eyebrow">Langkah 2 · Identifikasi</p>
-      <h1>Impor rekaman &amp; teks lengkap</h1>
-      <p class="lede">Unggah ekspor dari basis data (CSV, RIS, BibTeX) atau file PDF. Setiap unggahan dicatat sebagai sumber dan dihitung otomatis di diagram PRISMA.</p>
-    </div></div>
+    <div class="page-head">
+      <div>
+        <p class="eyebrow">Langkah 2 · Identifikasi</p>
+        <h1>Impor rekaman &amp; teks lengkap</h1>
+        <p class="lede">Unggah ekspor dari basis data (CSV, RIS, BibTeX, Excel) atau file PDF. Mendukung banyak berkas sekaligus dengan deduplikasi otomatis berstandar PRISMA 2020.</p>
+      </div>
+      <div class="btn-row">
+        ${S.records.length ? `<button class="btn sm ghost danger" data-action="clear-all-records-ask" style="color:#dc2626;border-color:#fca5a5" title="Hapus semua rekaman tersimpan"><i class="fa-solid fa-trash-can"></i> Kosongkan Rekaman (${S.records.length})</button>` : ''}
+        <button class="btn sm ghost" data-action="new-empty-ask"><i class="fa-solid fa-folder-plus"></i> Mulai Proyek Kosong</button>
+      </div>
+    </div>
+
+    ${S.isSample ? `<section class="card cbanner conf" style="background:#fffbeb;border:1.5px solid #fde68a;margin-bottom:16px;">
+      <span><b style="color:#b45309">⚠️ Perhatian:</b> Saat ini masih tersimpan <b>data contoh bawaan</b> (9 studi fiktif). Klik tombol di samping untuk mengosongkannya agar data lama tidak bercampur dengan data penelitian baru Anda.</span>
+      <span class="cb-actions"><button class="btn sm" data-action="clear-all-records-ask" style="background:#b45309;color:#fff">Kosongkan Data Contoh</button></span>
+    </section>` : ''}
 
     <section class="card">
       <div class="import-grid">
