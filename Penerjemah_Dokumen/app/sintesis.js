@@ -12,13 +12,21 @@ const SYNTHESIS_PATTERNS = {
     desc: 'Menggabungkan 2 atau lebih studi dalam satu klaim untuk membangun dasar teoretis yang kuat.',
     template: 'Banyak penelitian terkini telah membuktikan bahwa [Klaim Teoretis Utama] ([Penulis 1, Tahun]; [Penulis 2, Tahun]; [Penulis 3, Tahun]).'
   },
+  phenomenon: {
+    id: 'phenomenon',
+    name: 'Retorika Berbasis Fenomena (Storytelling Ilmiah)',
+    cls: 'phenomenon',
+    icon: 'fa-solid fa-feather-pointed',
+    desc: 'Membuka dengan anomali atau kesenjangan empiris lapangan, menghubungkan kalimat secara kohesif (semantic chaining), dan menempatkan sitasi sebagai penopang di akhir.',
+    template: 'Di luar fase “[Topik/Fokus Masalah]”, penelitian telah menunjukkan bahwa masih ada kesenjangan [Isu Empiris] yang membutuhkan perhatian ([Penulis 1, Tahun]; [Penulis 2, Tahun]). Sementara [Subjek] diharapkan memiliki [Karakteristik A] ([Penulis 3, Tahun]), bukti lapangan justru mengungkap bahwa [Kenyataan B] ([Penulis 4, Tahun]). Tidak mengherankan, salah satu prediktor utamanya adalah [Mekanisme C] ([Penulis 5, Tahun]).'
+  },
   contrast: {
     id: 'contrast',
     name: 'Pola Kontras & Pertentangan',
     cls: 'contrast',
     icon: 'fa-solid fa-code-compare',
     desc: 'Mempertentangkan atau membandingkan temuan/sudut pandang yang berbeda di antara para ahli terdahulu.',
-    template: 'Meskipun [Penulis A, Tahun] menekankan bahwa [Pandangan A], temuan [Penulis B, Tahun] dan [Penulis C, Tahun] justru menunjukkan sebaliknya, yakni [Pandangan B].'
+    template: 'Kendati [Pandangan/Teori A] secara luas diasumsikan berlaku ([Penulis A, Tahun]), investigasi empiris terkini justru membuktikan hal yang sebaliknya, yakni [Temuan B] ([Penulis B, Tahun]).'
   },
   consensus: {
     id: 'consensus',

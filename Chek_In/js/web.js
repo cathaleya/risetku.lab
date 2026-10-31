@@ -680,6 +680,131 @@
       distribusiBabTable(true) +
       '</div>';
 
+    // 2b. AUDIT POLA SINTESIS & GAYA RETORIKA AKADEMIK (Phenomenon-Driven vs Parade Literatur)
+    const audit = (window.SintesisEngine && result && parsed) ? window.SintesisEngine.auditDocument(result.S.chapters, parsed.blocks) : null;
+
+    h += '<div class="konsep-section-title">' +
+      '<span>🔬 Audit Pola Sintesis & Gaya Retorika Naskah</span>' +
+      '<span style="font-size:0.8rem;font-weight:600;color:var(--muted)">Penerapan Master Skill: Phenomenon-Driven Synthesis</span>' +
+      '</div>';
+
+    if (audit) {
+      h += '<div class="sintesis-style-banner ' + audit.styleClass + '">' +
+        '<div style="font-size:1.8rem;line-height:1">' + (audit.styleClass === 'phenomenon' ? '🌟' : audit.styleClass === 'transitional' ? '⚖️' : '🚨') + '</div>' +
+        '<div>' +
+          '<div class="sintesis-style-title">' + esc(audit.styleLabel) + '</div>' +
+          '<p class="sintesis-style-desc">' + esc(audit.styleDesc) + '</p>' +
+        '</div>' +
+      '</div>';
+
+      h += '<div class="sintesis-grid">' +
+        '<div class="sintesis-stat-card ' + (audit.phenomenonPct >= 80 ? 'ok' : audit.phenomenonPct >= 50 ? 'warn' : 'danger') + '">' +
+          '<div class="sintesis-stat-num ' + (audit.phenomenonPct >= 80 ? 'ok' : audit.phenomenonPct >= 50 ? 'warn' : 'danger') + '">' + audit.phenomenonPct + '%</div>' +
+          '<div class="sintesis-stat-lbl">Skor Retorika Fenomena</div>' +
+          '<small style="font-size:0.72rem;color:#64748b">Fokus konsep vs kliping pengarang</small>' +
+        '</div>' +
+        '<div class="sintesis-stat-card ' + (audit.cohesionPct >= 75 ? 'ok' : audit.cohesionPct >= 50 ? 'warn' : 'danger') + '">' +
+          '<div class="sintesis-stat-num ' + (audit.cohesionPct >= 75 ? 'ok' : audit.cohesionPct >= 50 ? 'warn' : 'danger') + '">' + audit.cohesionPct + '%</div>' +
+          '<div class="sintesis-stat-lbl">Indeks Kohesi Antar-Kalimat</div>' +
+          '<small style="font-size:0.72rem;color:#64748b">Jembatan semantik (Semantic Chaining)</small>' +
+        '</div>' +
+        '<div class="sintesis-stat-card ' + (audit.paradeCount === 0 ? 'ok' : audit.paradeCount <= 3 ? 'warn' : 'danger') + '">' +
+          '<div class="sintesis-stat-num ' + (audit.paradeCount === 0 ? 'ok' : audit.paradeCount <= 3 ? 'warn' : 'danger') + '">' + audit.paradeCount + '</div>' +
+          '<div class="sintesis-stat-lbl">Temuan Parade Literatur</div>' +
+          '<small style="font-size:0.72rem;color:#64748b">Subjek diawali nama pengarang</small>' +
+        '</div>' +
+        '<div class="sintesis-stat-card ' + (audit.jumpCount === 0 ? 'ok' : audit.jumpCount <= 5 ? 'warn' : 'danger') + '">' +
+          '<div class="sintesis-stat-num ' + (audit.jumpCount === 0 ? 'ok' : audit.jumpCount <= 5 ? 'warn' : 'danger') + '">' + audit.jumpCount + '</div>' +
+          '<div class="sintesis-stat-lbl">Lompatan Antar-Kalimat</div>' +
+          '<small style="font-size:0.72rem;color:#64748b">Kalimat loncat tanpa jembatan konsep</small>' +
+        '</div>' +
+      '</div>';
+
+      if (audit.paradeList.length) {
+        h += '<details class="list" open><summary>⚠️ Kalimat Terindikasi Parade Literatur / Kliping Pengarang (' + audit.paradeList.length + ' sampel ditemukan)</summary>' +
+          '<p class="muted" style="font-size:0.8rem;margin:6px 0 10px 0">Hindari menjadikan nama pengarang sebagai subjek utama kalimat. Ubah kalimat agar memimpin dengan <b>klaim fenomena atau mekanisme</b>, dan tempatkan nama pengarang di akhir klausa di dalam kurung sebagai <i>evidentiary anchor</i>.</p>' +
+          audit.paradeList.map((p) => {
+            return '<div class="sintesis-item-card parade">' +
+              '<div class="sintesis-item-header"><span style="color:#dc2626;font-weight:700">Terdeteksi: ' + esc(p.match) + ' (' + esc(p.label) + ')</span>' + (p.page ? '<span class="muted">hlm ' + p.page + '</span>' : '') + '</div>' +
+              '<div class="sintesis-item-text">“' + esc(p.sentence) + '”</div>' +
+              '<div class="sintesis-item-advice"><b>💡 Saran Rekonstruksi (Phenomenon-Driven):</b> Awali dengan fenomena riil atau sintesis tematik (mis. <i>"Penelitian telah membuktikan bahwa..."</i> atau <i>"Meskipun tuntutan X meningkat, fenomena Y tetap menjadi hambatan..."</i>), lalu letakkan sitasi di akhir kurung.</div>' +
+            '</div>';
+          }).join('') +
+          '</details>';
+      }
+
+      if (audit.jumpList.length) {
+        h += '<details class="list"><summary>⚠️ Indikasi Lompatan Alur Antar-Kalimat / Abrupt Jumps (' + audit.jumpList.length + ' sampel terdeteksi)</summary>' +
+          '<p class="muted" style="font-size:0.8rem;margin:6px 0 10px 0">Kalimat-kalimat berikut terdeteksi berpindah topik secara tiba-tiba tanpa konjungsi transisi argumentatif atau jembatan kata kunci dari kalimat sebelumnya.</p>' +
+          audit.jumpList.map((j) => {
+            return '<div class="sintesis-item-card jump">' +
+              '<div class="sintesis-item-header"><span style="color:#d97706;font-weight:700">Lompatan Ide Mendadak (Zero Semantic Bridge)</span>' + (j.page ? '<span class="muted">hlm ' + j.page + '</span>' : '') + '</div>' +
+              '<div class="sintesis-item-text">“' + esc(j.sentence) + '”</div>' +
+              '<div class="sintesis-item-advice"><b>💡 Saran Penaut Alur (Pilar 4: Semantic Chaining):</b> Sambungkan ide ini dengan meminjam kata kunci utama kalimat sebelumnya (mis. teknik <i>Last-Word/First-Word Bridge</i>) atau sisipkan konektor transisional seperti <i>"Sementara itu..."</i>, <i>"Tidak mengherankan..."</i>, <i>"Akibatnya..."</i>, atau <i>"Sejalan dengan hal tersebut..."</i>.</div>' +
+            '</div>';
+          }).join('') +
+          '</details>';
+      }
+
+      if (audit.topicViolations.length) {
+        h += '<details class="list"><summary>⚠️ Kalimat Pembuka Paragraf Diawali Pengarang (' + audit.topicViolations.length + ' paragraf)</summary>' +
+          '<p class="muted" style="font-size:0.8rem;margin:6px 0 10px 0"><b>Pilar 3 (Anti-Parade Topic Sentence Rule):</b> Kalimat pertama paragraf wajib berupa proposisi argumen, ketegangan empiris, atau sintesis tema—bukan diawali nama peneliti.</p>' +
+          audit.topicViolations.map((v) => {
+            return '<div class="sintesis-item-card parade">' +
+              '<div class="sintesis-item-header"><span style="color:#dc2626;font-weight:700">Pelanggaran Topic Sentence: ' + esc(v.match) + '</span>' + (v.page ? '<span class="muted">hlm ' + v.page + '</span>' : '') + '</div>' +
+              '<div class="sintesis-item-text">“' + esc(v.sentence) + '”</div>' +
+            '</div>';
+          }).join('') +
+          '</details>';
+      }
+    }
+
+    // 2c. BEDAH KOMPARASI MODEL NYATA (Contoh User & Doktoral)
+    h += '<div class="sintesis-compare-box">' +
+      '<div class="konsep-section-title" style="margin-top:0">' +
+        '<span>📖 Komparasi Model: Parade Literatur Kliping vs Retorika Akademik Bercerita</span>' +
+      '</div>' +
+      '<p style="font-size:0.85rem;color:#475569;margin-bottom:12px;line-height:1.55">Perhatikan perbedaan mendasar antara teks yang sekadar mengomparasi nama pengarang secara melompat-lompat dengan teks retorika akademik yang mengalir selaras (<i>phenomenon-driven storytelling</i>):</p>' +
+      '<div class="sintesis-compare-grid">' +
+        '<div class="sintesis-compare-card bad">' +
+          '<div class="sintesis-compare-head bad"><span>❌</span> Model Parade Literatur (Kliping Pengarang - Hindari)</div>' +
+          '<div class="sintesis-compare-text">“Menurut Goldhammer et al. (2016), ada kesenjangan keterampilan digital siswa. Leahy dan Dolan (2010) menyatakan bahwa siswa diharapkan memiliki keterampilan digital. Verhoeven et al. (2016) menemukan bahwa banyak siswa tidak memiliki keterampilan digital di universitas. De Wit et al. (2012) berpendapat bahwa kursus TI di SMA sangat penting.”</div>' +
+          '<div style="font-size:0.78rem;color:#991b1b;background:#fef2f2;padding:6px 10px;border-radius:6px;line-height:1.45">' +
+            '<b>Ciri Penyakit:</b><br>' +
+            '• Setiap kalimat diawali nama peneliti (monoton & melelahkan).<br>' +
+            '• Kalimat terfragmentasi dan melompat tanpa jembatan semantik.<br>' +
+            '• Tidak ada ketegangan naratif atau benang merah konseptual.' +
+          '</div>' +
+        '</div>' +
+        '<div class="sintesis-compare-card good">' +
+          '<div class="sintesis-compare-head good"><span>✓</span> Model Retorika Akademik Bercerita (Phenomenon-Driven - Standar Scopus/S3)</div>' +
+          '<div class="sintesis-compare-text">“Di luar fase “digital divide”, penelitian telah menunjukkan bahwa masih ada kesenjangan keterampilan digital di antara siswa yang membutuhkan perhatian (misalnya Goldhammer et al. 2016; Kaarakainen et al. 2017). Sementara siswa diharapkan memiliki keterampilan digital (Leahy dan Dolan 2010), penelitian telah menunjukkan bahwa saat mencapai universitas, banyak siswa tidak memiliki keterampilan digital yang dibutuhkan (Verhoeven et al. 2016). Tidak mengherankan, salah satu prediktor untuk keterampilan digital yang lebih kuat di universitas adalah mengikuti kursus Teknologi Informasi (TI) di sekolah menengah (De Wit et al. 2012; Verhoeven et al. 2016).”</div>' +
+          '<div style="font-size:0.78rem;color:#065f46;background:#ecfdf5;padding:6px 10px;border-radius:6px;line-height:1.45">' +
+            '<b>Keunggulan Retorika:</b><br>' +
+            '• <b>Pilar 1 (Hook Fenomena):</b> Membuka dengan paradoks kesenjangan keterampilan digital.<br>' +
+            '• <b>Pilar 4 (Semantic Chaining):</b> Kata kunci <i>"keterampilan digital"</i> dan <i>"universitas"</i> disambung mengalir dari Kalimat 1 &rarr; 2 &rarr; 3.<br>' +
+            '• <b>Konektor Transisi:</b> Memakai <i>"Sementara..."</i> dan <i>"Tidak mengherankan..."</i> sehingga tidak ada lompatan ide.' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+
+    // 2d. LABORATORIUM UJI PARAGRAF INSTAN (Interactive Tester)
+    h += '<div class="sintesis-tester-box">' +
+      '<div class="konsep-section-title" style="margin-top:0">' +
+        '<span>🧪 Laboratorium Uji Paragraf Instan (Alur & Kohesi Kalimat)</span>' +
+        '<span style="font-size:0.78rem;font-weight:600;color:var(--muted)">Uji langsung cuplikan tulisan Anda</span>' +
+      '</div>' +
+      '<p style="font-size:0.84rem;color:#475569;margin-bottom:10px">Tempelkan satu paragraf naskah Anda untuk membedah pola sintesis, mendeteksi parade pengarang, dan memetakan jembatan transisi antar-kalimat:</p>' +
+      '<textarea id="sintesisInput" class="sintesis-tester-textarea" placeholder="Tempelkan paragraf naskah di sini untuk diuji alur dan pola sintesisnya..."></textarea>' +
+      '<div class="sintesis-tester-btn-group">' +
+        '<button type="button" class="btn primary" id="btnTestSintesis" style="padding:8px 18px;font-weight:700">🔬 Bedah Alur & Sintesis Kalimat</button>' +
+        '<button type="button" class="btn" id="btnLoadUserExample" style="background:#f1f5f9;color:#334155;border:1px solid #cbd5e1;padding:8px 14px">📋 Muat Contoh Berbasis Fenomena</button>' +
+        '<button type="button" class="btn" id="btnLoadParadeExample" style="background:#f1f5f9;color:#334155;border:1px solid #cbd5e1;padding:8px 14px">📋 Muat Contoh Parade Literatur</button>' +
+      '</div>' +
+      '<div id="sintesisTestResult" style="margin-top:14px"></div>' +
+    '</div>';
+
     // 3. 5 Pillars Architecture
     h += '<div class="konsep-section-title">' +
       '<span>🏛️ 5 Pilar Arsitektur & Penyajian Ilmiah Monograf</span>' +
@@ -780,6 +905,96 @@
   }
 
   function bindKonsep() {
+    // Interactive Synthesis Tester
+    const btnTest = $('btnTestSintesis');
+    const inputArea = $('sintesisInput');
+    const resBox = $('sintesisTestResult');
+    const btnUserEx = $('btnLoadUserExample');
+    const btnParadeEx = $('btnLoadParadeExample');
+
+    const sampleUserEx = 'Di luar fase “digital divide”, penelitian telah menunjukkan bahwa masih ada kesenjangan keterampilan digital di antara siswa yang membutuhkan perhatian (misalnya Goldhammer et al. 2016; Kaarakainen et al. 2017). Sementara siswa diharapkan memiliki keterampilan digital (Leahy dan Dolan 2010), penelitian telah menunjukkan bahwa saat mencapai universitas, banyak siswa tidak memiliki keterampilan digital yang dibutuhkan (Verhoeven et al. 2016). Tidak mengherankan, salah satu prediktor untuk keterampilan digital yang lebih kuat di universitas adalah mengikuti kursus Teknologi Informasi (TI) di sekolah menengah (De Wit et al. 2012; Verhoeven et al. 2016).';
+
+    const sampleParadeEx = 'Menurut Goldhammer et al. (2016), ada kesenjangan keterampilan digital siswa. Leahy dan Dolan (2010) menyatakan bahwa siswa diharapkan memiliki keterampilan digital. Verhoeven et al. (2016) menemukan bahwa banyak siswa tidak memiliki keterampilan digital di universitas. De Wit et al. (2012) berpendapat bahwa kursus TI di SMA sangat penting.';
+
+    if (btnUserEx && inputArea) {
+      btnUserEx.addEventListener('click', () => {
+        inputArea.value = sampleUserEx;
+        if (btnTest) btnTest.click();
+      });
+    }
+
+    if (btnParadeEx && inputArea) {
+      btnParadeEx.addEventListener('click', () => {
+        inputArea.value = sampleParadeEx;
+        if (btnTest) btnTest.click();
+      });
+    }
+
+    if (btnTest && inputArea && resBox) {
+      btnTest.addEventListener('click', () => {
+        const text = inputArea.value.trim();
+        if (!text) {
+          resBox.innerHTML = '<p class="err" style="color:#dc2626;font-size:0.85rem">Ketikkan atau tempelkan teks paragraf terlebih dahulu.</p>';
+          return;
+        }
+
+        if (!window.SintesisEngine) {
+          resBox.innerHTML = '<p class="err" style="color:#dc2626;font-size:0.85rem">Modul SintesisEngine belum termuat.</p>';
+          return;
+        }
+
+        const analysis = window.SintesisEngine.analyzeParagraph(text);
+        if (!analysis.length) {
+          resBox.innerHTML = '<p class="err" style="color:#dc2626;font-size:0.85rem">Teks terlalu pendek untuk dianalisis sebagai kalimat akademik.</p>';
+          return;
+        }
+
+        let out = '<div style="margin-top:14px;border-top:1.5px dashed #cbd5e1;padding-top:14px;">';
+        out += '<h4 style="margin:0 0 10px 0;font-size:0.92rem;color:var(--navy);font-weight:800">📊 Hasil Bedah Pola Sintesis Kalimat per Kalimat:</h4>';
+
+        analysis.forEach((s) => {
+          let nodeClass = s.parade ? 'parade' : s.chainingType === 'jump' ? 'jump' : s.chainingType === 'strong' ? 'strong' : s.chainingType === 'moderate' ? 'moderate' : 'info';
+          out += '<div class="sintesis-chain-node ' + nodeClass + '">';
+          out += '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:6px;">';
+          out += '<strong style="font-size:0.84rem;color:var(--navy)">Kalimat ' + s.idx + (s.isTopicSentence ? ' (Kalimat Utama / Topic Sentence)' : '') + '</strong>';
+
+          if (s.parade) {
+            out += '<span style="background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:4px;font-size:0.72rem;font-weight:700">🚨 ' + esc(s.parade.label) + '</span>';
+          } else if (s.chainingType === 'strong') {
+            out += '<span style="background:#ecfdf5;color:#065f46;padding:2px 8px;border-radius:4px;font-size:0.72rem;font-weight:700">✓ Strong Chaining (Alur Sangat Selaras)</span>';
+          } else if (s.chainingType === 'moderate') {
+            out += '<span style="background:#eff6ff;color:#1e40af;padding:2px 8px;border-radius:4px;font-size:0.72rem;font-weight:700">✓ Mengalir (Moderate Chaining)</span>';
+          } else if (s.chainingType === 'jump') {
+            out += '<span style="background:#fffbeb;color:#92400e;padding:2px 8px;border-radius:4px;font-size:0.72rem;font-weight:700">⚠️ Lompatan Ide (Abrupt Jump)</span>';
+          } else {
+            out += '<span style="background:#f1f5f9;color:#475569;padding:2px 8px;border-radius:4px;font-size:0.72rem;font-weight:700">Kalimat Pembuka Paragraf</span>';
+          }
+          out += '</div>';
+
+          out += '<div style="font-size:0.86rem;line-height:1.55;color:#1e293b;margin-bottom:6px">“' + esc(s.text) + '”</div>';
+
+          out += '<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">';
+          if (s.connector) {
+            out += '<span class="sintesis-chain-bridge">🔗 Konektor Transisi: <b>' + esc(s.connector.match) + '</b> (' + esc(s.connector.label) + ')</span>';
+          }
+          if (s.sharedWithPrev && s.sharedWithPrev.length) {
+            out += '<span class="sintesis-chain-bridge">🌉 Jembatan Konsep Kata Kunci: <b>' + esc(s.sharedWithPrev.join(', ')) + '</b></span>';
+          }
+          if (s.chainingType === 'jump') {
+            out += '<span class="sintesis-chain-jump">⚠️ Kalimat ini tidak memiliki kata penghubung dan tidak meminjam konsep dari kalimat sebelumnya. Tambahkan konektor transisi atau kaitkan kata kunci agar tidak melompat.</span>';
+          }
+          if (s.parade) {
+            out += '<span class="sintesis-chain-jump" style="background:#fef2f2;color:#991b1b;border-color:#fecaca">💡 Rekomendasi: Ubah menjadi kalimat fenomena dengan meletakkan sitasi di dalam kurung di akhir klausa.</span>';
+          }
+          out += '</div>';
+          out += '</div>';
+        });
+
+        out += '</div>';
+        resBox.innerHTML = out;
+      });
+    }
+
     const btnGT = $('btnCopyGoldenThread');
     if (btnGT) {
       btnGT.addEventListener('click', () => {

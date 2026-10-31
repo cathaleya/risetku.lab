@@ -433,3 +433,57 @@ kbd { font-family: var(--f-mono); font-size: .74rem; font-weight: 700; color: va
 .konsep-copy-btn { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; border-radius: 6px; padding: 4px 10px; font-size: .78rem; font-weight: 700; cursor: pointer; transition: all .15s ease; }
 .konsep-copy-btn:hover { background: #1d4ed8; color: #ffffff; }
 
+/* ---------- Synthesis & Rhetorical Analysis (Phenomenon-Driven) ---------- */
+.sintesis-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 20px; }
+.sintesis-stat-card { background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 14px 16px; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.sintesis-stat-card.ok { border-top: 4px solid #10b981; }
+.sintesis-stat-card.warn { border-top: 4px solid #f59e0b; }
+.sintesis-stat-card.danger { border-top: 4px solid #ef4444; }
+.sintesis-stat-card.info { border-top: 4px solid #2563eb; }
+.sintesis-stat-num { font-size: 1.6rem; font-weight: 900; line-height: 1.1; margin-bottom: 4px; }
+.sintesis-stat-num.ok { color: #059669; }
+.sintesis-stat-num.warn { color: #d97706; }
+.sintesis-stat-num.danger { color: #dc2626; }
+.sintesis-stat-num.info { color: #2563eb; }
+.sintesis-stat-lbl { font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+
+.sintesis-style-banner { padding: 16px 20px; border-radius: 12px; margin-bottom: 20px; display: flex; align-items: flex-start; gap: 14px; }
+.sintesis-style-banner.phenomenon { background: #ecfdf5; border: 1.5px solid #a7f3d0; color: #065f46; }
+.sintesis-style-banner.transitional { background: #fffbeb; border: 1.5px solid #fde68a; color: #92400e; }
+.sintesis-style-banner.parade { background: #fef2f2; border: 1.5px solid #fecaca; color: #991b1b; }
+.sintesis-style-title { font-weight: 800; font-size: 1rem; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+.sintesis-style-desc { font-size: 0.85rem; line-height: 1.5; margin: 0; }
+
+.sintesis-compare-box { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 18px 20px; margin-bottom: 22px; }
+.sintesis-compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px; }
+@media (max-width: 768px) { .sintesis-compare-grid { grid-template-columns: 1fr; } }
+.sintesis-compare-card { background: #ffffff; border-radius: 10px; padding: 14px 16px; border: 1.5px solid #e2e8f0; }
+.sintesis-compare-card.bad { border-top: 4px solid #ef4444; }
+.sintesis-compare-card.good { border-top: 4px solid #10b981; }
+.sintesis-compare-head { font-weight: 800; font-size: 0.88rem; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.sintesis-compare-head.bad { color: #dc2626; }
+.sintesis-compare-head.good { color: #059669; }
+.sintesis-compare-text { font-size: 0.84rem; line-height: 1.6; color: #334155; margin-bottom: 8px; font-style: italic; }
+
+.sintesis-item-card { background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; }
+.sintesis-item-card.parade { border-left: 4px solid #ef4444; }
+.sintesis-item-card.jump { border-left: 4px solid #f59e0b; }
+.sintesis-item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 0.8rem; }
+.sintesis-item-text { font-size: 0.85rem; line-height: 1.5; color: #1e293b; margin-bottom: 6px; }
+.sintesis-item-advice { font-size: 0.8rem; color: #2563eb; background: #eff6ff; padding: 6px 10px; border-radius: 6px; border: 1px solid #bfdbfe; }
+
+/* Interactive Tester */
+.sintesis-tester-box { background: #ffffff; border: 2px solid #2563eb; border-radius: 14px; padding: 18px 22px; margin-bottom: 24px; box-shadow: 0 8px 25px rgba(37,99,235,0.08); }
+.sintesis-tester-textarea { width: 100%; min-height: 110px; padding: 12px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.88rem; font-family: inherit; line-height: 1.55; resize: vertical; margin-bottom: 12px; }
+.sintesis-tester-textarea:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.15); }
+.sintesis-tester-btn-group { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+
+.sintesis-chain-node { background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 12px 16px; margin-bottom: 10px; position: relative; }
+.sintesis-chain-node.strong { border-left: 4px solid #10b981; }
+.sintesis-chain-node.moderate { border-left: 4px solid #3b82f6; }
+.sintesis-chain-node.jump { border-left: 4px solid #f59e0b; background: #fffdfa; }
+.sintesis-chain-node.parade { border-left: 4px solid #ef4444; background: #fffafa; }
+.sintesis-chain-bridge { display: inline-flex; align-items: center; gap: 4px; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; border-radius: 4px; padding: 2px 7px; font-size: 0.74rem; font-weight: 700; margin-top: 6px; }
+.sintesis-chain-jump { display: inline-flex; align-items: center; gap: 4px; background: #fffbeb; color: #b45309; border: 1px solid #fde68a; border-radius: 4px; padding: 2px 7px; font-size: 0.74rem; font-weight: 700; margin-top: 6px; }
+
+
