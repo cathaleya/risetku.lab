@@ -44,6 +44,8 @@
       $('filename').innerHTML = '<b>' + files.length + ' berkas bab terpilih:</b><br><small style="color:var(--text-dim)">' +
         files.map((f) => esc(f.name)).join(', ') + ' (' + (totalSize / 1048576).toFixed(1) + ' MB total)</small>';
     }
+    // Bersihkan judul sebelumnya agar tidak terbawa ke file baru
+    if ($('judul')) $('judul').value = '';
     $('run').disabled = false;
     $('progress').textContent = '';
   }
@@ -61,6 +63,8 @@
     $('run').disabled = true;
     $('progress').textContent = 'Membaca ' + files.length + ' berkas naskah…';
     try {
+      // Bersihkan input judul sebelumnya agar naskah baru dideteksi secara murni
+      if ($('judul')) $('judul').value = '';
       parsed = await window.Parser.parseFiles(files, (curr, total, name) => {
         $('progress').textContent = 'Membaca berkas ' + curr + ' dari ' + total + ' (' + name + ')…';
       });
@@ -71,6 +75,10 @@
       }
       $('progress').textContent = 'Selesai membaca.';
       analyze();
+      // Sinkronkan judul yang terdeteksi otomatis dari dokumen baru ke kolom input
+      if (result && result.judul && $('judul') && !$('judul').value) {
+        $('judul').value = result.judul;
+      }
       if (window.matchMedia('(max-width: 900px)').matches) $('report').scrollIntoView({ behavior: 'smooth' });
     } catch (e) {
       console.error(e);
@@ -672,9 +680,11 @@
       '<span style="font-size:0.8rem;font-weight:600;color:var(--muted)">Terbaca otomatis dari file yang sedang dianalisis</span>' +
       '</div>';
 
+    const activeDocJudul = (result && (result.judul || result.title)) ? (result.judul || result.title) : 'Belum terdeteksi di lembar judul';
+
     h += '<div class="konsep-live-box">' +
       '<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:12px;">' +
-        '<div><strong>Judul:</strong> ' + esc(result.title || 'Belum terdeteksi di lembar judul') + '</div>' +
+        '<div><strong>Judul Naskah:</strong> ' + esc(activeDocJudul) + '</div>' +
         '<div><span class="konsep-tag">' + esc(jenjangLabel) + '</span><span class="konsep-tag">' + esc(jenisLabel) + '</span><span class="konsep-tag">' + esc((result.tahap || 'lengkap').toUpperCase()) + '</span><span class="konsep-tag">' + bodyWordsFmt + ' Kata Batang Tubuh</span></div>' +
       '</div>' +
       distribusiBabTable(true) +
@@ -844,13 +854,107 @@
       '<button type="button" class="konsep-copy-btn" id="btnCopyGoldenThread">📋 Salin Format Matriks Markdown</button>' +
       '</div>';
 
-    h += '<p class="muted" style="margin-top:0">Setiap rumusan masalah harus memiliki tautan lurus 1:1 tanpa deviasi menuju landasan teori, instrumen metodologi, sajian temuan, dan bahasan novelty.</p>' +
-      '<div class="mx-wrap"><table class="mx">' +
-      '<thead><tr><th>No</th><th>Rumusan Masalah (Bab I)</th><th>Tujuan Penelitian</th><th>Konstruk Teori (Bab II)</th><th>Instrumen & Analisis (Bab III)</th><th>Temuan Utama (Bab IV)</th><th>Pembahasan & Novelty (Bab IV/V)</th></tr></thead>' +
-      '<tbody>' +
-      '<tr><td>1</td><td>Sejauh mana efektivitas model X terhadap kompetensi Y?</td><td>Menganalisis efektivitas model X terhadap peningkatan kompetensi Y.</td><td>Teori Konstruktivisme Sosial, Taksonomi Hasil Belajar, Indikator Kompetensi Y.</td><td>Kuesioner skala Likert terkalibrasi Rasch Model, Uji Wilcoxon/t-test.</td><td>Peningkatan signifikan skor kompetensi Y (p &lt; .001, effect size d = 0.82).</td><td>Mengonfirmasi teori Z dan melengkapi keterbatasan riset Smith (2023) dalam konteks blended.</td></tr>' +
-      '<tr><td>2</td><td>Bagaimana dinamika interaksi partisipan dalam mengadopsi model X?</td><td>Mendeskripsikan dinamika interaksi partisipan selama implementasi model X.</td><td>Model Difusi Inovasi (Rogers), Kerangka Interaksi Kolaboratif.</td><td>Wawancara semi-terstruktur, observasi partisipatif berkode tematik.</td><td>Teridentifikasi 3 fase adaptasi: <i>hesitation, scaffolding, autonomous mastery</i>.</td><td>Menghasilkan proposisi baru mengenai pentingnya mediasi mentor dalam mitigasi resistensi.</td></tr>' +
-      '</tbody></table></div>';
+    h += '<p class="muted" style="margin-top:0">Setiap rumusan masalah harus memiliki tautan lurus 1:1 tanpa deviasi menuju landasan teori, instrumen metodologi, sajian temuan, dan bahasan novelty.</p>';
+
+    const questions = (result && result.koherensi && result.koherensi.questions) ? result.koherensi.questions : [];
+    const chapters = (result && result.S && result.S.chapters) || [];
+    const ch2 = chapters.find((c) => c.num === 2);
+    const ch3 = chapters.find((c) => c.num === 3);
+    const ch4 = chapters.find((c) => c.num === 4);
+    const ch5 = chapters.find((c) => c.num === 5);
+
+    if (questions.length) {
+      h += '<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:0.85rem;color:#166534;">' +
+        '<b>✓ Terdeteksi ' + questions.length + ' Rumusan Masalah dari Naskah Aktif</b> (dilacak lurus ke Bab I–V naskah yang sedang diuji):' +
+        '</div>';
+
+      h += '<div class="mx-wrap"><table class="mx">' +
+        '<thead><tr><th>No</th><th>Rumusan Masalah (Bab I)</th><th>Tujuan Penelitian</th><th>Konstruk Teori (Bab II)</th><th>Instrumen & Analisis (Bab III)</th><th>Temuan Utama (Bab IV)</th><th>Pembahasan & Novelty (Bab IV/V)</th></tr></thead>' +
+        '<tbody>';
+
+      questions.forEach((q, idx) => {
+        const no = idx + 1;
+        const rmText = q.text;
+
+        // Formulasi tujuan penelitian otomatis dari RM
+        let tujuanText = rmText.replace(/^[\d.)\s]+/, '').replace(/\?$/, '').trim();
+        if (/^(bagaimanakah|bagaimana)\s+/i.test(tujuanText)) {
+          tujuanText = 'Menganalisis dan mendeskripsikan ' + tujuanText.replace(/^(bagaimanakah|bagaimana)\s+/i, '');
+        } else if (/^(apakah|sejauh mana|seberapa besar)\s+/i.test(tujuanText)) {
+          tujuanText = 'Menguji dan membuktikan ' + tujuanText.replace(/^(apakah|sejauh mana|seberapa besar)\s+/i, '');
+        } else {
+          tujuanText = 'Menganalisis ' + tujuanText;
+        }
+        tujuanText += '.';
+
+        // Cari padanan di Bab II
+        let bab2Hits = [];
+        if (ch2 && ch2.headings) {
+          ch2.headings.forEach((h) => {
+            const matches = q.words.filter((w) => h.norm.includes(w));
+            if (matches.length >= 1 && !/^(kajian|bab|pendahuluan|landasan)/i.test(h.text)) {
+              bab2Hits.push(h.text);
+            }
+          });
+        }
+        const teoriVal = bab2Hits.length
+          ? bab2Hits.slice(0, 3).join('; ')
+          : ('Kajian teoretis & sintesis literatur terkait: ' + q.words.slice(0, 4).join(', '));
+
+        // Cari padanan di Bab III
+        let bab3Hits = [];
+        if (ch3 && ch3.headings) {
+          ch3.headings.forEach((h) => {
+            const matches = q.words.filter((w) => h.norm.includes(w));
+            if (matches.length >= 1) bab3Hits.push(h.text);
+          });
+        }
+        const instrumenVal = bab3Hits.length
+          ? bab3Hits.slice(0, 2).join('; ')
+          : (['rnd', 'instrumen'].includes(result.jenisId)
+            ? 'Spesifikasi kisi-kisi instrumen, validasi pakar & pengujian psikometrik/kalibrasi'
+            : 'Desain instrumen, sampling, dan protokol analisis empiris');
+
+        // Cari padanan di Bab IV
+        let bab4Hits = [];
+        if (ch4 && ch4.headings) {
+          ch4.headings.forEach((h) => {
+            const matches = q.words.filter((w) => h.norm.includes(w));
+            if (matches.length >= 1 && !/^(hasil|pembahasan|bab)/i.test(h.text)) bab4Hits.push(h.text);
+          });
+        }
+        const temuanVal = bab4Hits.length
+          ? bab4Hits.slice(0, 2).join('; ')
+          : ('Hasil pengujian & data empiris Bab IV untuk RM ' + no);
+
+        // Bab V / Pembahasan Novelty
+        const noveltyVal = 'Pembahasan sintesis dialektis & simpulan butir ' + no + ' menjawab RM ' + no;
+
+        h += '<tr>' +
+          '<td style="text-align:center;font-weight:700">' + no + '</td>' +
+          '<td><b>' + esc(rmText) + '</b></td>' +
+          '<td>' + esc(tujuanText) + '</td>' +
+          '<td>' + esc(teoriVal) + '</td>' +
+          '<td>' + esc(instrumenVal) + '</td>' +
+          '<td>' + esc(temuanVal) + '</td>' +
+          '<td>' + esc(noveltyVal) + '</td>' +
+          '</tr>';
+      });
+
+      h += '</tbody></table></div>';
+    } else {
+      h += '<div style="background:#fffbeb;border:1px solid #fef3c7;border-radius:8px;padding:12px 16px;margin-bottom:12px;font-size:0.85rem;color:#92400e;">' +
+        '<b>⚠️ Rumusan Masalah Belum Terdeteksi Otomatis dari Naskah Aktif</b><br>' +
+        '<span style="color:#b45309">Pastikan Bab I pada naskah yang diunggah memuat subbab "Rumusan Masalah" dengan butir kalimat tanya (diakhiri tanda tanya "?"). Matriks di bawah ini ditampilkan sebagai kerangka standar panduan:</span>' +
+        '</div>';
+
+      h += '<div class="mx-wrap"><table class="mx">' +
+        '<thead><tr><th>No</th><th>Rumusan Masalah (Bab I)</th><th>Tujuan Penelitian</th><th>Konstruk Teori (Bab II)</th><th>Instrumen & Analisis (Bab III)</th><th>Temuan Utama (Bab IV)</th><th>Pembahasan & Novelty (Bab IV/V)</th></tr></thead>' +
+        '<tbody>' +
+        '<tr><td style="text-align:center">1</td><td>[Rumusan Masalah 1 dari naskah aktif]</td><td>[Tujuan penelitian menjawab RM 1]</td><td>[Konstruk teoretis & variabel di Bab II]</td><td>[Desain instrumen & uji statistik di Bab III]</td><td>[Temuan empiris / hasil uji di Bab IV]</td><td>[Novelty & konfrontasi teori di Bab IV/V]</td></tr>' +
+        '<tr><td style="text-align:center">2</td><td>[Rumusan Masalah 2 dari naskah aktif]</td><td>[Tujuan penelitian menjawab RM 2]</td><td>[Konstruk teoretis & variabel di Bab II]</td><td>[Desain instrumen & uji statistik di Bab III]</td><td>[Temuan empiris / hasil uji di Bab IV]</td><td>[Novelty & konfrontasi teori di Bab IV/V]</td></tr>' +
+        '</tbody></table></div>';
+    }
 
     // 5. Bank Frasa Akademik Doktoral (Academic Phrasebank / Sentence Stems)
     h += '<div class="konsep-section-title">' +
@@ -998,12 +1102,52 @@
     const btnGT = $('btnCopyGoldenThread');
     if (btnGT) {
       btnGT.addEventListener('click', () => {
-        const text = '| No | Rumusan Masalah (Bab I) | Tujuan Penelitian | Landasan Teori (Bab II) | Metode & Instrumen (Bab III) | Temuan Utama (Bab IV) | Pembahasan & Kebaruan (Bab IV/V) |\n' +
-          '|---|---|---|---|---|---|---|\n' +
-          '| 1 | [Tuliskan Rumusan Masalah 1] | [Tuliskan Tujuan 1] | [Konstruk & Teori Rujukan] | [Desain, Populasi/Sampel, Uji Validitas] | [Temuan Kunci / Angka / Tema] | [Konfirmasi Literatur & Novelty] |\n' +
-          '| 2 | [Tuliskan Rumusan Masalah 2] | [Tuliskan Tujuan 2] | [Konstruk & Teori Rujukan] | [Desain, Populasi/Sampel, Uji Validitas] | [Temuan Kunci / Angka / Tema] | [Konfirmasi Literatur & Novelty] |\n';
+        let text = '| No | Rumusan Masalah (Bab I) | Tujuan Penelitian | Landasan Teori (Bab II) | Metode & Instrumen (Bab III) | Temuan Utama (Bab IV) | Pembahasan & Kebaruan (Bab IV/V) |\n' +
+          '|---|---|---|---|---|---|---|\n';
+
+        const qs = (result && result.koherensi && result.koherensi.questions) ? result.koherensi.questions : [];
+        if (qs.length) {
+          const chs = (result.S && result.S.chapters) || [];
+          const ch2 = chs.find((c) => c.num === 2);
+          const ch3 = chs.find((c) => c.num === 3);
+          const ch4 = chs.find((c) => c.num === 4);
+
+          qs.forEach((q, idx) => {
+            const no = idx + 1;
+            const rm = q.text.replace(/\|/g, '\\|');
+            let tujuan = rm.replace(/^[\d.)\s]+/, '').replace(/\?$/, '').trim();
+            if (/^(bagaimanakah|bagaimana)\s+/i.test(tujuan)) {
+              tujuan = 'Menganalisis dan mendeskripsikan ' + tujuan.replace(/^(bagaimanakah|bagaimana)\s+/i, '');
+            } else if (/^(apakah|sejauh mana|seberapa besar)\s+/i.test(tujuan)) {
+              tujuan = 'Menguji dan membuktikan ' + tujuan.replace(/^(apakah|sejauh mana|seberapa besar)\s+/i, '');
+            } else {
+              tujuan = 'Menganalisis ' + tujuan;
+            }
+            tujuan += '.';
+
+            let b2 = [];
+            if (ch2 && ch2.headings) ch2.headings.forEach(h => { if (q.words.some(w => h.norm.includes(w)) && !/^(kajian|bab)/i.test(h.text)) b2.push(h.text); });
+            const teori = (b2.length ? b2.slice(0, 3).join('; ') : 'Kajian teoretis ' + q.words.slice(0, 3).join(' ')).replace(/\|/g, '\\|');
+
+            let b3 = [];
+            if (ch3 && ch3.headings) ch3.headings.forEach(h => { if (q.words.some(w => h.norm.includes(w))) b3.push(h.text); });
+            const inst = (b3.length ? b3.slice(0, 2).join('; ') : 'Instrumen terkalibrasi & metode analisis').replace(/\|/g, '\\|');
+
+            let b4 = [];
+            if (ch4 && ch4.headings) ch4.headings.forEach(h => { if (q.words.some(w => h.norm.includes(w)) && !/^(hasil|pembahasan)/i.test(h.text)) b4.push(h.text); });
+            const temuan = (b4.length ? b4.slice(0, 2).join('; ') : 'Temuan empiris Bab IV untuk RM ' + no).replace(/\|/g, '\\|');
+
+            const nov = ('Simpulan butir ' + no + ' & novelty terkonfirmasi').replace(/\|/g, '\\|');
+
+            text += '| ' + no + ' | ' + rm + ' | ' + tujuan + ' | ' + teori + ' | ' + inst + ' | ' + temuan + ' | ' + nov + ' |\n';
+          });
+        } else {
+          text += '| 1 | [Tuliskan Rumusan Masalah 1] | [Tuliskan Tujuan 1] | [Konstruk & Teori Rujukan] | [Desain, Populasi/Sampel, Uji Validitas] | [Temuan Kunci / Angka / Tema] | [Konfirmasi Literatur & Novelty] |\n' +
+            '| 2 | [Tuliskan Rumusan Masalah 2] | [Tuliskan Tujuan 2] | [Konstruk & Teori Rujukan] | [Desain, Populasi/Sampel, Uji Validitas] | [Temuan Kunci / Angka / Tema] | [Konfirmasi Literatur & Novelty] |\n';
+        }
+
         navigator.clipboard.writeText(text).then(() => {
-          btnGT.textContent = '✓ Format Tersalin!';
+          btnGT.textContent = '✓ Matriks Tersalin!';
           setTimeout(() => { btnGT.textContent = '📋 Salin Format Matriks Markdown'; }, 2000);
         });
       });
@@ -1027,9 +1171,9 @@
     const btnBP = $('btnCopyMonografBlueprint');
     if (btnBP) {
       btnBP.addEventListener('click', () => {
-        const title = result.title || 'JUDUL DISERTASI / TESIS';
-        const jenjang = (result.jenjangId || 'disertasi').toUpperCase();
-        const jenis = (R.JENIS[result.jenisId] && R.JENIS[result.jenisId].label) || 'Kuantitatif / Kualitatif';
+        const title = (result && (result.judul || result.title)) ? (result.judul || result.title) : 'JUDUL DISERTASI / TESIS';
+        const jenjang = (result && result.jenjangId ? result.jenjangId : 'disertasi').toUpperCase();
+        const jenis = (result && result.jenisId && R.JENIS[result.jenisId] && R.JENIS[result.jenisId].label) || 'Kuantitatif / Kualitatif';
         const bp = '# BLUEPRINT & ARSITEKTUR MONOGRAF ' + jenjang + '\n' +
           'Judul: ' + title + '\n' +
           'Jenis Pendekatan: ' + jenis + '\n' +
