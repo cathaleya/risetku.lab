@@ -65,29 +65,38 @@ const cur = () => docs.get(UI.sel);
 // ---------- Memasukkan file ----------
 const readQueue = [];
 let reading = false;
+let renderLibTimer = null;
+function throttledRenderLib() {
+  if (renderLibTimer) return;
+  renderLibTimer = setTimeout(() => {
+    renderLibTimer = null;
+    renderLib();
+  }, 120);
+}
 
 async function addFiles(files) {
   let first = null;
-  if (files.length) toast(`Memasukkan ${files.length} file…`);
-  for (const f of files) {
+  if (!files || !files.length) return;
+  toast(`Memasukkan ${files.length} file…`);
+  const toPut = [];
+  for (let i = 0; i < files.length; i++) {
+    const f = files[i];
     const same = [...docs.values()].find(d => d.name === f.name && d.size === f.size);
     if (same) { first = first || same.id; continue; }
-    const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
-    const doc = { id, name: f.name, ext: extOf(f.name), size: f.size, added: Date.now(), status: 'reading', units: [], loc: [], sections: [], tr: {} };
-    try {
-      await DB.put('files', { id, blob: f });
-      await DB.put('docs', doc);
-    } catch (e) {
-      console.error(e);
-      banner(`Gagal memasukkan "${f.name}": ${e.message || e}. Coba tutup tab lain aplikasi ini lalu muat ulang (F5).`);
-      continue;
-    }
+    const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 7) + i;
+    const doc = { id, name: f.name, ext: extOf(f.name), size: f.size, added: Date.now() + i, status: 'reading', units: [], loc: [], sections: [], tr: {} };
     docs.set(id, doc);
     readQueue.push(id);
+    toPut.push(Promise.all([
+      DB.put('files', { id, blob: f }).catch(e => console.error(f.name, e)),
+      DB.put('docs', doc).catch(e => console.error(f.name, e))
+    ]));
     first = first || id;
   }
+  // Simpan secara paralel agar cepat & tidak blocking
+  await Promise.all(toPut);
   renderLib();
-  if (first) select(first);
+  if (first && !UI.sel) select(first);
   pumpRead();
 }
 
@@ -99,19 +108,25 @@ async function pumpRead() {
     if (!doc) continue;
     try {
       const rec = await DB.get('files', doc.id);
-      const res = await extract(doc, rec.blob, msg => { doc.msg = msg; renderLib(); if (UI.sel === doc.id) $('#docContent').innerHTML = `<p class="muted pad">${esc(msg)}</p>`; });
+      const res = await extract(doc, rec.blob, msg => {
+        doc.msg = msg;
+        throttledRenderLib();
+        if (UI.sel === doc.id) $('#docContent').innerHTML = `<p class="muted pad">${esc(msg)}</p>`;
+      });
       Object.assign(doc, res, { status: 'ready', msg: '' });
     } catch (e) {
       console.error(e);
       Object.assign(doc, { status: 'error', error: e.message });
     }
     await save(doc, true);
-    renderLib();
+    throttledRenderLib();
     if (UI.sel === doc.id) renderDoc();
     pumpTr();
     if (doc.status === 'ready') resolveMeta(doc);
+    await new Promise(r => setTimeout(r, 10)); // berikan jeda render event loop
   }
   reading = false;
+  renderLib();
 }
 
 // ---------- Ekstraksi isi dokumen ----------
@@ -539,11 +554,13 @@ async function pumpTr() {
       }
       save(doc);
       updateUnits(doc, idx);
-      renderLib();
+      throttledRenderLib();
       if (UI.sel === doc.id) updateTrBar(doc);
+      await new Promise(r => setTimeout(r, Math.max(10, opt().gap || 0)));
     }
   } finally {
     trBusy = false;
+    renderLib();
   }
 }
 
@@ -572,7 +589,12 @@ function renderLib() {
 }
 
 function select(id) {
-  if (UI.sel !== id) { UI.view = 'read'; UI.gram = null; }
+  if (UI.sel !== id) {
+    UI.view = 'read';
+    UI.gram = null;
+    const c = $('#docContent');
+    if (c) c.scrollTop = 0;
+  }
   UI.page = 'doc';
   UI.sel = id;
   LS.set('sel', id);
@@ -651,11 +673,15 @@ function renderDoc() {
   if (doc.status === 'reading') { c.innerHTML = `<p class="muted pad">${esc(doc.msg || 'Membaca file…')}</p>`; return; }
   if (doc.status === 'error') { c.innerHTML = `<p class="err pad">${esc(doc.error)}</p>`; return; }
   if (UI.view === 'orig') { renderOriginal(doc, c); return; }
+  const prevScroll = c ? c.scrollTop : 0;
   const secTitle = s => s.title ? `<div class="sec-title">${esc(s.title)}</div>` : '';
   c.innerHTML = '<div class="tr-bar" id="trBar"></div>' + (UI.lang === 'bi'
     ? `<div class="doc-text bi"><div class="bi-row bi-head"><div>Asli${doc.srcLang ? ' (' + esc(doc.srcLang) + ')' : ''}</div><div>Terjemahan (${esc(LANG_NAME[opt().tl] || opt().tl)})</div></div>${doc.sections.map(s =>
         `<section class="sec">${secTitle(s)}${s.blocks.map(b => `<div class="bi-row"><div class="bi-l">${blockHTML(doc, b, 'orig')}</div><div class="bi-r">${blockHTML(doc, b, 'id')}</div></div>`).join('')}</section>`).join('')}</div>`
     : `<div class="doc-text">${doc.sections.map(s => `<section class="sec">${secTitle(s)}${s.blocks.map(b => blockHTML(doc, b)).join('')}</section>`).join('')}</div>`);
+  if (prevScroll > 0) {
+    requestAnimationFrame(() => { if (c) c.scrollTop = prevScroll; });
+  }
   updateTrBar(doc);
   if ($('#find').value.trim()) runFind(false);
 }

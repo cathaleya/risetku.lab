@@ -500,6 +500,10 @@
         </div>
         <button class="btn sm ghost" id="editBtn" title="Edit teks langsung di sini">✎ Edit</button>
         <button class="btn sm ghost" id="gramBtn" title="Periksa ejaan dan tata bahasa">Periksa tata bahasa</button>
+        <button type="button" class="btn sm" id="synthesisBtn" onclick="openSynthesisModal()" style="background:#059669;color:#fff;font-weight:700;display:inline-flex;align-items:center;gap:6px" title="Buka Pembaca Pola Sintesis &amp; Pola Penyajian Artikel">
+          <i class="fa-solid fa-brain"></i>
+          <span>Pola Sintesis Artikel</span>
+        </button>
         <label class="check sync" id="syncLbl" hidden title="Saat terjemahan di kanan diedit, teks asli di kiri diterjemahkan balik otomatis"><input type="checkbox" id="syncChk" checked> Edit kanan ubah kiri</label>
         <div class="find">
           <input type="search" id="find" placeholder="Cari di dokumen ( / )" aria-label="Cari di dokumen">
@@ -635,5 +639,7 @@
 <script src="license.js"></script>
 <script src="app.js"></script>
 <script src="kutipan.js"></script>
+<script src="sintesis.js"></script>
+<div id="synthesisModal" class="modal" hidden></div>
 </body>
 </html>
