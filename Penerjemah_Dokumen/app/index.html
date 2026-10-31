@@ -466,7 +466,18 @@
       <input type="file" id="file" multiple hidden accept=".pdf,.docx,.pptx,.xlsx,.csv,.tsv,.txt,.md,.srt,.vtt,.html,.htm,.json,.png,.jpg,.jpeg,.bmp,.webp,.gif">
     </div>
     <button class="btn sm ghost wide" id="fromFolder">Ambil semua dari folder Masukan</button>
-    <div class="side-title">Dokumen <span id="libCount" class="muted"></span></div>
+    <div class="side-head" style="display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:.4rem;padding-bottom:.3rem;border-bottom:1px solid var(--line-2)">
+      <div class="side-title" style="margin:0">Dokumen <span id="libCount" class="muted"></span></div>
+      <div class="side-actions" style="display:flex;align-items:center;gap:4px">
+        <button type="button" class="btn-side-act danger" id="delAllPdfsBtn" title="Hapus semua file PDF dari aplikasi secara otomatis" style="font-size:11px;padding:3px 7px;border-radius:6px;background:rgba(239,68,68,0.1);color:#dc2626;border:1px solid rgba(239,68,68,0.25);cursor:pointer;font-weight:700;display:none;align-items:center;gap:4px">
+          <i class="fa-solid fa-file-pdf"></i>
+          <span>Hapus PDF</span>
+        </button>
+        <button type="button" class="btn-side-act" id="delAllDocsBtn" title="Kosongkan semua dokumen dari daftar" style="font-size:11px;padding:3px 6px;border-radius:6px;background:transparent;color:var(--muted);border:1px solid transparent;cursor:pointer;display:none;align-items:center" aria-label="Kosongkan semua dokumen">
+          <i class="fa-solid fa-trash-can"></i>
+        </button>
+      </div>
+    </div>
     <ul id="lib" class="lib"></ul>
   </aside>
 

@@ -542,3 +542,4 @@ window.closeThesisModal = closeThesisModal;
 window.copyGoldenThreadTemplate = copyGoldenThreadTemplate;
 window.copyFullThesisBlueprint = copyFullThesisBlueprint;
 window.copyTextToClipboard = copyTextToClipboard;
+

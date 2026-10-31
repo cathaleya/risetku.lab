@@ -200,9 +200,12 @@ label.check.sync { display: flex; align-items: center; gap: .3rem; font-size: .7
 /* Hapus di daftar */
 .lib .nm { display: flex; gap: .3rem; align-items: flex-start; }
 .lib .nm span { flex: 1; min-width: 0; }
-.lib .x { border: 0; background: none; color: var(--muted); font-size: 1.05rem; line-height: 1; cursor: pointer; padding: 0 .2rem; border-radius: 4px; opacity: .55; }
+.lib .x { border: 0; background: none; color: var(--muted); font-size: 1.15rem; line-height: 1; cursor: pointer; padding: 0 .25rem; border-radius: 4px; opacity: .45; transition: all .15s; }
 .lib li:hover .x, .lib li.on .x { opacity: 1; }
-.lib .x:hover { color: var(--no); background: var(--sunk); }
+.lib .x:hover { color: #dc2626; background: rgba(239, 68, 68, 0.15); transform: scale(1.15); }
+.btn-side-act { transition: all .15s ease; }
+.btn-side-act:hover { opacity: .85; transform: translateY(-1px); }
+.btn-side-act:active { transform: translateY(1px); }
 #quotesBtn.on { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
 
 /* Referensi */

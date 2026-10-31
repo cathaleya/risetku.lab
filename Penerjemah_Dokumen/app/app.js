@@ -590,11 +590,24 @@ function statusOf(doc) {
 
 function renderLib() {
   const list = [...docs.values()].sort((a, b) => b.added - a.added);
+  const pdfCount = list.filter(d => d.ext === 'pdf').length;
   $('#libCount').textContent = list.length ? '(' + list.length + ')' : '';
+
+  const delPdfBtn = $('#delAllPdfsBtn');
+  if (delPdfBtn) {
+    delPdfBtn.style.display = pdfCount > 0 ? 'inline-flex' : 'none';
+    delPdfBtn.title = `Hapus semua ${pdfCount} file PDF dari aplikasi secara otomatis`;
+  }
+  const delAllBtn = $('#delAllDocsBtn');
+  if (delAllBtn) {
+    delAllBtn.style.display = list.length > 0 ? 'inline-flex' : 'none';
+    delAllBtn.title = `Kosongkan semua (${list.length}) dokumen dari daftar`;
+  }
+
   $('#lib').innerHTML = list.length ? list.map(d => {
     const [cls, txt, p] = statusOf(d);
     return `<li data-id="${d.id}" class="${d.id === UI.sel && UI.page !== 'quotes' ? 'on' : ''}" title="${esc(d.name)}">
-      <div class="nm"><span>${esc(d.name)}</span><button class="x" data-del="${d.id}" title="Hapus dokumen ini dari aplikasi" aria-label="Hapus ${esc(d.name)}">×</button></div>
+      <div class="nm"><span>${esc(d.name)}</span><button class="x" data-del="${d.id}" title="Hapus file ini secara manual" aria-label="Hapus ${esc(d.name)}">×</button></div>
       <div class="st ${cls}"><span class="chip">${esc(d.ext)}</span>${esc(txt)}</div>
       ${p != null ? `<div class="mini-bar"><span style="width:${Math.round(p * 100)}%"></span></div>` : ''}
     </li>`;
@@ -1527,7 +1540,7 @@ async function deleteDoc(id) {
   const doc = docs.get(id);
   if (!doc) return;
   const nq = [...quotes.values()].filter(q => q.docId === id).length;
-  if (!confirm(`Hapus "${doc.name}" dari aplikasi?${nq ? `\n${nq} kutipan dari dokumen ini tetap tersimpan di Laporan kutipan.` : ''}\nFile di folder Masukan dan Hasil_Terjemahan tidak ikut terhapus.`)) return;
+  if (!confirm(`Hapus "${doc.name}" dari aplikasi?${nq ? `\n${nq} kutipan dari dokumen ini tetap tersimpan di Laporan kutipan.` : ''}\n\nFile asli di folder komputer Anda tidak akan terhapus.`)) return;
   docs.delete(id);
   await DB.del('docs', id);
   await DB.del('files', id);
@@ -1538,9 +1551,60 @@ async function deleteDoc(id) {
     LS.set('sel', UI.sel || '');
   }
   renderLib(); renderDoc();
-  toast('Dokumen dihapus dari aplikasi');
+  toast('Dokumen berhasil dihapus dari aplikasi');
 }
+
+async function deleteAllPdfs() {
+  const pdfs = [...docs.values()].filter(d => d.ext === 'pdf');
+  if (!pdfs.length) {
+    toast('Tidak ada file PDF di daftar dokumen.', 'warn');
+    return;
+  }
+  const count = pdfs.length;
+  if (!confirm(`Hapus SEMUA (${count}) file PDF dari aplikasi secara otomatis?\n\nCatatan: File fisik asli di folder Masukan komputer Anda tidak akan terhapus.`)) return;
+
+  for (const d of pdfs) {
+    docs.delete(d.id);
+    await DB.del('docs', d.id);
+    await DB.del('files', d.id);
+    if (pdfCache.id === d.id) pdfCache = { id: null, pdf: null };
+  }
+
+  if (pdfs.some(d => d.id === UI.sel)) {
+    const next = [...docs.values()].sort((a, b) => b.added - a.added)[0];
+    UI.sel = next ? next.id : null;
+    LS.set('sel', UI.sel || '');
+  }
+
+  renderLib(); renderDoc();
+  toast(`Berhasil menghapus ${count} file PDF dari aplikasi.`);
+}
+
+async function deleteAllDocs() {
+  const all = [...docs.values()];
+  if (!all.length) {
+    toast('Daftar dokumen sudah kosong.', 'warn');
+    return;
+  }
+  const count = all.length;
+  if (!confirm(`Kosongkan SEMUA (${count}) dokumen dari aplikasi?\n\nCatatan: File fisik asli di folder komputer Anda tidak akan terhapus.`)) return;
+
+  for (const d of all) {
+    docs.delete(d.id);
+    await DB.del('docs', d.id);
+    await DB.del('files', d.id);
+  }
+  pdfCache = { id: null, pdf: null };
+  UI.sel = null;
+  LS.set('sel', '');
+
+  renderLib(); renderDoc();
+  toast(`Berhasil mengosongkan seluruh (${count}) dokumen.`);
+}
+
 $('#delBtn').addEventListener('click', () => { if (cur()) deleteDoc(cur().id); });
+$('#delAllPdfsBtn')?.addEventListener('click', deleteAllPdfs);
+$('#delAllDocsBtn')?.addEventListener('click', deleteAllDocs);
 $('#quotesBtn').addEventListener('click', () => { if (UI.page === 'quotes') { UI.page = 'doc'; renderLib(); renderDoc(); } else showQuotes(); });
 $('#openIn').addEventListener('click', () => fetch('/api/buka-folder?folder=masukan'));
 $('#openOut').addEventListener('click', () => fetch('/api/buka-folder?folder=hasil'));
