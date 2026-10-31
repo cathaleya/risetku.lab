@@ -543,3 +543,4 @@ function CriteriaHighlight(text) {
     .replace(REGEX_RULES.gap, '<mark style="background:#fee2e2;color:#b91c1c;font-weight:700;padding:1px 3px;border-radius:3px">$1</mark>')
     .replace(REGEX_RULES.novelty, '<mark style="background:#f3e8ff;color:#6b21a8;font-weight:700;padding:1px 3px;border-radius:3px">$1</mark>');
 }
+

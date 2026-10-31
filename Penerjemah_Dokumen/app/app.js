@@ -187,9 +187,19 @@ async function extractPdf(blob, B, say) {
     let paras = paragraphsFromText(await page.getTextContent());
     let ocr = false;
     if (paras.map(p => p.text).join('').replace(/\s/g, '').length < 15) {
-      say(`Halaman ${n} berupa gambar, membaca dengan OCR…`);
-      paras = (await ocrCanvas(await renderPage(page, 2))).map(text => ({ text, h: 0 }));
-      ocr = true; ocrPages++;
+      say(`Halaman ${n} berupa gambar/diagram, memproses teks…`);
+      try {
+        const ocrPromise = ocrCanvas(await renderPage(page, 1.5));
+        const timeoutPromise = new Promise((_, rej) => setTimeout(() => rej(new Error('OCR timeout')), 6000));
+        const ocrParas = await Promise.race([ocrPromise, timeoutPromise]);
+        if (ocrParas && ocrParas.length) {
+          paras = ocrParas.map(text => ({ text, h: 0 }));
+          ocr = true; ocrPages++;
+        }
+      } catch (err) {
+        console.warn(`Halaman ${n}: OCR dilewati (${err.message})`);
+        paras = [{ text: `[Halaman ${n}: Ilustrasi / Bagan / Halaman Visual]`, h: 0 }];
+      }
     }
     if (n === 1 && !ocr) {
       const big = paras.filter(p => p.text.length >= 15 && p.text.length <= 300).sort((a, b) => b.h - a.h)[0];
@@ -199,6 +209,7 @@ async function extractPdf(blob, B, say) {
     const hs = paras.filter(p => p.h).map(p => p.h).sort((a, b) => a - b);
     const med = hs[Math.floor(hs.length / 2)] || 0;
     for (const p of paras) B.block({ t: med && p.h > med * 1.2 && p.text.length < 200 ? 'h' : 'p', ...B.unit(p.text) });
+    await new Promise(r => setTimeout(r, 4));
   }
   return pdf.numPages + ' halaman' + (ocrPages ? ` (${ocrPages} dibaca dengan OCR)` : '');
 }
@@ -251,9 +262,11 @@ const OCR_LANG = { auto: 'eng', en: 'eng', 'zh-CN': 'chi_sim', ar: 'ara', ja: 'j
 let ocrWorker = null, ocrLang = null;
 async function ocrCanvas(canvas) {
   if (!window.Tesseract) await new Promise((ok, fail) => {
+    const timer = setTimeout(() => fail(new Error('Timeout unduh library OCR')), 5000);
     const s = document.createElement('script');
     s.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';
-    s.onload = ok; s.onerror = () => fail(new Error('Gagal memuat OCR (cek internet)'));
+    s.onload = () => { clearTimeout(timer); ok(); };
+    s.onerror = () => { clearTimeout(timer); fail(new Error('Gagal memuat OCR (cek koneksi internet)')); };
     document.head.appendChild(s);
   });
   const lang = OCR_LANG[opt().sl] || 'eng';
@@ -703,31 +716,181 @@ function updateTrBar(doc) {
 
 let pdfCache = { id: null, pdf: null };
 async function renderOriginal(doc, c) {
-  c.innerHTML = '<p class="muted pad">Memuat…</p>';
-  const { blob } = await DB.get('files', doc.id);
-  if (UI.sel !== doc.id || UI.view !== 'orig') return;
-  if (IMG.test(doc.name)) { c.innerHTML = `<img class="orig-img" alt="${esc(doc.name)}" src="${URL.createObjectURL(blob)}">`; return; }
-  if (pdfCache.id !== doc.id) pdfCache = { id: doc.id, pdf: await pdfjsLib.getDocument({ data: new Uint8Array(await blob.arrayBuffer()) }).promise };
-  const pdf = pdfCache.pdf;
-  const first = (await pdf.getPage(1)).getViewport({ scale: 1 });
-  c.innerHTML = '<div class="pdf-pages"></div>';
-  const wrap = c.firstChild;
-  const io = new IntersectionObserver(entries => entries.forEach(async e => {
-    if (!e.isIntersecting || e.target.dataset.done) return;
-    e.target.dataset.done = 1;
-    const page = await pdf.getPage(+e.target.dataset.n);
-    const scale = (e.target.clientWidth * (window.devicePixelRatio || 1)) / page.getViewport({ scale: 1 }).width;
-    const canvas = await renderPage(page, scale);
-    e.target.style.aspectRatio = '';
-    e.target.prepend(canvas);
-  }), { root: c, rootMargin: '600px' });
-  for (let n = 1; n <= pdf.numPages; n++) {
-    const d = document.createElement('div');
-    d.className = 'pdf-page'; d.dataset.n = n;
-    d.style.aspectRatio = first.width + ' / ' + first.height;
-    d.innerHTML = `<span class="pg">${n}</span>`;
-    wrap.appendChild(d);
-    io.observe(d);
+  if (!c) return;
+  c.innerHTML = '<div class="pdf-loading-ph"><div class="pdf-spinner"></div><span>Mempersiapkan dokumen PDF…</span></div>';
+  try {
+    const rec = await DB.get('files', doc.id);
+    if (!rec || !rec.blob) {
+      c.innerHTML = '<p class="err pad">File PDF tidak ditemukan di basis data lokal.</p>';
+      return;
+    }
+    const blob = rec.blob;
+    if (UI.sel !== doc.id || UI.view !== 'orig') return;
+    if (IMG.test(doc.name)) {
+      c.innerHTML = `<div style="text-align:center;padding:1rem 0;"><img class="orig-img" alt="${esc(doc.name)}" src="${URL.createObjectURL(blob)}"></div>`;
+      return;
+    }
+
+    if (pdfCache.id !== doc.id) {
+      const arr = new Uint8Array(await blob.arrayBuffer());
+      pdfCache = { id: doc.id, pdf: await pdfjsLib.getDocument({ data: arr }).promise };
+    }
+    const pdf = pdfCache.pdf;
+    if (UI.sel !== doc.id || UI.view !== 'orig') return;
+
+    // Ambil viewport halaman pertama untuk mengukur rasio
+    const firstPage = await pdf.getPage(1);
+    const firstVp = firstPage.getViewport({ scale: 1 });
+    const ratio = (firstVp.height / firstVp.width) || 1.414;
+
+    // Tentukan lebar halaman agar pas di layar
+    const scrollbarW = 18;
+    const availW = Math.max(320, (c.clientWidth || 800) - scrollbarW - 32);
+    let targetW = Math.min(availW, 900);
+    let targetH = Math.round(targetW * ratio);
+
+    // Bilah kontrol atas PDF
+    const barHtml = `
+      <div class="pdf-bar" id="pdfTopBar">
+        <div class="pdf-bar-info">
+          <span>📄 <b>PDF Asli</b>: Halaman <span id="pdfCurPg">1</span> / ${pdf.numPages}</span>
+        </div>
+        <div class="pdf-bar-tools">
+          <button class="btn sm ghost" id="pdfZoomOut" title="Perkecil">－</button>
+          <span id="pdfZoomVal" style="font-weight:600;min-width:44px;text-align:center;">100%</span>
+          <button class="btn sm ghost" id="pdfZoomIn" title="Perbesar">＋</button>
+          <button class="btn sm ghost" id="pdfZoomFit" title="Pas Lebar Layar">Pas Lebar</button>
+          <button class="btn sm ghost" id="pdfScrollTop" title="Kembali ke Halaman Pertama">⬆ Ke Atas</button>
+        </div>
+      </div>
+      <div class="pdf-pages" id="pdfPagesWrap"></div>
+    `;
+    c.innerHTML = barHtml;
+
+    const wrap = $('#pdfPagesWrap');
+    let zoomLevel = 1.0;
+
+    // Buat placeholder untuk SELURUH halaman dengan tinggi terhitung pasti
+    for (let n = 1; n <= pdf.numPages; n++) {
+      const d = document.createElement('div');
+      d.className = 'pdf-page';
+      d.id = `pdfPg_${n}`;
+      d.dataset.n = n;
+      d.style.width = `${targetW}px`;
+      d.style.minHeight = `${targetH}px`;
+      d.style.height = `${targetH}px`;
+      d.innerHTML = `
+        <div class="pdf-loading-ph">
+          <div class="pdf-spinner"></div>
+          <span>Memuat Halaman ${n}…</span>
+        </div>
+        <span class="pg">${n} / ${pdf.numPages}</span>
+      `;
+      wrap.appendChild(d);
+    }
+
+    // Antrean render sekuensial agar CPU browser tetap enteng dan scrolling lancar
+    const renderQueue = new Set();
+    let isRendering = false;
+
+    async function drainQueue() {
+      if (isRendering || !renderQueue.size) return;
+      if (UI.sel !== doc.id || UI.view !== 'orig') {
+        renderQueue.clear();
+        return;
+      }
+      const n = renderQueue.values().next().value;
+      renderQueue.delete(n);
+      const pageEl = wrap.querySelector(`.pdf-page[data-n="${n}"]`);
+      if (!pageEl || pageEl.dataset.rendered === '1') {
+        drainQueue();
+        return;
+      }
+
+      isRendering = true;
+      try {
+        const page = await pdf.getPage(n);
+        const vp0 = page.getViewport({ scale: 1 });
+        const curW = parseFloat(pageEl.style.width) || pageEl.clientWidth || targetW;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const renderScale = (curW / vp0.width) * dpr;
+        const vp = page.getViewport({ scale: renderScale });
+
+        const canvas = document.createElement('canvas');
+        canvas.width = vp.width;
+        canvas.height = vp.height;
+        canvas.style.width = '100%';
+        canvas.style.height = 'auto';
+        canvas.style.display = 'block';
+
+        await page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise;
+
+        if (UI.sel === doc.id && UI.view === 'orig') {
+          const ph = pageEl.querySelector('.pdf-loading-ph');
+          if (ph) ph.remove();
+          pageEl.style.height = 'auto';
+          pageEl.prepend(canvas);
+          pageEl.dataset.rendered = '1';
+        }
+      } catch (err) {
+        console.warn(`Gagal render halaman ${n}:`, err);
+        const ph = pageEl.querySelector('.pdf-loading-ph');
+        if (ph) ph.innerHTML = `<span class="err small">Halaman ${n} gagal dimuat</span>`;
+      } finally {
+        isRendering = false;
+        setTimeout(drainQueue, 10);
+      }
+    }
+
+    // Observer saat pengguna menggulir (scroll)
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const n = +entry.target.dataset.n;
+          if (n) {
+            const curPgEl = $('#pdfCurPg');
+            if (curPgEl) curPgEl.textContent = n;
+            if (entry.target.dataset.rendered !== '1') {
+              renderQueue.add(n);
+              drainQueue();
+            }
+          }
+        }
+      });
+    }, { root: c, rootMargin: '600px 0px' });
+
+    wrap.querySelectorAll('.pdf-page').forEach(el => io.observe(el));
+
+    // Langsung render halaman 1 & 2 di awal
+    renderQueue.add(1);
+    if (pdf.numPages >= 2) renderQueue.add(2);
+    drainQueue();
+
+    // Navigasi kontrol zoom
+    function applyZoom(newZoom) {
+      zoomLevel = Math.max(0.5, Math.min(2.0, newZoom));
+      const zv = $('#pdfZoomVal');
+      if (zv) zv.textContent = Math.round(zoomLevel * 100) + '%';
+      const baseW = Math.min(Math.max(320, (c.clientWidth || 800) - scrollbarW - 32), 900);
+      const newW = Math.round(baseW * zoomLevel);
+      const newH = Math.round(newW * ratio);
+      wrap.querySelectorAll('.pdf-page').forEach(el => {
+        el.style.width = `${newW}px`;
+        if (el.dataset.rendered !== '1') {
+          el.style.minHeight = `${newH}px`;
+          el.style.height = `${newH}px`;
+        }
+      });
+    }
+
+    $('#pdfZoomIn')?.addEventListener('click', () => applyZoom(zoomLevel + 0.15));
+    $('#pdfZoomOut')?.addEventListener('click', () => applyZoom(zoomLevel - 0.15));
+    $('#pdfZoomFit')?.addEventListener('click', () => applyZoom(1.0));
+    $('#pdfScrollTop')?.addEventListener('click', () => { c.scrollTop = 0; });
+
+  } catch (err) {
+    console.error('Error render original PDF:', err);
+    c.innerHTML = `<p class="err pad">Gagal memuat PDF asli: ${esc(err.message)}</p>`;
   }
 }
 
@@ -1474,17 +1637,19 @@ function closeLicModal() {
 function showLanding() {
   const landing = $('#transLanding');
   const ws = $('#transWorkspace');
+  document.body.style.overflow = 'auto';
   if (landing) landing.style.display = 'block';
   if (ws) ws.style.display = 'none';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({ top: 0, behavior: 'auto' });
 }
 
 function showWorkspace() {
   const landing = $('#transLanding');
   const ws = $('#transWorkspace');
+  document.body.style.overflow = 'hidden';
   if (landing) landing.style.display = 'none';
-  if (ws) ws.style.display = 'block';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (ws) ws.style.display = 'flex';
+  window.scrollTo({ top: 0, behavior: 'auto' });
 }
 
 function handleStartTerjemah() {

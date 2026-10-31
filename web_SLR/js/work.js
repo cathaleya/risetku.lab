@@ -525,6 +525,7 @@ async function renderPdf(r) {
         });
       });
       ctx.globalCompositeOperation = 'source-over';
+      await new Promise(r => setTimeout(r, 6)); // biarkan UI thread memproses scroll & event loop
     }
     if (max < pdf.numPages) {
       const b = document.createElement('button');
