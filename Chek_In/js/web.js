@@ -378,6 +378,7 @@
     else if (tab === 'perbab') { P.innerHTML = perBab(); bindPerBab(); }
     else if (tab === 'dimensi') P.innerHTML = dimensiTab();
     else if (tab === 'analisis') P.innerHTML = analisisTab();
+    else if (tab === 'konsep') { P.innerHTML = konsepTab(); bindKonsep(); }
     else if (tab === 'ai') { P.innerHTML = aiTab(); bindAi(); }
     else if (tab === 'isi') P.innerHTML = legend() + list(g.isi, null, true);
     else if (tab === 'awal') P.innerHTML = legend() + list(g.awal, 'Bagian awal') + (g.lampiran.length ? list(g.lampiran, 'Lampiran') : '<p class="muted">Lampiran hanya diperiksa pada naskah lengkap.</p>');
@@ -649,6 +650,214 @@
     if (T && T.mismatch && T.mismatch.length) h += '<details class="list" open><summary>Angka di teks yang tidak ditemukan di tabel yang dirujuk (' + T.mismatch.length + ')</summary><ul>' + T.mismatch.map((m) => '<li>' + esc(m) + '</li>').join('') + '</ul><p class="muted" style="font-size:.78rem">Bisa berupa salah kutip, pembulatan berbeda, salah nomor tabel, atau angka kriteria. Periksa satu per satu.</p></details>';
     if (T && T.caps && T.caps.length) h += '<details class="list"><summary>Daftar tabel & gambar terbaca (' + T.caps.length + ')</summary><ul>' + T.caps.map((c) => '<li>' + esc(c.id) + ' — ' + esc(c.judul.slice(0, 90)) + ' · dirujuk ' + c.disebut + '×</li>').join('') + '</ul></details>';
     return h;
+  }
+
+  // ----------------------------------------- konsep penyajian monograf
+  function konsepTab() {
+    const jenjangLabel = (result.jenjangId || 'disertasi').toUpperCase();
+    const jenisLabel = (R.JENIS[result.jenisId] && R.JENIS[result.jenisId].label) || result.jenisId;
+    const bodyWordsFmt = fmt(result.bodyWords || 0);
+
+    let h = '';
+
+    // 1. Banner
+    h += '<div class="konsep-banner">' +
+      '<h3>🎓 Konsep Penyajian Monograf Disertasi & Tesis</h3>' +
+      '<p>Pedoman arsitektur penulisan monograf tingkat lanjut (Standar Doktoral Pascasarjana UNJ 2025 & Scopus Q1/Sinta 1). Fokus pada kekuatan argumen (<i>funneling</i>), sintesis literatur anti-parade, rigor metodologis, dan konsistensi benang merah penelitian (<i>The Golden Thread</i>).</p>' +
+      '</div>';
+
+    // 2. Real-time Diagnostic on Current Upload
+    h += '<div class="konsep-section-title">' +
+      '<span>📊 Diagnostik Real-Time Naskah Aktif</span>' +
+      '<span style="font-size:0.8rem;font-weight:600;color:var(--muted)">Terbaca otomatis dari file yang sedang dianalisis</span>' +
+      '</div>';
+
+    h += '<div class="konsep-live-box">' +
+      '<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:12px;">' +
+        '<div><strong>Judul:</strong> ' + esc(result.title || 'Belum terdeteksi di lembar judul') + '</div>' +
+        '<div><span class="konsep-tag">' + esc(jenjangLabel) + '</span><span class="konsep-tag">' + esc(jenisLabel) + '</span><span class="konsep-tag">' + esc((result.tahap || 'lengkap').toUpperCase()) + '</span><span class="konsep-tag">' + bodyWordsFmt + ' Kata Batang Tubuh</span></div>' +
+      '</div>' +
+      distribusiBabTable(true) +
+      '</div>';
+
+    // 3. 5 Pillars Architecture
+    h += '<div class="konsep-section-title">' +
+      '<span>🏛️ 5 Pilar Arsitektur & Penyajian Ilmiah Monograf</span>' +
+      '</div>';
+
+    h += '<div class="konsep-pillar-grid">' +
+      '<div class="konsep-pillar">' +
+        '<h4><span>Pilar 1</span> Pendahuluan & Funneling Argumentatif (Bab I)</h4>' +
+        '<p>Struktur piramida terbalik (Makro &rarr; Meso &rarr; Mikro). Dimulai dari tren/urgensi global, didukung data statistik empiris terkini, identifikasi <i>research gap</i> (kesenjangan pengetahuan), urgensi masalah, hingga perumusan <i>research questions</i> yang spesifik dan operasional.</p>' +
+        '<div><span class="konsep-tag">Funneling Logic</span><span class="konsep-tag">Empirical Gap</span><span class="konsep-tag">Clear Research Questions</span></div>' +
+      '</div>' +
+      '<div class="konsep-pillar">' +
+        '<h4><span>Pilar 2</span> Kajian Pustaka & Anti-Parade Synthesis (Bab II)</h4>' +
+        '<p><b>Bukan parade kliping nama pengarang</b> (menolak pola monoton "A menyatakan X. B menyatakan Y"). Wajib berbentuk sintesis tematik konseptual integratif, memetakan kontradiksi temuan terdahulu (<i>State-of-the-Art</i>), dan merumuskan kerangka alur pikir (<i>conceptual framework</i>) yang kokoh.</p>' +
+        '<div><span class="konsep-tag">Anti-Parade Rhetoric</span><span class="konsep-tag">State-of-the-Art (SotA)</span><span class="konsep-tag">Kerangka Konseptual</span></div>' +
+      '</div>' +
+      '<div class="konsep-pillar">' +
+        '<h4><span>Pilar 3</span> Metodologi & Epistemological Rigor (Bab III)</h4>' +
+        '<p>Justifikasi epistemologis pemilihan paradigma dan desain penelitian. Kalibrasi instrumen yang teruji (validitas isi pakar, kalibrasi Rasch/CFA, reliabilitas komposit, atau keabsahan triangulasi data kualitatif), serta transparansi alur analisis data yang dapat direplikasi (<i>reproducibility</i>).</p>' +
+        '<div><span class="konsep-tag">Epistemological Justification</span><span class="konsep-tag">Psychometric/Method Rigor</span><span class="konsep-tag">Reproducible Protocol</span></div>' +
+      '</div>' +
+      '<div class="konsep-pillar">' +
+        '<h4><span>Pilar 4</span> Penyajian Temuan Bersih Standar APA 7 (Bab IV)</h4>' +
+        '<p>Tabel disajikan bersih sesuai APA 7th Edition (tanpa garis batas vertikal, 3 garis horizontal utama, angka terbaca jelas). Penyajian temuan menjawab rumusan masalah secara berurutan, mengintegrasikan visualisasi bermakna serta kutipan bukti data lapangan yang transparan.</p>' +
+        '<div><span class="konsep-tag">APA 7th Clean Tables</span><span class="konsep-tag">Sequential Answering</span><span class="konsep-tag">Triangulated Evidence</span></div>' +
+      '</div>' +
+      '<div class="konsep-pillar" style="grid-column: 1 / -1">' +
+        '<h4><span>Pilar 5</span> Pembahasan Mendalam, Novelty & Implikasi (Bab IV/V)</h4>' +
+        '<p>Menjawab pertanyaan <b>"So What?"</b>. Tidak sekadar mengulang angka hasil statistik atau deskripsi kualitatif, melainkan mengonfrontasi temuan dengan literatur global bereputasi (sejalan vs berlawanan beserta argumentasi dialektisnya), mengkristalisasi <b>kebaruan (novelty)</b>, dan merumuskan implikasi teoretis, praktis, serta rekomendasi kebijakan.</p>' +
+        '<div><span class="konsep-tag">The "So What?" Question</span><span class="konsep-tag">International Literature Dialogue</span><span class="konsep-tag">Novelty Articulation</span><span class="konsep-tag">Policy & Practical Implications</span></div>' +
+      '</div>' +
+    '</div>';
+
+    // 4. Matriks Benang Merah (The Golden Thread Alignment)
+    h += '<div class="konsep-section-title">' +
+      '<span>🧶 Matriks Benang Merah (The Golden Thread Alignment)</span>' +
+      '<button type="button" class="konsep-copy-btn" id="btnCopyGoldenThread">📋 Salin Format Matriks Markdown</button>' +
+      '</div>';
+
+    h += '<p class="muted" style="margin-top:0">Setiap rumusan masalah harus memiliki tautan lurus 1:1 tanpa deviasi menuju landasan teori, instrumen metodologi, sajian temuan, dan bahasan novelty.</p>' +
+      '<div class="mx-wrap"><table class="mx">' +
+      '<thead><tr><th>No</th><th>Rumusan Masalah (Bab I)</th><th>Tujuan Penelitian</th><th>Konstruk Teori (Bab II)</th><th>Instrumen & Analisis (Bab III)</th><th>Temuan Utama (Bab IV)</th><th>Pembahasan & Novelty (Bab IV/V)</th></tr></thead>' +
+      '<tbody>' +
+      '<tr><td>1</td><td>Sejauh mana efektivitas model X terhadap kompetensi Y?</td><td>Menganalisis efektivitas model X terhadap peningkatan kompetensi Y.</td><td>Teori Konstruktivisme Sosial, Taksonomi Hasil Belajar, Indikator Kompetensi Y.</td><td>Kuesioner skala Likert terkalibrasi Rasch Model, Uji Wilcoxon/t-test.</td><td>Peningkatan signifikan skor kompetensi Y (p &lt; .001, effect size d = 0.82).</td><td>Mengonfirmasi teori Z dan melengkapi keterbatasan riset Smith (2023) dalam konteks blended.</td></tr>' +
+      '<tr><td>2</td><td>Bagaimana dinamika interaksi partisipan dalam mengadopsi model X?</td><td>Mendeskripsikan dinamika interaksi partisipan selama implementasi model X.</td><td>Model Difusi Inovasi (Rogers), Kerangka Interaksi Kolaboratif.</td><td>Wawancara semi-terstruktur, observasi partisipatif berkode tematik.</td><td>Teridentifikasi 3 fase adaptasi: <i>hesitation, scaffolding, autonomous mastery</i>.</td><td>Menghasilkan proposisi baru mengenai pentingnya mediasi mentor dalam mitigasi resistensi.</td></tr>' +
+      '</tbody></table></div>';
+
+    // 5. Bank Frasa Akademik Doktoral (Academic Phrasebank / Sentence Stems)
+    h += '<div class="konsep-section-title">' +
+      '<span>✍️ Bank Frasa Akademik Doktoral (Sentence Stems Terkalibrasi)</span>' +
+      '</div>';
+
+    const stems = [
+      {
+        kategori: '1. Merumuskan Kesenjangan Penelitian (Establishing a Niche)',
+        en: 'While extensive literature has examined [Topic X], empirical investigations regarding [Topic Y] in the context of [Context Z] remain conspicuously scarce.',
+        id: 'Meskipun literatur terdahulu telah banyak menelaah [Topik X], investigasi empiris mengenai [Topik Y] dalam konteks [Konteks Z] masih sangat terbatas dan belum terpetakan secara komprehensif.'
+      },
+      {
+        kategori: '2. Sintesis Pustaka Konseptual Anti-Parade (Thematic Synthesis)',
+        en: 'A critical synthesis of recent scholarship reveals a theoretical divergence between [Perspective A] (e.g., Author, 2022) and [Perspective B] (e.g., Author, 2024), particularly concerning [Core Mechanism].',
+        id: 'Sintesis kritis terhadap literatur terkini mengungkap divergensi teoretis antara [Perspektif A] dan [Perspektif B], khususnya terkait mekanisme fundamental [Mekanisme Kunci].'
+      },
+      {
+        kategori: '3. Mengartikulasikan Kebaruan & Kontribusi (Articulating Novelty)',
+        en: 'The primary theoretical contribution of this monograph lies in bridging the conceptual gap between [Construct 1] and [Construct 2], providing a validated structural model previously unaddressed in the literature.',
+        id: 'Kontribusi teoretis utama monograf ini terletak pada penjembatanan kesenjangan konseptual antara [Konstruk 1] dan [Konstruk 2], menghasilkan model struktural terverifikasi yang sebelumnya belum terjawab dalam literatur.'
+      },
+      {
+        kategori: '4. Membahas Temuan Tidak Terduga / Kontradiktif (Dialectical Discussion)',
+        en: 'Contrary to initial hypotheses and earlier findings by [Author (Year)], the present analysis indicates that [Finding]. This discrepancy can plausibly be attributed to [Contextual/Methodological Factor].',
+        id: 'Berlawanan dengan hipotesis awal dan temuan terdahulu oleh [Peneliti (Tahun)], analisis riset ini mengindikasikan bahwa [Temuan]. Diskrepansi ini dapat dijelaskan secara rasional melalui faktor [Konteks/Metodologis].'
+      },
+      {
+        kategori: '5. Menegaskan Implikasi Praktis & Rekomendasi Kebijakan (Practical Implications)',
+        en: 'Beyond theoretical advancement, these empirical insights offer actionable blueprints for policy makers and practitioners seeking to optimize [Target Outcome] through [Intervention].',
+        id: 'Di luar kemajuan teoretis, wawasan empiris ini menawarkan cetak biru aplikatif bagi para pengambil kebijakan dan praktisi untuk mengoptimalkan [Target Luaran] melalui [Bentuk Intervensi].'
+      }
+    ];
+
+    stems.forEach((s, idx) => {
+      h += '<div class="konsep-stem-card">' +
+        '<div class="konsep-stem-header">' +
+          '<span class="konsep-stem-title">' + esc(s.kategori) + '</span>' +
+          '<button type="button" class="konsep-copy-btn btn-copy-stem" data-stem-idx="' + idx + '">📋 Salin Frasa</button>' +
+        '</div>' +
+        '<div class="konsep-stem-en">“' + esc(s.en) + '”</div>' +
+        '<div class="konsep-stem-id"><b>Padanan Bahasa Indonesia:</b> ' + esc(s.id) + '</div>' +
+      '</div>';
+    });
+
+    // 6. Tombol Salin Seluruh Blueprint
+    h += '<div style="margin-top:24px;text-align:center;">' +
+      '<button type="button" class="btn primary" id="btnCopyMonografBlueprint" style="padding:10px 24px;font-size:0.95rem;font-weight:800;">📑 Salin Seluruh Kerangka & Blueprint Monograf (Markdown)</button>' +
+      '</div>';
+
+    return h;
+  }
+
+  function bindKonsep() {
+    const btnGT = $('btnCopyGoldenThread');
+    if (btnGT) {
+      btnGT.addEventListener('click', () => {
+        const text = '| No | Rumusan Masalah (Bab I) | Tujuan Penelitian | Landasan Teori (Bab II) | Metode & Instrumen (Bab III) | Temuan Utama (Bab IV) | Pembahasan & Kebaruan (Bab IV/V) |\n' +
+          '|---|---|---|---|---|---|---|\n' +
+          '| 1 | [Tuliskan Rumusan Masalah 1] | [Tuliskan Tujuan 1] | [Konstruk & Teori Rujukan] | [Desain, Populasi/Sampel, Uji Validitas] | [Temuan Kunci / Angka / Tema] | [Konfirmasi Literatur & Novelty] |\n' +
+          '| 2 | [Tuliskan Rumusan Masalah 2] | [Tuliskan Tujuan 2] | [Konstruk & Teori Rujukan] | [Desain, Populasi/Sampel, Uji Validitas] | [Temuan Kunci / Angka / Tema] | [Konfirmasi Literatur & Novelty] |\n';
+        navigator.clipboard.writeText(text).then(() => {
+          btnGT.textContent = '✓ Format Tersalin!';
+          setTimeout(() => { btnGT.textContent = '📋 Salin Format Matriks Markdown'; }, 2000);
+        });
+      });
+    }
+
+    document.querySelectorAll('.btn-copy-stem').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const card = btn.closest('.konsep-stem-card');
+        if (!card) return;
+        const en = card.querySelector('.konsep-stem-en') ? card.querySelector('.konsep-stem-en').textContent : '';
+        const id = card.querySelector('.konsep-stem-id') ? card.querySelector('.konsep-stem-id').textContent : '';
+        const textToCopy = en.replace(/^“|”$/g, '') + '\n\n' + id;
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          const oldText = btn.textContent;
+          btn.textContent = '✓ Tersalin!';
+          setTimeout(() => { btn.textContent = oldText; }, 2000);
+        });
+      });
+    });
+
+    const btnBP = $('btnCopyMonografBlueprint');
+    if (btnBP) {
+      btnBP.addEventListener('click', () => {
+        const title = result.title || 'JUDUL DISERTASI / TESIS';
+        const jenjang = (result.jenjangId || 'disertasi').toUpperCase();
+        const jenis = (R.JENIS[result.jenisId] && R.JENIS[result.jenisId].label) || 'Kuantitatif / Kualitatif';
+        const bp = '# BLUEPRINT & ARSITEKTUR MONOGRAF ' + jenjang + '\n' +
+          'Judul: ' + title + '\n' +
+          'Jenis Pendekatan: ' + jenis + '\n' +
+          'Pedoman: Standar Pascasarjana UNJ 2025 & Scopus Q1\n\n' +
+          '---\n\n' +
+          '## BAB I: PENDAHULUAN (Funneling Argumentatif)\n' +
+          '- **1.1 Latar Belakang Masalah**:\n' +
+          '  * Makro: Tantangan global, data tren, urgensi konseptual.\n' +
+          '  * Meso: Kebijakan nasional, realitas empiris di Indonesia.\n' +
+          '  * Mikro: Kesenjangan spesifik lapangan dan kesenjangan riset terdahulu (Research Gap).\n' +
+          '- **1.2 Identifikasi & Pembatasan Masalah**\n' +
+          '- **1.3 Rumusan Masalah (Research Questions)**: Disusun terfokus dan bernomor.\n' +
+          '- **1.4 Tujuan Penelitian**: Koheren 1:1 dengan rumusan masalah.\n' +
+          '- **1.5 Manfaat / Signifikansi Penelitian**: Teoretis, praktis, dan kebijakan.\n\n' +
+          '## BAB II: KAJIAN TEORI & KERANGKA KONSEPTUAL (Anti-Parade)\n' +
+          '- **2.1 Kajian Teori Konstruk/Variabel Utama**: Sintesis integratif tematik (bukan kliping pengarang).\n' +
+          '- **2.2 State-of-the-Art & Penelitian Terkait**: Matriks komparasi riset internasional 5 tahun terakhir.\n' +
+          '- **2.3 Kerangka Alur Pikir / Konseptual**: Diagram hubungan konstruk yang dilengkapi premis ilmiah.\n' +
+          '- **2.4 Hipotesis Penelitian / Pertanyaan Pengarah**\n\n' +
+          '## BAB III: METODOLOGI PENELITIAN (Epistemological Rigor)\n' +
+          '- **3.1 Desain & Pendekatan Penelitian**: Justifikasi epistemologis desain yang dipilih.\n' +
+          '- **3.2 Subjek / Populasi & Sampel**: Teknik penarikan, kriteria inklusi & eksklusi.\n' +
+          '- **3.3 Pengembangan & Validasi Instrumen**: Validitas isi pakar, kalibrasi Rasch/CFA/reliabilitas.\n' +
+          '- **3.4 Prosedur Pengumpulan Data & Etika Penelitian**\n' +
+          '- **3.5 Teknik Analisis Data**: Protokol analisis data yang transparan dan dapat direplikasi.\n\n' +
+          '## BAB IV: HASIL & PEMBAHASAN (APA 7 & Novelty)\n' +
+          '- **4.1 Deskripsi Data & Uji Prasyarat**\n' +
+          '- **4.2 Penyajian Temuan Penelitian**: Tabel bersih APA 7th, runut menjawab tiap rumusan masalah.\n' +
+          '- **4.3 Pembahasan Mendalam (The So What Question)**:\n' +
+          '  * Makna substantif temuan.\n' +
+          '  * Dialog dengan literatur global (mengonfirmasi atau membantah temuan terdahulu).\n' +
+          '  * Artikulasi Novelty (Kebaruan Teoretis/Model/Praksis).\n' +
+          '- **4.4 Keterbatasan Penelitian**\n\n' +
+          '## BAB V: PENUTUP\n' +
+          '- **5.1 Simpulan**: Menjawab tuntas seluruh rumusan masalah tanpa repetisi angka statistik mentah.\n' +
+          '- **5.2 Implikasi**: Teoretis, metodologis, dan manajerial.\n' +
+          '- **5.3 Saran / Rekomendasi Terapan**\n';
+        navigator.clipboard.writeText(bp).then(() => {
+          btnBP.textContent = '✓ Blueprint Berhasil Disalin ke Clipboard!';
+          setTimeout(() => { btnBP.textContent = '📑 Salin Seluruh Kerangka & Blueprint Monograf (Markdown)'; }, 2500);
+        });
+      });
+    }
   }
 
   function refLists() {

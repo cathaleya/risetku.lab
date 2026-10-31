@@ -412,3 +412,24 @@ kbd { font-family: var(--f-mono); font-size: .74rem; font-weight: 700; color: va
   .lp { grid-template-columns: minmax(0, 1fr); gap: 28px; padding-block: 36px; }
   .loginpage { min-height: 0; }
 }
+
+/* ---------- Konsep Penyajian Monograf (Tab Konsep) ---------- */
+.konsep-banner { background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%); color: #ffffff; padding: 22px 26px; border-radius: 18px; margin-bottom: 24px; box-shadow: 0 10px 25px -5px rgba(30, 58, 138, 0.25); border: 2px solid #2563eb; }
+.konsep-banner h3 { margin: 0 0 6px 0; font-size: 1.25rem; font-weight: 900; color: #ffffff; letter-spacing: -0.01em; display: flex; align-items: center; gap: 8px; }
+.konsep-banner p { margin: 0; font-size: .88rem; color: #bfdbfe; line-height: 1.6; }
+.konsep-pillar-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.konsep-pillar { background: #ffffff; border: 1.5px solid #e2e8f0; border-top: 5px solid #2563eb; border-radius: 14px; padding: 18px 20px; box-shadow: 0 4px 15px -3px rgba(15,23,42,0.05); transition: transform .15s ease; }
+.konsep-pillar:hover { transform: translateY(-2px); box-shadow: 0 8px 25px -4px rgba(37,99,235,0.12); }
+.konsep-pillar h4 { margin: 0 0 8px 0; font-size: 1rem; font-weight: 800; color: #1e3a8a; display: flex; align-items: center; gap: 8px; }
+.konsep-pillar p { margin: 0 0 10px 0; font-size: .84rem; color: #475569; line-height: 1.55; }
+.konsep-tag { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: .72rem; font-weight: 700; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; margin-right: 4px; margin-bottom: 4px; }
+.konsep-stem-card { background: #ffffff; border: 1.5px solid #e2e8f0; border-left: 4px solid #1d4ed8; border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; }
+.konsep-stem-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.konsep-stem-title { font-weight: 800; font-size: .86rem; color: #1e3a8a; }
+.konsep-stem-en { font-family: Georgia, serif; font-size: .92rem; color: #0f172a; line-height: 1.55; margin-bottom: 6px; }
+.konsep-stem-id { font-size: .82rem; color: #475569; background: #f8fafc; padding: 6px 10px; border-radius: 6px; line-height: 1.5; }
+.konsep-section-title { font-size: 1.05rem; font-weight: 800; color: #1e3a8a; margin: 24px 0 12px 0; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+.konsep-live-box { background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 16px 20px; margin-bottom: 24px; }
+.konsep-copy-btn { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; border-radius: 6px; padding: 4px 10px; font-size: .78rem; font-weight: 700; cursor: pointer; transition: all .15s ease; }
+.konsep-copy-btn:hover { background: #1d4ed8; color: #ffffff; }
+
