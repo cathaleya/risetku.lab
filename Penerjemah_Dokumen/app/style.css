@@ -283,3 +283,28 @@ label.check.sync { display: flex; align-items: center; gap: .3rem; font-size: .7
 .syn-template-box b { color: #0f766e; }
 .syn-actions { display: flex; gap: .4rem; flex-wrap: wrap; margin-top: .6rem; }
 
+/* Telaah Disertasi / Tesis & Konsep Penyajian */
+.thesis-header { padding: 1.1rem 1.4rem; background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%); color: #ffffff; display: flex; align-items: center; justify-content: space-between; gap: 1rem; border-bottom: 2px solid #2563eb; flex-shrink: 0; }
+.thesis-title-wrap h3 { margin: 0; font-size: 1.15rem; font-weight: 800; display: flex; align-items: center; gap: .6rem; }
+.thesis-title-wrap p { margin: 3px 0 0 0; font-size: .8rem; color: #bfdbfe; }
+.thesis-tabs { display: flex; gap: 4px; padding: .5rem 1.4rem; background: var(--surface-2); border-bottom: 1px solid var(--line-2); overflow-x: auto; flex-shrink: 0; }
+.thesis-tab { border: none; background: transparent; padding: .45rem .9rem; border-radius: 8px; font-size: .82rem; font-weight: 600; color: var(--ink-2); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; transition: all .15s; }
+.thesis-tab:hover { background: var(--sunk); color: var(--ink); }
+.thesis-tab.on { background: var(--surface); color: #1d4ed8; box-shadow: var(--shadow); border: 1px solid var(--line-2); font-weight: 700; }
+.thesis-body { flex: 1; overflow-y: auto; padding: 1.25rem 1.4rem 2.2rem; min-height: 0; }
+.thesis-card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 1.1rem 1.3rem; margin-bottom: 1.2rem; box-shadow: var(--shadow); }
+.thesis-pillar-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1.4rem; }
+.thesis-pillar { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 1.1rem; border-top: 5px solid #2563eb; transition: transform .15s; }
+.thesis-pillar:hover { transform: translateY(-2px); box-shadow: 0 8px 20px -6px rgba(37, 99, 235, 0.15); }
+.thesis-pillar h4 { margin: 0 0 .5rem 0; font-size: .95rem; color: #1e3a8a; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.thesis-pillar p { margin: 0 0 .6rem 0; font-size: .82rem; color: #475569; line-height: 1.5; }
+.thesis-tag { display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: .7rem; font-weight: 700; background: #dbeafe; color: #1d4ed8; margin-right: 4px; margin-bottom: 4px; }
+.thesis-matrix-table { width: 100%; border-collapse: collapse; font-size: .83rem; margin: .8rem 0; }
+.thesis-matrix-table th { background: #1e3a8a; color: #fff; padding: 9px 12px; text-align: left; font-weight: 700; border: 1px solid #1e3a8a; }
+.thesis-matrix-table td { padding: 9px 12px; border: 1px solid var(--line); vertical-align: top; background: var(--surface); }
+.thesis-matrix-table tr:nth-child(even) td { background: var(--surface-2); }
+.thesis-stem-card { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid #1d4ed8; border-radius: 8px; padding: .85rem 1rem; margin-bottom: .8rem; }
+.thesis-stem-card .stem-title { font-weight: 700; font-size: .84rem; color: #1e3a8a; margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; }
+.thesis-stem-card .stem-en { font-family: var(--font-doc); font-size: .9rem; color: #0f172a; margin-bottom: 4px; line-height: 1.5; }
+.thesis-stem-card .stem-id { font-size: .82rem; color: #475569; line-height: 1.45; background: var(--surface-2); padding: 4px 8px; border-radius: 4px; }
+
